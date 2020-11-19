@@ -1,8 +1,8 @@
 <template>
     <div class="nav" ref="nav">
-        <div class="nav__body flexWrapper flexWrapper_A-C" ref="body">
+        <div class="nav__body flex-wrapper flex-wrapper_A-C" ref="body">
             <span class="nav__prev" @click="$emit('prev')"></span>
-            <ul class="nav__list flexWrapper" ref="nav-list">
+            <ul class="nav__list flex-wrapper" ref="nav-list">
                 <li v-for="index in Object.keys(Array(countSlides).fill(0))" :key="index" class="nav__item"
                     :class="{'nav__item_active': currentSlideIndex === Number(index)}" :index="index"></li>
             </ul>

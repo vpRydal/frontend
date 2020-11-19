@@ -2,7 +2,7 @@
   <div class="categories">
     <div class="container">
       <Link text="Смотреть все предложения" class="categories__link-wrapper"/>
-      <div class="flexWrapper flexWrapper_column">
+      <div class="flex-wrapper flex-wrapper_column">
         <div class="categories__row">
           <div class="categories__col">
             <div class="category">

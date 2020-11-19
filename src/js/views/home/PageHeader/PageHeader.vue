@@ -13,7 +13,7 @@
                     />
                 </transition>
             </div>
-            <div class="flexWrapper flexWrapper_J-FE">
+            <div class="flex-wrapper flex-wrapper_J-FE">
                 <SliderNav
                         class="slider__nav"
                         @prev="prevHandler"
@@ -31,8 +31,8 @@
     import Slide from "@/js/views/home/PageHeader/Slide.vue";
     import SliderNav from "@/js/components/SliderNav.vue";
 
-    type ISlide = { text: string; title: string; imgPath: string }
 
+    type ISlide = { text: string; title: string; imgPath: string }
 
     @Component({
         components: {SliderNav, Slide},

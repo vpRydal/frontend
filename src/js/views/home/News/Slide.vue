@@ -1,6 +1,6 @@
 <template>
     <div class="slide">
-        <div class="slide__flexWrapper flexWrapper">
+        <div class="slide__flex-wrapper flex-wrapper">
             <ibg :src="img" class="slide__img"/>
             <div class="slide__body">
                 <h3 class="slide__title">{{ title }}</h3>
@@ -41,7 +41,7 @@
             font-size .9rem
         @media (max-width 320px)
             font-size .8rem
-        &__flexWrapper
+        &__flex-wrapper
             margin 0 45px
             @media (max-width 1100px)
                 flex-direction column

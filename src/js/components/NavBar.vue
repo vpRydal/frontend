@@ -3,7 +3,7 @@
         <aside v-if="visible" class="nav-bar" @click="handleClick" ref="nav-bar">
             <div class="nav-bar__body" ref="body">
                 <div class="nav-bar__header header">
-                    <div class="flexWrapper flexWrapper_J-SB">
+                    <div class="flex-wrapper flex-wrapper_J-SB">
                         <ibg src="/img/logo.png" class="header__logo"/>
                         <span class="header__cross" @click="handleClose"></span>
                     </div>

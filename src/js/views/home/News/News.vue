@@ -1,7 +1,7 @@
 <template>
     <div class="news">
         <div class="news__container container">
-            <div class="news__flexWrapper flexWrapper flexWrapper_J-SB flexWrapper_A-FE">
+            <div class="news__flex-wrapper flex-wrapper flex-wrapper_J-SB flex-wrapper_A-FE">
                 <Link text="Смотреть все предложения" class="news__link"/>
                 <BigHeader :texts="['Новости', 'технопарка']" class="news__title"/>
             </div>
@@ -25,7 +25,7 @@
 
 <style lang="stylus" scoped>
     .news
-        &__flexWrapper
+        &__flex-wrapper
             margin-bottom 80px
             @media(max-width 1500px)
                 flex-direction column
