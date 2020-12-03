@@ -21,7 +21,7 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import Slide from "./Slide.vue";
+    import Slide from "./Slide";
     import Slick from "vue-slick";
     import SliderNav from "@/js/components/SliderNav.vue";
 
@@ -69,11 +69,13 @@
         ];
 
         handleNextSlide() {
+            /* eslint-disable */
             //@ts-ignore
             this.$refs['slick'].next()
         }
 
         handlePrevSlide() {
+            /* eslint-disable */
             //@ts-ignore
             this.$refs['slick'].prev()
         }

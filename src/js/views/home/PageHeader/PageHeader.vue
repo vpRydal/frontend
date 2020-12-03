@@ -36,6 +36,21 @@
 
     @Component({
         components: {SliderNav, Slide},
+        metaInfo: {
+            title: 'Аренда помещений Севастополь',
+            meta: [
+                {
+                    vmid: 'description',
+                    name: 'description',
+                    content: "Аренда помещений в севастополь",
+                },
+                {
+                    vmid: 'keywords',
+                    name: 'keywords',
+                    content: 'аренда, недвижимость, севастополь, аренда помещений, аренда недвижимости, помещения, коммерческая недвижимость',
+                }
+            ]
+        }
     })
 
     export default class PageHeader extends Vue {

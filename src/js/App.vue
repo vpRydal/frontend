@@ -15,7 +15,20 @@ import {Component, Vue} from 'vue-property-decorator';
 import bus from "./bus";
 import {Vue2TouchEventsOptions} from 'vue2-touch-events'
 
-@Component({components: {NavBar, Footer, Header}})
+@Component({
+  components: {NavBar, Footer, Header},
+  metaInfo: {
+    title: 'Аренда помещений Севастополь',
+    titleTemplate: '%s | Ассоциация Технопарк Маяк',
+    meta: [
+      {
+        vmid: 'keywords',
+        name: 'keywords',
+        content: 'Технопарк Маяк, Ассоциация Технопарк Маяк',
+      }
+    ]
+  }
+})
 export default class App extends Vue {
   handleSwipeRight(event: Vue2TouchEventsOptions) {
       bus.$emit('nav-bar-show')

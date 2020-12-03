@@ -7,7 +7,9 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import $ from "jquery";
 import Vue2TouchEvents from 'vue2-touch-events'
+import VueMeta from 'vue-meta'
 
+Vue.use(VueMeta)
 Vue.use(Vue2TouchEvents);
 
 Vue.config.productionTip = false;
