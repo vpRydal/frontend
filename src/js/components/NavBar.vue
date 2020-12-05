@@ -67,7 +67,7 @@
         }
 
         @Watch('visible')
-        watchShow(val: boolean) {
+        watchShow(val: boolean): void {
             if (val) {
                 $('body').css('overflow', 'hidden')
             } else {

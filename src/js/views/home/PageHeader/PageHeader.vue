@@ -15,6 +15,7 @@
             </div>
             <div class="flex-wrapper flex-wrapper_J-FE">
                 <SliderNav
+                    v-if="slides.length"
                         class="slider__nav"
                         @prev="prevHandler"
                         @next="nextHandler"
@@ -30,10 +31,7 @@
     import {Component, Vue} from 'vue-property-decorator';
     import Slide from "@/js/views/home/PageHeader/Slide.vue";
     import SliderNav from "@/js/components/SliderNav.vue";
-    import town from '@/assets/img/town.png'
-
-
-    type ISlide = { text: string; title: string; imgPath: string }
+    import SliderOnMainPage, {Slide as TSlide} from "@/js/api/sliderOnMainPage";
 
     @Component({
         components: {SliderNav, Slide},
@@ -58,37 +56,20 @@
 
     export default class PageHeader extends Vue {
         currentSlideIndex = -1;
-        slides: Array<ISlide> = [
-            {
-                imgPath: town,
-                text: 'Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.',
-                title: 'Аренда офисов и производсвенных помещений'
-            },
-            {
-                imgPath: town,
-                text: 'Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.',
-                title: 'Аренда офисов и производсвенных помещений'
-            },
-            {
-                imgPath: town,
-                text: 'Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.',
-                title: 'Аренда офисов и производсвенных помещений'
-            },
-            {
-                imgPath: town,
-                text: 'Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.',
-                title: 'Аренда офисов и производсвенных помещений'
-            }
+        slides: Array<TSlide> = [
         ];
         idInterval = 0;
 
-        mounted() {
+        mounted():void {
+          SliderOnMainPage.get().then(({data}) => {
+            this.slides = data
+          })
             this.$nextTick(() => {
                 this.initSlider()
             })
         }
 
-        prevHandler() {
+        prevHandler():void {
             clearInterval(this.idInterval);
             this.setInterval();
             if (this.currentSlideIndex === 0)
@@ -97,7 +78,7 @@
                 this.currentSlideIndex--
         }
 
-        nextHandler() {
+        nextHandler():void {
             clearInterval(this.idInterval);
             this.setInterval();
             if (this.currentSlideIndex === this.slides.length - 1)
@@ -106,7 +87,7 @@
                 this.currentSlideIndex++
         }
 
-        setInterval() {
+        setInterval():void {
             this.idInterval = setInterval(() => {
                 if (this.currentSlideIndex && this.currentSlideIndex + 1 === this.slides.length) {
                     this.currentSlideIndex = 0
@@ -116,7 +97,7 @@
             }, 5000)
         }
 
-        initSlider() {
+        initSlider():void {
             setTimeout(() => {
                 this.currentSlideIndex = 0;
                 this.setInterval();

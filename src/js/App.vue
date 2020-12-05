@@ -13,7 +13,6 @@ import Footer from "./components/Footer.vue";
 import NavBar from "./components/NavBar.vue";
 import {Component, Vue} from 'vue-property-decorator';
 import bus from "./bus";
-import {Vue2TouchEventsOptions} from 'vue2-touch-events'
 
 @Component({
   components: {NavBar, Footer, Header},
@@ -30,10 +29,10 @@ import {Vue2TouchEventsOptions} from 'vue2-touch-events'
   }
 })
 export default class App extends Vue {
-  handleSwipeRight(event: Vue2TouchEventsOptions) {
+  handleSwipeRight(): void {
       bus.$emit('nav-bar-show')
   }
-  handleSwipeLeft() {
+  handleSwipeLeft(): void {
     bus.$emit('nav-bar-hide')
   }
 

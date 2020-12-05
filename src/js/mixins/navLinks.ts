@@ -11,7 +11,8 @@ const links: Array<link> = [
 ];
 
 export const mixinNavLinks = {
-    data: () => ({
+    /* eslint-disable */
+    data: (): any => ({
         links
     })
 };

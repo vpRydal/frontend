@@ -42,11 +42,11 @@
         })
     })
     export default class Header extends Vue {
-        handleShowMenu() {
+        handleShowMenu(): void {
             bus.$emit('nav-bar-show')
         }
 
-        handleScroll() {
+        handleScroll(): void {
             console.log(123)
         }
     }

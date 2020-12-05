@@ -83,7 +83,7 @@
             console.log(this.townImages)
         }
 
-        scroll() {
+        scroll(): void {
             console.log(123)
         }
     }
