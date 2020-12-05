@@ -5,7 +5,7 @@
       breakPoint: 100,
       handler: handleScroll
     }">
-            <ibg class="header__logo" src="/img/logo.png"/>
+            <ibg class="header__logo" :src="logoPng"/>
             <Burger class="header__burger" @click="handleShowMenu"/>
             <nav class="header__nav nav">
                 <ul class="nav__list">
@@ -18,7 +18,7 @@
                 </ul>
             </nav>
             <span class="header__search">Поиск
-      <ibg class="header__icon" src="/img/search.png"/>
+      <ibg class="header__icon" :src="searchPng"/>
     </span>
         </div>
 
@@ -30,10 +30,16 @@
     import Burger from "@/js/components/header/Burger.vue";
     import bus from "@/js/bus";
     import {mixinNavLinks} from "@/js/mixins/navLinks";
+    import searchPng from '@/assets/img/search.png'
+    import logoPng from '@/assets/img/logo.png'
 
     @Component({
         components: {Burger},
-        mixins: [mixinNavLinks]
+        mixins: [mixinNavLinks],
+        data: () =>({
+            searchPng,
+            logoPng
+        })
     })
     export default class Header extends Vue {
         handleShowMenu() {

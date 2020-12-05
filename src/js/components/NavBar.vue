@@ -4,7 +4,7 @@
             <div class="nav-bar__body" ref="body">
                 <div class="nav-bar__header header">
                     <div class="flex-wrapper flex-wrapper_J-SB">
-                        <ibg src="/img/logo.png" class="header__logo"/>
+                        <ibg :src="logoImg" class="header__logo"/>
                         <span class="header__cross" @click="handleClose"></span>
                     </div>
                 </div>
@@ -25,14 +25,18 @@
     import $ from 'jquery'
     import bus from "../bus";
     import {mixinNavLinks} from "@/js/mixins/navLinks";
+    import logoImg from '@/assets/img/logo.png'
 
     @Component({
         mixins: [mixinNavLinks],
+        data: () => ({
+            logoImg
+        })
     })
     export default class NavBar extends Vue {
         visible = false;
 
-        mounted() {
+        mounted(): void {
             bus.$on('nav-bar-hide', () => {
                 this.hide();
             });
@@ -42,15 +46,15 @@
             });
         }
 
-        show() {
+        show(): void {
             this.visible = true
         }
 
-        hide() {
+        hide(): void {
             this.visible = false
         }
 
-        handleClick(event: Event) {
+        handleClick(event: Event): void {
             const $body = $(this.$refs['nav-bar']);
 
             if ($body.get(0) === event.target) {
@@ -58,7 +62,7 @@
             }
         }
 
-        handleClose() {
+        handleClose(): void {
             this.hide()
         }
 

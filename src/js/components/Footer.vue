@@ -12,11 +12,11 @@
                 </div>
                 <div class="footer__col footer__col_second">
                     <div class="social-link">
-                        <ibg class="" src="/img/vk.png"/>
+                        <ibg class="" :src="fImg"/>
                         <a href="" class="stretched-link"></a>
                     </div>
                     <div class="social-link">
-                        <ibg src="/img/f.png"/>
+                        <ibg :src="vkImg"/>
                         <a href="" class="stretched-link"></a>
                     </div>
                 </div>
@@ -40,13 +40,20 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
+    import vkImg from '@/assets/img/vk.png'
+    import fImg from '@/assets/img/f.png'
 
     type Contact = {
         name: string;
         value: string;
     }
 
-    @Component({})
+    @Component({
+        data: () => ({
+            vkImg,
+            fImg
+        })
+    })
     export default class Footer extends Vue {
         contacts: Array<Contact> = [
             {name: 'Менеджер проекта', value: '+7(978) 801-43-83 '},

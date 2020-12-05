@@ -30,12 +30,15 @@
     import {Component, Vue} from 'vue-property-decorator';
     import Slide from "@/js/views/home/PageHeader/Slide.vue";
     import SliderNav from "@/js/components/SliderNav.vue";
+    import town from '@/assets/img/town.png'
 
 
     type ISlide = { text: string; title: string; imgPath: string }
 
     @Component({
         components: {SliderNav, Slide},
+        data: () => ({
+        }),
         metaInfo: {
             title: 'Аренда помещений Севастополь',
             meta: [
@@ -57,22 +60,22 @@
         currentSlideIndex = -1;
         slides: Array<ISlide> = [
             {
-                imgPath: '/img/town.png',
+                imgPath: town,
                 text: 'Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.',
                 title: 'Аренда офисов и производсвенных помещений'
             },
             {
-                imgPath: '/img/town.png',
+                imgPath: town,
                 text: 'Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.',
                 title: 'Аренда офисов и производсвенных помещений'
             },
             {
-                imgPath: '/img/town.png',
+                imgPath: town,
                 text: 'Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.',
                 title: 'Аренда офисов и производсвенных помещений'
             },
             {
-                imgPath: '/img/town.png',
+                imgPath: town,
                 text: 'Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.',
                 title: 'Аренда офисов и производсвенных помещений'
             }
