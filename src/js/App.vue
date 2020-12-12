@@ -8,8 +8,8 @@
 </template>
 
 <script lang="ts">
-import Header from "./components/header/Header.vue";
-import Footer from "./components/Footer.vue";
+import Header from "./components/layouts/header/Header.vue";
+import Footer from "./components/layouts/Footer.vue";
 import NavBar from "./components/NavBar.vue";
 import {Component, Vue} from 'vue-property-decorator';
 import bus from "./bus";

@@ -63,7 +63,7 @@
 </script>
 
 <style scoped lang="stylus">
-    @import "../../stylus/colors.styl"
+    @import "../../../stylus/colors.styl"
     .footer
         &__container
             background-color: mainColor

@@ -27,7 +27,7 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import Burger from "@/js/components/header/Burger.vue";
+    import Burger from "@/js/components/layouts/header/Burger.vue";
     import bus from "@/js/bus";
     import {mixinNavLinks} from "@/js/mixins/navLinks";
     import searchPng from '@/assets/img/search.png'
@@ -53,7 +53,7 @@
 </script>
 
 <style scoped lang="stylus">
-    @import "../../../stylus/colors.styl"
+    @import "../../../../stylus/colors.styl"
     .header
         padding 25px 25px
         font-size 20px

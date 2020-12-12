@@ -38,7 +38,7 @@
         &__second-word
             line-height .9em
         &__third-word
-            line-height .6em
+            line-height .8em
         &__first-word, &__second-word, &__third-word
             font-weight 800
         &__second-word, &__third-word
