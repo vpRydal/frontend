@@ -28,7 +28,7 @@
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
     import Burger from "@/js/components/layouts/header/Burger.vue";
-    import bus from "@/js/bus";
+    import bus from "@/js/common/bus";
     import {mixinNavLinks} from "@/js/mixins/navLinks";
     import searchPng from '@/assets/img/search.png'
     import logoPng from '@/assets/img/logo.png'

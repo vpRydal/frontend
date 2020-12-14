@@ -23,7 +23,7 @@
 <script lang="ts">
     import {Component, Watch, Vue} from 'vue-property-decorator';
     import $ from 'jquery'
-    import bus from "../bus";
+    import bus from "../common/bus";
     import {mixinNavLinks} from "@/js/mixins/navLinks";
     import logoImg from '@/assets/img/logo.png'
 

@@ -14,7 +14,7 @@ Vue.use(Vue2TouchEvents);
 
 Vue.config.productionTip = false;
 
-Vue.component('ibg', () => import('@/js/components/Ibg.vue'));
+Vue.component('ibg', () => import('@/js/components/common/Ibg.vue'));
 
 
 Vue.directive('scroll', {

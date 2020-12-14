@@ -12,7 +12,7 @@ import Header from "./components/layouts/header/Header.vue";
 import Footer from "./components/layouts/Footer.vue";
 import NavBar from "./components/NavBar.vue";
 import {Component, Vue} from 'vue-property-decorator';
-import bus from "./bus";
+import bus from "./common/bus";
 
 @Component({
   components: {NavBar, Footer, Header},
