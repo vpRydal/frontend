@@ -121,5 +121,10 @@
         &__item
             display flex
             justify-content space-between
+            @media (max-width: 430px)
+                flex-direction column
+                margin-bottom 0
+                span
+                    margin-bottom 15px
 
 </style>

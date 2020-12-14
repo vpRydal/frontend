@@ -1,10 +1,6 @@
 <template>
     <div class="header">
-        <div class="header__container container container_big" v-scroll="{
-      once: false,
-      breakPoint: 100,
-      handler: handleScroll
-    }">
+        <div class="header__container container container_big" >
             <ibg class="header__logo" :src="logoPng"/>
             <Burger class="header__burger" @click="handleShowMenu"/>
             <nav class="header__nav nav">
@@ -44,10 +40,6 @@
     export default class Header extends Vue {
         handleShowMenu(): void {
             bus.$emit('nav-bar-show')
-        }
-
-        handleScroll(): void {
-            console.log(123)
         }
     }
 </script>

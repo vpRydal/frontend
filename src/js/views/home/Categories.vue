@@ -1,10 +1,10 @@
 <template>
-    <div class="categories">
+    <div class="categories" ref="categories">
         <div class="container">
-            <Link text="Смотреть все предложения" class="categories__link-wrapper"/>
+            <Link text="Смотреть все предложения" class="categories__link-wrapper" v-animate-to-on-scroll:left/>
             <div class="flex-wrapper flex-wrapper_column">
                 <div class="categories__row categories__row_1">
-                    <div class="categories__col ">
+                    <div class="categories__col" v-animate-to-on-scroll:left>
                         <div class="category">
                             <div class="category__name-wrapper">
                                 <h3 class="category__name">Склады</h3>
@@ -13,13 +13,13 @@
                         </div>
                     </div>
                     <div class="categories__col categories__col_title">
-                        <BigHeader class="categories__title" :texts="['Аренда', 'площадей', 'и помещений']" tag="h1"/>
+                        <BigHeader class="categories__title" :texts="['Аренда', 'площадей', 'и помещений']" tag="h1" v-animate-to-on-scroll:top/>
                     </div>
                 </div>
                 <div class="categories__row categories__row_2">
                     <div class="categories__col">
                     </div>
-                    <div class="categories__col categories__row_2">
+                    <div class="categories__col" v-animate-to-on-scroll:right>
                         <div class="category">
                             <div class="category__name-wrapper category__name-wrapper_name-top">
                                 <h3 class="category__name">Ангары</h3>
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="categories__row categories__row_3">
-                    <div class="categories__col">
+                    <div class="categories__col" v-animate-to-on-scroll:left>
                         <div class="category">
                             <div class="category__name-wrapper category__name-wrapper_name-right">
                                 <h3 class="category__name">Офисы</h3>
@@ -40,9 +40,9 @@
                     <div class="categories__col">
                     </div>
                 </div>
-                <Link text="Узнать больше" class="link-wrapper_right categories__link-wrapper_more"/>
-                <div class="categories__row categories__row_center">
-                    <div class="categories__col">
+                <Link text="Узнать больше" class="link-wrapper_right categories__link-wrapper_more" v-animate-to-on-scroll:right/>
+                <div class="categories__row categories__row_center" >
+                    <div class="categories__col" v-animate-to-on-scroll:bot>
                         <div class="category">
                             <div
                                 class="category__name-wrapper category__name-wrapper_name-right category__name-wrapper_default-padding">
@@ -65,6 +65,7 @@ import town1 from '@/assets/img/town1.png';
 import town2 from '@/assets/img/town2.png';
 import town3 from '@/assets/img/town3.png';
 import town4 from '@/assets/img/town4.png';
+import $ from 'jquery';
 
 
 @Component({
@@ -77,19 +78,12 @@ export default class Categories extends Vue {
         town3,
         town4,
     ];
-
-    mounted(): void {
-        console.log(this.townImages)
-    }
-
-    scroll(): void {
-        console.log(123)
-    }
 }
 </script>
 
 <style scoped lang="stylus">
 @import "../../../stylus/colors.styl"
+
 .categories
     overflow hidden
     margin-bottom 150px
