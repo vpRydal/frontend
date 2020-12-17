@@ -92,7 +92,8 @@
         &__icon
             margin-left 10px
             margin-top 3px
-            padding 0 0 50% 50%
+            width 20px
+            height 20px
 
     .nav
         &__list

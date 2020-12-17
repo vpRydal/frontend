@@ -42,5 +42,5 @@ export default class App extends Vue {
 
 <style lang="stylus" scoped>
   .view
-    padding-top 90px
+    padding-top 100px
 </style>
