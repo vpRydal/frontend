@@ -4,7 +4,7 @@ export type link = {
 }
 
 const links: Array<link> = [
-    {displayName: 'Главная', routeName: 'index'},
+    {displayName: 'О технопарке', routeName: 'home'},
     {displayName: 'Аренда', routeName: 'index'},
     {displayName: 'Новости', routeName: 'index'},
     {displayName: 'Контакты', routeName: 'index'},

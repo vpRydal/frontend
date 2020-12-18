@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
-import Object from "@/js/views/Catalog/Object.vue";
+import Object from "@/js/components/Object.vue";
 import imgTown from "@/assets/img/town.png";
 import Pagination from "@/js/components/widgets/Paginate.vue";
 
