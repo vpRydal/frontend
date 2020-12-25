@@ -13,7 +13,8 @@
                         </div>
                     </div>
                     <div class="categories__col categories__col_title">
-                        <BigHeader class="categories__title" :texts="['Аренда', 'площадей', 'и помещений']" tag="h1" v-animate-to-on-scroll:top/>
+                        <BigHeader class="categories__title" :texts="['Аренда', 'площадей', 'и помещений']" tag="h1"
+                                   v-animate-to-on-scroll:top/>
                     </div>
                 </div>
                 <div class="categories__row categories__row_2">
@@ -34,21 +35,24 @@
                             <div class="category__name-wrapper category__name-wrapper_name-right">
                                 <h3 class="category__name">Офисы</h3>
                             </div>
-                            <ibg class="category__img category__img_align-left category__img_3" :src="townImages[2]" alt=""/>
+                            <ibg class="category__img category__img_align-left category__img_3" :src="townImages[2]"
+                                 alt=""/>
                         </div>
                     </div>
                     <div class="categories__col">
                     </div>
                 </div>
-                <Link text="Узнать больше" class="link-wrapper_right categories__link-wrapper_more" v-animate-to-on-scroll:right/>
-                <div class="categories__row categories__row_center" >
+                <Link text="Узнать больше" class="link-wrapper_right categories__link-wrapper_more"
+                      v-animate-to-on-scroll:right/>
+                <div class="categories__row categories__row_center">
                     <div class="categories__col" v-animate-to-on-scroll:bot>
                         <div class="category">
                             <div
                                 class="category__name-wrapper category__name-wrapper_name-right category__name-wrapper_default-padding">
                                 <h3 class="category__name">Офисные блоки</h3>
                             </div>
-                            <ibg class="category__img category__img_align-left category__img_4" :src="townImages[1]" alt=""/>
+                            <ibg class="category__img category__img_align-left category__img_4" :src="townImages[1]"
+                                 alt=""/>
                         </div>
                     </div>
                 </div>
@@ -145,12 +149,13 @@ export default class Categories extends Vue {
 
 
         &_2
-            transform translateY(-30px)
+            transform translateY(30px)
             @media (max-width 1400px)
                 transform none
                 order 1
             @media (max-width 735px)
                 margin-bottom 40px
+
             & ^[0]__col:last-child
                 @media (max-width 1400px)
                     margin-left auto
@@ -160,7 +165,6 @@ export default class Categories extends Vue {
                     width 60%
                 @media (max-width 610px)
                     width 95%
-
 
 
         &_3
@@ -211,6 +215,7 @@ export default class Categories extends Vue {
         padding 30px
         padding-right 0
         bottom 50px
+        right 40px
         @media (max-width 860px)
             bottom 10%
         @media (max-width 735px)
@@ -220,11 +225,12 @@ export default class Categories extends Vue {
             justify-content flex-end
             padding-right 139px
             padding-left 0
-            right -150px
+            right -230px
             @media (max-width 1400px)
                 padding-right 100px
-            @media (max-width 1200px)
-                padding-right 50px
+                right -150px
+        @media (max-width 1200px)
+            padding-right 50px
 
         &_default-padding
             width 85%
@@ -243,10 +249,12 @@ export default class Categories extends Vue {
 
         @media (max-width 735px)
             padding 15px 25px
-            left 18px
-            width 100%
+            left 0
             align-items flex-end
             right auto
+        &_name-right
+            @media (max-width 1400px)
+                left -20px
 
 
     &__img

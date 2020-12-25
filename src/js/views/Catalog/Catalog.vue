@@ -1,7 +1,7 @@
 <template>
     <div class="catalog">
         <div class="container">
-            <div class="catalog__titles text-center">
+            <div class="catalog__titles text-left">
                 <h1 class="catalog__title">Аренда офисов в Севастополе от собственника Технопарк "Маяк"</h1>
                 <h2 class="catalog__subtitle text-main-color">При условии внесения предоплаты предоставляется
                     дополнительная скидка!</h2>
@@ -103,6 +103,9 @@ export default class Catalog extends Vue {
 
         & .object
             margin 15px auto
+            width 350px
+            & .object__img
+                padding 0 0 54% 0
             @media (max-width 500px)
                 width 100%
 

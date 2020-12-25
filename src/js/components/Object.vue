@@ -2,14 +2,16 @@
     <div class="object">
         <ibg class="object__img" :src="imgPath"/>
         <div class="object__info">
-            <div class="object__col">
-                <div class="object__price-wrapper fw-600">
-                    <span class="object__price"><span class="p">&#8381;</span>{{ price }}<span class="m2">М2</span></span>
+            <h3 class="object__title text-right">{{ title }}</h3>
+            <div class="flex-wrapper flex-wrapper_J-SB">
+                <div class="object__col">
+                    <div class="object__price-wrapper fw-600">
+                        <span class="object__price"><span class="p">&#8381;</span>{{ price }}<span class="m2">М2</span></span>
+                    </div>
                 </div>
-            </div>
-            <div class="object__col">
-                <h3 class="object__title">{{ title }}</h3>
-                <span class="object__area fw-600">Площадь: {{ area }} <span class="m2">М2</span></span>
+                <div class="object__col flex-wrapper flex-wrapper_J-C">
+                    <span class="object__area fw-600">Площадь: {{ area }} <span class="m2">М2</span></span>
+                </div>
             </div>
         </div>
     </div>
@@ -53,12 +55,13 @@ export default class Item extends Vue {
 
     &__img
         width 100%
-
-        padding 0 0 50% 0
+        margin-bottom 55px
 
     &__title
         color white
-        margin-bottom 3px
+        margin-right 5px
+        margin-top 10px
+        font-size 17px
 
     &__info
         width 100%
@@ -68,6 +71,7 @@ export default class Item extends Vue {
         display flex
         justify-content space-between
         font-size 17px
+        flex-direction column
 
     &__col
         display flex
@@ -75,8 +79,6 @@ export default class Item extends Vue {
 
         &:last-child
             margin-right 5px
-            padding-top 16px
-            padding-bottom 8px
 
     &__area
         margin-left auto
@@ -87,7 +89,7 @@ export default class Item extends Vue {
         padding-right 15px
 
     &__price-wrapper
-        height 30px
+        height 25px
         width 100px
         position relative
         margin-top auto
@@ -105,7 +107,7 @@ export default class Item extends Vue {
             top 0
             border-top: 0 solid transparent;
             border-left: 15px solid transparent;
-            border-bottom: 30px solid mainColor;
+            border-bottom: 25px solid mainColor;
 
     &__price
         position relative
