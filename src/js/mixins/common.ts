@@ -1,8 +1,8 @@
 import $ from 'jquery'
-import Vue from "vue";
+import {Component, Mixins} from "vue-property-decorator";
 
-
-export class scrollTo extends Vue {
+@Component
+export class ScrollTo extends Mixins() {
     scrollTo(target: HTMLElement | number, offset = 0): void {
         setTimeout(() => {
             let scrollEndPoint;

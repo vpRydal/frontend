@@ -28,13 +28,12 @@
 </template>
 
 <script lang="ts">
-    import {Component} from 'vue-property-decorator';
+import {Component, Mixins} from 'vue-property-decorator';
     import Slide from "@/js/views/home/PageHeader/Slide.vue";
     import SliderNav from "@/js/components/SliderNav.vue";
     import SliderOnMainPage, {Slide as TSlide} from "@/js/api/sliderOnMainPage";
     import bus from "@/js/common/bus";
-    import {scrollTo} from "@/js/mixins/common";
-    import {mixins} from "vue-class-component";
+    import {ScrollTo} from "@/js/mixins/common";
 
     @Component({
         components: {SliderNav, Slide},
@@ -57,7 +56,7 @@
         }
     })
 
-    export default class PageHeader extends mixins(scrollTo) {
+    export default class PageHeader extends Mixins(ScrollTo) {
         currentSlideIndex = -1;
         slides: Array<TSlide> = [];
 
@@ -119,7 +118,7 @@
 </script>
 
 <style scoped lang="stylus">
-    @import '../../../../stylus/colors.styl'
+    @import '~@/stylus/colors.styl'
 
     .page-header
         background-color mainColor

@@ -11,18 +11,17 @@
 </template>
 
 <script lang="ts">
-    import {Component} from 'vue-property-decorator';
+import {Component, Mixins} from 'vue-property-decorator';
     import Link from "@/js/views/home/Link.vue";
     import BigHeader from "@/js/components/BigHeader.vue";
     import Slider from "./Slider.vue";
     import bus from "@/js/common/bus";
-    import {scrollTo} from "@/js/mixins/common";
-    import {mixins} from "vue-class-component";
+    import {ScrollTo} from "@/js/mixins/common";
 
     @Component({
         components: {Slider, BigHeader, Link},
     })
-    export default class News extends mixins(scrollTo) {
+    export default class News extends Mixins(ScrollTo) {
         created():void {
             bus.$on('scroll-to-news', () => {
                 this.scrollTo(this.$refs['news'] as HTMLElement, -100)
