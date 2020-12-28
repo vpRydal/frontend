@@ -1,9 +1,12 @@
 <template>
-    <div class="object">
+    <div class="object object_op" @mouseenter="isHovered = true" @mouseleave="isHovered = false" ref="object">
         <ibg class="object__img" :src="imgPath"/>
         <div class="object__info">
-            <h3 class="object__title text-right">{{ title }}</h3>
-            <div class="flex-wrapper flex-wrapper_J-SB">
+            <div class="object__title text-right">
+                <h3 class="">{{ title }}</h3>
+            </div>
+            <div class="object__flex-wrapper">
+                <div class="object__bg"></div>
                 <div class="object__col">
                     <div class="object__price-wrapper fw-600">
                         <span class="object__price"><span class="p">&#8381;</span>{{ price }}<span class="m2">М2</span></span>
@@ -14,11 +17,15 @@
                 </div>
             </div>
         </div>
+        <router-link class="stretched-link"
+                     :to="{name: 'viewObject', props: {category: 'category-name', 'id': 'fghfgh'}}">
+        </router-link>
     </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
+import {Component, Vue, Watch} from 'vue-property-decorator';
+import $ from 'jquery'
 
 @Component({
     components: {},
@@ -42,26 +49,113 @@ import {Component, Vue} from 'vue-property-decorator';
     }
 })
 export default class Item extends Vue {
+    isHovered = false
+    defaultHeight: undefined | number;
+    defaultBgWidth: undefined | number;
+
+    mounted(): void {
+        this.defaultHeight = $(this.$refs['object']).find('.object__info').height()
+        this.defaultBgWidth = $(this.$refs['object']).find('.object__bg').width()
+    }
+
+    @Watch('isHovered')
+    watchIsHovered(val: boolean): void {
+        const $target = $(this.$refs['object'])
+        const $targetTitle = $(this.$refs['object']).find('.object__title')
+        const $targetImage = $target.find('.ibg')
+        const $targetBG= $target.find('.object__bg')
+
+        if (val) {
+            $targetTitle.stop()
+                .animate({
+                    opacity: '0',
+                }, 3, () => {
+                    $targetTitle.animate({
+                        'font-size': 25
+                    }, {
+                        start() {
+                            $targetTitle.removeClass('text-right').addClass('text-center')
+                            $target.css('color', 'white')
+                            $targetBG.animate({
+                                width: '100%'
+                            })
+                        },
+                        complete: () => {
+                            $targetTitle.animate({
+                                opacity: '1',
+                            }, 1)
+                        }
+                    })
+                })
+
+            $target.find('.object__info').stop().animate({
+                height: '100%',
+            }, {
+                start() {
+                    $target.addClass('object_opacity')
+                    $targetImage.css('transform', 'scale(1.1)')
+                }
+            })
+        } else {
+            $targetTitle.stop().animate({
+                opacity: '0',
+            }, 3, () => {
+                $targetTitle.animate({
+                    'font-size': 17
+                }, {
+                    start() {
+                        $targetTitle.removeClass('text-center').addClass('text-right')
+                        $target.css('color', '')
+                    },
+                    complete: () => {
+                        $targetTitle.animate({
+                            opacity: '1',
+                        }, 1)
+                    }
+                })
+            })
+
+            $target.find('.object__info').stop().animate({
+                height: this.defaultHeight
+            }, {
+                start: () => {
+                    $target.removeClass('object_opacity')
+                    $targetImage.css('transform', 'none')
+                    $targetBG.animate({
+                        width: this.defaultBgWidth
+                    })
+                }
+            })
+        }
+    }
 }
 </script>
 
 <style scoped lang="stylus">
 @import "~@/stylus/colors.styl"
+@import "~@/stylus/mixins.styl"
+
 .object
     position relative
     width 400px
     height 250px
     display flex
+    overflow hidden
 
     &__img
         width 100%
-        margin-bottom 55px
+        transition transform ease-out .5s
 
     &__title
         color white
         margin-right 5px
         margin-top 10px
         font-size 17px
+        flex 1 1 100%
+        display flex
+        align-items center
+        & h3
+            width 100%
 
     &__info
         width 100%
@@ -69,9 +163,39 @@ export default class Item extends Vue {
         position absolute
         bottom 0
         display flex
-        justify-content space-between
         font-size 17px
         flex-direction column
+        transition background-color linear .5s
+        justify-content center
+
+        ^[0]_opacity &
+            background-color getColorWithOpacity(mainColor, .5)
+
+    &__flex-wrapper
+        display flex
+        justify-content space-between
+        position: relative
+    &__bg
+        position absolute
+        overflow visible !important
+        left 0
+        top 0
+        width 80px
+        height 100%
+        background-color mainColorDark
+        &:after
+            content ''
+            display block
+            position absolute
+            right -15px
+            top 0
+            transition border linear .47s
+            border-top: 0 solid transparent;
+            border-left: 15px solid mainColorDark;
+            border-bottom: 25px solid mainColor;
+            ^[0]_opacity &
+                border-bottom: 25px solid getColorWithOpacity(mainColor, 0);
+
 
     &__col
         display flex
@@ -79,7 +203,6 @@ export default class Item extends Vue {
 
         &:last-child
             margin-right 5px
-
     &__area
         margin-left auto
         display block
@@ -87,38 +210,31 @@ export default class Item extends Vue {
         position relative
         align-self flex-end
         padding-right 15px
+        transition color linear .2s
 
     &__price-wrapper
         height 25px
-        width 100px
+        width 75px
         position relative
         margin-top auto
-        background-color #071a3c
+        padding-left 15px
         color white
         display flex
         justify-content center
         align-items center
-
-        &:after
-            content ''
-            display block
-            position absolute
-            right 0
-            top 0
-            border-top: 0 solid transparent;
-            border-left: 15px solid transparent;
-            border-bottom: 25px solid mainColor;
 
     &__price
         position relative
         padding-right 13px
         padding-left 10px
         margin-right 10px
+
 .m2, .p
     font-size 9px
     position absolute
     top 0
     right 0
+
 .p
     left 0
     font-size 12px

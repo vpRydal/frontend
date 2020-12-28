@@ -11,16 +11,6 @@
                     Кроме того, вы можете воспользоваться услугой «онлайн-консультант» или позвонить по телефону:
                     +7(978)734-58-55</p>
             </div>
-            <div class="catalog__types types">
-                <span class="types__item">Офисы от собственника</span>
-                <span class="types__item">От 10 до 500 кв. м.</span>
-                <span class="types__item">От 650 руб. за кв. м.</span>
-                <span class="types__item">Свежий ремонт</span>
-                <span class="types__item">Кондиционер</span>
-                <span class="types__item">Круглосуточный доступ</span>
-                <span class="types__item">Развитая инфраструктура</span>
-                <span class="types__item">Охраняемая территория, видеонаблюдение</span>
-            </div>
             <div class="catalog__objects">
                 <Object area="32.5" title="Нежилое помещение" price="550" :img-path="imgTown"/>
                 <Object area="32.5" title="Нежилое помещение" price="550" :img-path="imgTown"/>
@@ -31,21 +21,6 @@
                 <Object area="32.5" title="Нежилое помещение" price="550" :img-path="imgTown"/>
             </div>
             <Pagination class="catalog__paginate"/>
-            <div class="catalog__bottom-text">
-                <h2 class="text-center text-main-color">Аренда помещения под офис</h2>
-                <p class="text-center">Выбор помещения под офис достаточно трудоемкий и сложный процесс, который может занять долгое время.
-                    Чтобы сократить процедуру поиска, пользователь должен четко сформулировать перед собой основные цели
-                    и задачи. Для этого необходимо обозначить сумму, которую необходимо будет ежемесячно выделять на
-                    аренду помещений. Скрупулезно подсчитав предстоящие расходы, можно будет сделать вывод о
-                    целесообразности заключения договора аренды тех или иных нежилых помещений. После того, как
-                    предстоящие расходы будут подсчитаны и одобрены, необходимо перейти к выбору офиса или иного
-                    помещения для бизнеса.</p>
-                <p class="text-center">При выборе объекта необходимо понять критерии, которые будут основополагающими. Как правило,
-                    пользователи обращают внимание на инфраструктуру, транспортную и иную доступность объекта. Имеет
-                    большое значение безопасность территории и возможность бесплатной парковки. Ассоциация «Технопарк
-                    «Маяк» обладает обширной базой офисов и административных зданий. Пользователь может самостоятельно
-                    выбрать подходящее помещение.</p>
-            </div>
         </div>
     </div>
 </template>
@@ -74,9 +49,6 @@ export default class Catalog extends Vue {
 .catalog
     margin-top 40px
     margin-bottom 75px
-
-    &__types
-        margin-bottom 76px
 
     &__titles
         margin-bottom 57px
@@ -111,40 +83,4 @@ export default class Catalog extends Vue {
 
     &__paginate
         margin-bottom 70px
-
-    &__bottom-text
-        & h2
-            margin-bottom 25px
-        & p
-            margin-bottom 20px
-            &:last-child
-                margin-bottom 0
-.types
-    display flex
-    flex-wrap wrap
-    justify-content center
-
-
-    &__item
-        padding-left 10px
-        position relative
-        margin 0 30px
-
-        &:last-child
-            margin-right 0
-
-        &:first-child
-            margin-left 0
-
-        &:before
-            content ''
-            position absolute
-            display inline-block
-            left 3px
-            top 10px
-            width 3px
-            height 3px
-            border-radius 50%
-            background-color black
-
 </style>
