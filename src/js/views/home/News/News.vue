@@ -1,7 +1,7 @@
 <template>
-    <div class="news">
+    <div class="news" >
         <div class="news__container container">
-            <div class="news__flex-wrapper flex-wrapper flex-wrapper_J-SB flex-wrapper_A-FE" style="overflow: hidden">
+            <div class="news__flex-wrapper flex-wrapper flex-wrapper_J-SB flex-wrapper_A-FE">
                 <Link text="Смотреть все предложения" class="news__link" v-animate-to-on-scroll:left/>
                 <BigHeader :texts="['Новости', 'технопарка']" class="news__title" v-animate-to-on-scroll:right/>
             </div>
@@ -25,6 +25,7 @@
 
 <style lang="stylus" scoped>
     .news
+        overflow hidden
         &__flex-wrapper
             margin-bottom 80px
             @media(max-width 1500px)
@@ -49,11 +50,10 @@
             @media(max-width 430px)
                 font-size 60px
         &__link
-            font-size 46px
+            font-size 40px
             @media(max-width 1500px)
                 align-self flex-end
                 order 1
-                overflow hidden
             @media(max-width 675px)
                 font-size 40px
                 margin-bottom 20px

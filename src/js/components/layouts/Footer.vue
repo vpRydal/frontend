@@ -1,6 +1,6 @@
 <template>
     <div class="footer">
-        <div class="footer__container container container_big">
+        <div class="footer__container container">
             <div class="footer__flex-wrapper flex-wrapper">
                 <div class="footer__col footer__col_first">
                     <p class="footer__address">г. Севастополь, ул. Фиолентовское шоссе, 1/2</p>
@@ -65,18 +65,17 @@
 <style scoped lang="stylus">
     @import "../../../stylus/colors.styl"
     .footer
+        font-size 1.1rem
+        background-color: mainColor
         &__container
-            background-color: mainColor
-            max-width 1520px
-            padding 45px 200px
-            @media (max-width: 1600px)
-                max-width 1920px
-                padding 45px 15px
+            padding 45px 0
+            @media (max-width 1200px)
+                padding 45px 20px
         &__flex-wrapper
             @media (max-width: 1200px)
                 flex-direction column
         &__col
-            flex 1 1 40%
+            flex 1 1 34%
             &_first
                 @media (max-width: 1200px)
                     margin-bottom: 25px
@@ -89,13 +88,13 @@
             &_third
                 flex 1 1 30%
         &__address, &__departments
-            font-size 30px
+            font-size 1em
             color white
             font-family Raleway-Regular
             margin-bottom 40px
     .contacts-list, .departments
         color white
-        font-size 24px
+        font-size 1em
         &__item
             margin-bottom 15px
 

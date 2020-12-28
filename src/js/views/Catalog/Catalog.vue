@@ -1,7 +1,7 @@
 <template>
     <div class="catalog">
         <div class="container">
-            <div class="catalog__titles text-left">
+            <div class="catalog__titles text-center">
                 <h1 class="catalog__title">Аренда офисов в Севастополе от собственника Технопарк "Маяк"</h1>
                 <h2 class="catalog__subtitle text-main-color">При условии внесения предоплаты предоставляется
                     дополнительная скидка!</h2>
