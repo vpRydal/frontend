@@ -1,5 +1,5 @@
 <template>
-    <div class="news" >
+    <div class="news" ref="news">
         <div class="news__container container">
             <div class="news__flex-wrapper flex-wrapper flex-wrapper_J-SB flex-wrapper_A-FE">
                 <Link text="Смотреть все предложения" class="news__link" v-animate-to-on-scroll:left/>
@@ -15,11 +15,23 @@
     import Link from "@/js/views/home/Link.vue";
     import BigHeader from "@/js/components/BigHeader.vue";
     import Slider from "./Slider.vue";
+    import bus from "@/js/common/bus";
+    import {scrollTo} from "@/js/mixins/common";
 
     @Component({
         components: {Slider, BigHeader, Link},
+        mixins: [scrollTo],
     })
     export default class News extends Vue {
+        created():void {
+            bus.$on('scroll-to-news', () => {
+                this.scrollTo(this.$refs['news'], -100)
+            })
+        }
+
+        beforeDestroy(): void {
+            bus.$off('scroll-to-news')
+        }
     }
 </script>
 

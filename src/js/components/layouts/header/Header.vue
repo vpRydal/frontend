@@ -4,14 +4,14 @@
             <ibg class="header__logo" :src="logoPng"/>
             <Burger class="header__burger" @click="handleShowMenu"/>
             <nav class="header__nav nav">
-                <ul class="nav__list">
-                    <li
-                            v-for="(link, index) in links"
-                            :key="index"
-                            class="nav__link">
-                        {{ link.displayName }}
-                    </li>
-                </ul>
+                <NavLinks class="nav__links">
+                    <template v-slot:link="{link}">
+                        <router-link v-if="link.isLink" :to="{name: link.routeName}" class="nav__link">
+                            {{ link.displayName }}
+                        </router-link>
+                        <span v-else class="cursor-pointer nav__link">{{ link.displayName }}</span>
+                    </template>
+                </NavLinks>
             </nav>
             <span class="header__search">Поиск
       <ibg class="header__icon" :src="searchPng"/>
@@ -24,14 +24,13 @@
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
     import Burger from "@/js/components/layouts/header/Burger.vue";
-    import bus from "@/js/common/bus";
-    import {mixinNavLinks} from "@/js/mixins/navLinks";
     import searchPng from '@/assets/img/search.png'
     import logoPng from '@/assets/img/logo.png'
+    import bus from "@/js/common/bus";
+    import NavLinks from "@/js/components/layouts/header/NavLinks.vue";
 
     @Component({
-        components: {Burger},
-        mixins: [mixinNavLinks],
+        components: {NavLinks, Burger},
         data: () =>({
             searchPng,
             logoPng
@@ -96,12 +95,10 @@
             height 20px
 
     .nav
-        &__list
+        &__links
             display flex
             @media (max-width 1200px)
                 display none
-
         &__link
             margin 0 50px
-
 </style>

@@ -32,9 +32,12 @@
     import Slide from "@/js/views/home/PageHeader/Slide.vue";
     import SliderNav from "@/js/components/SliderNav.vue";
     import SliderOnMainPage, {Slide as TSlide} from "@/js/api/sliderOnMainPage";
+    import bus from "@/js/common/bus";
+    import {scrollTo} from "@/js/mixins/common";
 
     @Component({
         components: {SliderNav, Slide},
+        mixins: [scrollTo],
         data: () => ({
         }),
         metaInfo: {
@@ -102,6 +105,16 @@
                 this.currentSlideIndex = 0;
                 this.setInterval();
             }, 500)
+        }
+
+        created():void {
+            bus.$on('scroll-to-info', () => {
+                this.scrollTo(0)
+            })
+        }
+
+        beforeDestroy(): void {
+            bus.$off('scroll-to-info')
         }
     }
 </script>
