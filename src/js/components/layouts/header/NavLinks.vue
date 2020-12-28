@@ -19,15 +19,18 @@
 import {Component, Vue} from "vue-property-decorator";
 import {mixinNavLinks} from "@/js/mixins/navLinks";
 import bus from "@/js/common/bus";
+import {Route} from "vue-router";
 
 @Component({
     mixins: [mixinNavLinks],
 })
 export default class NavLinks extends Vue {
     onClickNavLink(linkId: number):void {
+        const routeIsHome = this.$route.name === 'home'
+
         if (linkId === 3) {
-            if (this.$route.name !== 'home') {
-                this.$router.push({name: 'home'}).then(() => {
+            if (!routeIsHome) {
+                this.goToHome().then(() => {
                     this.$nextTick(() => {
                         bus.$emit('scroll-to-news')
                     })
@@ -36,12 +39,26 @@ export default class NavLinks extends Vue {
                 bus.$emit('scroll-to-news')
             }
         } else if (linkId === 1) {
-            if (this.$route.name !== 'home') {
-                this.$router.push({name: 'home'})
+            if (!routeIsHome) {
+                this.goToHome()
             } else {
                 bus.$emit('scroll-to-info')
             }
+        } else if (linkId === 4) {
+            if (!routeIsHome) {
+                this.goToHome().then(() => {
+                    this.$nextTick(() => {
+                        bus.$emit('scroll-to-contacts')
+                    })
+                })
+            } else {
+                bus.$emit('scroll-to-contacts')
+            }
         }
+    }
+
+    goToHome(): Promise <Route> {
+        return this.$router.push({name: 'home'})
     }
 }
 </script>
