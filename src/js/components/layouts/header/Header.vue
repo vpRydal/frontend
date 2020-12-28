@@ -63,8 +63,8 @@ export default class Header extends Vue {
             padding-left 0
 
     &__logo
-        height 51px
-        width 112px
+        height 50px
+        width 50px
 
     &__burger
         margin-left 130px

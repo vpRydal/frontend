@@ -139,8 +139,8 @@ export default class NavBar extends Vue {
 
 .header
     &__logo
-        height 51px
-        width 112px
+        height 80px
+        width 80px
 
     &__cross
         display block
