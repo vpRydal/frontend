@@ -28,16 +28,16 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+    import {Component} from 'vue-property-decorator';
     import Slide from "@/js/views/home/PageHeader/Slide.vue";
     import SliderNav from "@/js/components/SliderNav.vue";
     import SliderOnMainPage, {Slide as TSlide} from "@/js/api/sliderOnMainPage";
     import bus from "@/js/common/bus";
     import {scrollTo} from "@/js/mixins/common";
+    import {mixins} from "vue-class-component";
 
     @Component({
         components: {SliderNav, Slide},
-        mixins: [scrollTo],
         data: () => ({
         }),
         metaInfo: {
@@ -57,12 +57,11 @@
         }
     })
 
-    export default class PageHeader extends Vue {
+    export default class PageHeader extends mixins(scrollTo) {
         currentSlideIndex = -1;
-        slides: Array<TSlide> = [
-        ];
-        idInterval = 0;
+        slides: Array<TSlide> = [];
 
+        idInterval = 0;
         mounted():void {
           SliderOnMainPage.get().then(({data}) => {
             this.slides = data

@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import {Component, Vue} from "vue-property-decorator";
-import Slider from "./Slider";
+import Slider from "./Slider.vue";
 import Object from "@/js/components/Object.vue";
 import imgTown from '@/assets/img/town.png'
 

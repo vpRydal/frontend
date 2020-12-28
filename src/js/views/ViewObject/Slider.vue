@@ -48,7 +48,7 @@ export default class Slider extends Vue {
         this.startAutoplay()
     }
 
-    changeCurrentSlide(newSlideIndex): void {
+    changeCurrentSlide(newSlideIndex: number): void {
         this.isMouseClicked = true
         this.currentImageIndex = newSlideIndex
 
@@ -73,7 +73,7 @@ export default class Slider extends Vue {
     }
 
     @Watch('currentImageIndex')
-    watchCurrentImageIndex(val, oldVal):void {
+    watchCurrentImageIndex(val: number, oldVal: number):void {
         if (val > oldVal || (oldVal === this.images.length - 1 && val < oldVal && !this.isMouseClicked)) {
             this.enterClass = 'anim-enter-left'
             this.enterToClass = 'anim-enter-left-to'
