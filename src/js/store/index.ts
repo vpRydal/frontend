@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import common from './common'
-import $ from 'jquery'
 
 Vue.use(Vuex)
 
