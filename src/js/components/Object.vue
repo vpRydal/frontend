@@ -169,7 +169,7 @@ export default class Item extends Vue {
         justify-content center
 
         ^[0]_opacity &
-            background-color getColorWithOpacity(mainColor, .5)
+            background-color getColorWithOpacity(mainColor, .8)
 
     &__flex-wrapper
         display flex
