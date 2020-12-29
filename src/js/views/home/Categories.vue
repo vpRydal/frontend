@@ -69,7 +69,6 @@ import town1 from '@/assets/img/town1.png';
 import town2 from '@/assets/img/town2.png';
 import town3 from '@/assets/img/town3.png';
 import town4 from '@/assets/img/town4.png';
-import $ from 'jquery';
 
 
 @Component({

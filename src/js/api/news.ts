@@ -1,4 +1,3 @@
-import axiosInstance from "@/js/common/axiosInstance";
 import {AxiosResponse} from "axios";
 import newsImage from '@/assets/img/town.png'
 

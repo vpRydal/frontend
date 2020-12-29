@@ -5,7 +5,7 @@
                 <ibg class="header__logo" :src="logoPng"/>
             </router-link>
             <Burger class="header__burger" @click="handleShowMenu"/>
-            <nav class="header__nav nav">
+            <nav v-if="!isXSM" class="header__nav nav">
                 <NavLinks class="nav__links">
                     <template v-slot:link="{link}">
                         <router-link v-if="link.isLink" :to="{name: link.routeName}" class="nav__link">
@@ -15,9 +15,7 @@
                     </template>
                 </NavLinks>
             </nav>
-            <span class="header__search">Поиск
-                <ibg class="header__icon" :src="searchPng"/>
-            </span>
+            <Search v-if="!isXSM" class="header__search"/>
         </div>
     </div>
 </template>
@@ -25,21 +23,32 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 import Burger from "@/js/components/layouts/header/Burger.vue";
-import searchPng from '@/assets/img/search.png'
 import logoPng from '@/assets/img/logo.png'
 import bus from "@/js/common/bus";
 import NavLinks from "@/js/components/layouts/header/NavLinks.vue";
+import Search from "@/js/components/layouts/header/Search.vue";
+import {mapGetters} from "vuex";
 
 @Component({
-    components: {NavLinks, Burger},
+    components: {Search, NavLinks, Burger},
     data: () => ({
-        searchPng,
         logoPng
-    })
+    }),
+    computed: {
+        ...mapGetters('common', {
+            $windowWidth: 'windowWidth'
+        })
+    }
 })
 export default class Header extends Vue {
+    $windowWidth!: number
+
     handleShowMenu(): void {
         bus.$emit('nav-bar-show')
+    }
+
+    get isXSM(): boolean {
+        return this.$windowWidth <= 500;
     }
 }
 </script>
@@ -47,7 +56,6 @@ export default class Header extends Vue {
 <style scoped lang="stylus">
 @import "../../../../stylus/colors.styl"
 .header
-    padding 25px 25px
     font-size 20px
     width 100%
     position fixed
@@ -58,9 +66,11 @@ export default class Header extends Vue {
     &__container
         display flex
         align-items center
-        padding 0 30px
-        @media (max-width 470px)
-            padding-left 0
+        margin 0 auto
+        padding-top 5px
+        padding-bottom 5px
+        @media (max-width 1200px)
+            padding 5px 40px
 
     &__logo
         height 50px
@@ -81,14 +91,10 @@ export default class Header extends Vue {
             margin-left auto
 
     &__search
-        color mainColor
         margin-left auto
-        display flex
-        align-items center
-        justify-content center
-        margin-right 25px
-        @media (max-width 500px)
-            margin-left 0
+        margin-right 130px
+        @media (max-width 1240px)
+            margin-right 0
 
     &__icon
         margin-left 10px

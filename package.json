@@ -19,6 +19,7 @@
     "axios": "^0.21.0"
   },
   "devDependencies": {
+    "@types/jquery": "^3.5.4",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -30,13 +31,13 @@
     "@vue/eslint-config-typescript": "^7.0.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "jquery": "^3.5.1",
+    "slick-carousel": "^1.8.1",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
     "typescript": "~3.9.3",
-    "vue-template-compiler": "^2.6.11",
-    "slick-carousel": "^1.8.1",
     "vue-slick": "^1.1.15",
-    "jquery": "^3.5.1",
-    "@types/jquery": "^3.5.4"
+    "vue-template-compiler": "^2.6.11",
+    "vuex-module-decorators": "^1.0.1"
   }
 }

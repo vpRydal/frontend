@@ -16,7 +16,7 @@ Vue.use(Vue2TouchEvents);
 Vue.config.productionTip = false;
 
 Vue.component('ibg', () => import('@/js/components/common/Ibg.vue'));
-
+store.dispatch('init')
 
 
 new Vue({

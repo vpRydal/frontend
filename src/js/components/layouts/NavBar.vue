@@ -8,6 +8,7 @@
                         <span class="header__cross" @click="handleClose"></span>
                     </div>
                 </div>
+                <Search v-if="$windowWidth <= 500" class="nav-bar__search" always-open full-size/>
                 <NavLinks class="nav-bar__links-list" @click="handleClose">
                     <template v-slot:link="{link}" >
                         <router-link v-if="link.isLink" :to="{name: link.routeName}" class="nav-bar__link">
@@ -28,13 +29,20 @@ import bus from "../../common/bus";
 import {mixinNavLinks} from "@/js/mixins/navLinks";
 import logoImg from '@/assets/img/logo.png'
 import NavLinks from "@/js/components/layouts/header/NavLinks.vue";
+import Search from "@/js/components/layouts/header/Search.vue";
+import {mapGetters} from "vuex";
 
 @Component({
-    components: {NavLinks},
+    components: {Search, NavLinks},
     mixins: [mixinNavLinks],
     data: () => ({
         logoImg
-    })
+    }),
+    computed: {
+        ...mapGetters('common', {
+            $windowWidth: 'windowWidth'
+        })
+    }
 })
 export default class NavBar extends Vue {
     visible = false;
@@ -94,6 +102,9 @@ export default class NavBar extends Vue {
     z-index 4
     top 0
     left 0
+
+    &__search
+        margin-bottom 10px
 
     &__header
         margin-bottom 80px
