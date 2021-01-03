@@ -55,12 +55,14 @@ export default class Header extends Vue {
 
 <style scoped lang="stylus">
 @import "../../../../stylus/colors.styl"
+
 .header
     font-size 20px
     width 100%
     position fixed
     top 0
     background-color white
+    padding 25px 0
     z-index 3
 
     &__container
