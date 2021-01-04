@@ -63,7 +63,7 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
-import Link from "@/js/views/home/Link.vue";
+import Link from "@/js/views/Home/Link.vue";
 import BigHeader from "@/js/components/BigHeader.vue";
 import town1 from '@/assets/img/town1.png';
 import town2 from '@/assets/img/town2.png';

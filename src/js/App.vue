@@ -13,6 +13,7 @@ import Footer from "./components/layouts/Footer.vue";
 import NavBar from "./components/layouts/NavBar.vue";
 import {Component, Vue} from 'vue-property-decorator';
 import bus from "./common/bus";
+import {mapGetters} from "vuex";
 
 @Component({
     components: {NavBar, Footer, Header},
@@ -26,11 +27,20 @@ import bus from "./common/bus";
                 content: 'Технопарк Маяк, Ассоциация Технопарк Маяк',
             }
         ]
+    },
+    computed: {
+        ...mapGetters('common', {
+            $windowWidth: 'windowWidth'
+        })
     }
 })
 export default class App extends Vue {
+    $windowWidth!: number
+
     handleSwipeRight(): void {
-        bus.$emit('nav-bar-show')
+        if (this.$windowWidth <= 1200) {
+            bus.$emit('nav-bar-show')
+        }
     }
 
     handleSwipeLeft(): void {

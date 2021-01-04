@@ -39,24 +39,28 @@
                     <li class="nav_item"><a href="" class="nav__link link">Название</a></li>
                 </ul>
             </nav>
-            <div class="view-object__content">
+            <div v-if="viewObject" class="view-object__content">
                 <div class="view-object__col">
-                    <Slider/>
+                    <Slider
+                        :images="viewObject.images"
+                    />
                 </div>
                 <div class="view-object__col view-object__object-info object-info">
-                    <h1 class="object-info__name">{{ name }}</h1>
+                    <h1 class="object-info__name">{{ viewObject.name }}</h1>
                     <ul class="object-info__parameters parameters fw-600">
-                        <li class="parameters__item"><span
-                            class="parameters__name">Хозяйственное назначение</span>:<span class="parameters__value">Офисы</span>
+                        <li class="parameters__item">
+                            <span class="parameters__name">Хозяйственное назначение</span>:<span class="parameters__value">Офисы</span>
                         </li>
                         <li class="parameters__item"><span class="parameters__name">Площадь</span>:<span
-                            class="parameters__value">19.80 кв. м.</span></li>
-                        <li class="parameters__item"><span class="parameters__name"></span>Цена<span
-                            class="parameters__value">:</span></li>
-                        <li class="parameters__item"><span class="parameters__name"></span>До 30.12.2020<span
-                            class="parameters__value"></span></li>
+                            class="parameters__value">{{ viewObject.area }} кв. м.</span></li>
+                        <li class="parameters__item">
+                            <span class="parameters__name">Цена: </span><span class="parameters__value">{{ viewObject.price }}</span>
+                        </li>
+                        <li class="parameters__item">
+                            <span class="parameters__name"></span>До 30.12.2020<span class="parameters__value"></span>
+                        </li>
                     </ul>
-                    <p class="object-info__description fw-600">{{ description }}</p>
+                    <p class="object-info__description fw-600">{{ viewObject.description }}</p>
                 </div>
             </div>
             <div class="view-object__btn-wrapper">
@@ -65,12 +69,17 @@
             <div class="view-object__offers offers">
                 <h2 class="offers__title">Интересные предложения</h2>
                 <div class="offers__body">
-                    <Object class="offers__object" area="32.5" title="Нежилое помещение" price="550"
-                            :img-path="imgTown"/>
-                    <Object class="offers__object" area="32.5" title="Нежилое помещение" price="550"
-                            :img-path="imgTown"/>
-                    <Object class="offers__object" area="32.5" title="Нежилое помещение" price="550"
-                            :img-path="imgTown"/>
+                    <Object
+                        class="offers__object"
+                        v-if="objects.length"
+                        v-for="(object, index) in objects"
+                        :key="index"
+                        :area="object.area"
+                        :title="object.name"
+                        :price="object.price"
+                        :img-path="object.img_path"
+
+                    />
                 </div>
             </div>
         </div>
@@ -83,6 +92,7 @@ import Slider from "./Slider.vue";
 import Object from "@/js/components/Object.vue";
 import imgTown from '@/assets/img/town.png'
 import Modal from "@/js/components/widgets/Modal.vue";
+import RentObject from "@/js/api/RentObject";
 
 
 @Component({
@@ -92,15 +102,17 @@ import Modal from "@/js/components/widgets/Modal.vue";
     })
 })
 export default class ViewObject extends Vue {
-    name: string
-    description: string
+    objects: Array<RentObject> = []
+    viewObject: RentObject | false = false
     isShowRentModal = false
 
-
-    constructor() {
-        super();
-        this.name = 'Офисное помещение'
-        this.description = 'Офисное помещение общей площадью 19,8 м2 расположено на 2-м этаже 3-х-этажного офисного здания. В помещении установлен с/у площадью 2,6 м2. Также установлен кондиционер зима-лето. Отдельный узел учёта электроэнергии. Возможно подключение интернета и IP-телефонии. Круглосуточный доступ. Охраняемая территория, видео наблюдение.Офисное помещение общей площадью 19,8 м2 расположено на 2-м этаже 3-х-этажного офисного здания. В помещении установлен с/у площадью 2,6 м2. Также установлен кондиционер зима-лето. Отдельный узел учёта электроэнергии. Возможно подключение интернета и IP-телефонии. Круглосуточный доступ. Охраняемая территория, видео наблюдение.'
+    created(): void {
+        RentObject.getList().then(({ data }) => {
+            this.objects = data.slice(0, 3)
+        })
+        RentObject.get().then(({ data }) => {
+            this.viewObject = data
+        })
     }
 
     openRentModal(): void {
@@ -175,14 +187,12 @@ export default class ViewObject extends Vue {
         margin-bottom 90px
         display grid
         grid-template-columns 1fr 1fr 1fr
-        @media (max-width 1200px)
+        grid-gap 30px
+        @media (max-width 1000px)
             grid-template-columns 1fr 1fr
-        @media (max-width 800px)
+        @media (max-width 650px)
             grid-template-columns 1fr
 
     &__object
-        margin 15px auto
-        width 371px
-        @media (max-width 800px)
-            width 80%
+        width 100%
 </style>

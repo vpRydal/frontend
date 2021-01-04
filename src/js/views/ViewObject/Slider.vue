@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import imgTown from '@/assets/img/town.png'
-import {Component, Vue, Watch} from "vue-property-decorator";
+import {Component, Prop, Vue, Watch} from "vue-property-decorator";
 
 @Component({
     data: () => ({
@@ -40,9 +40,13 @@ export default class Slider extends Vue {
     leaveToClass = ''
     intervalId = 0
     isMouseClicked = false
-
     currentImageIndex = 0
-    images = new Array<string>(imgTown, imgTown, imgTown, imgTown)
+
+    @Prop({
+        required: true,
+    })
+    images!: Array<string>
+
 
     mounted(): void {
         this.startAutoplay()
@@ -106,6 +110,7 @@ export default class Slider extends Vue {
     width 100%
     display flex
     align-items center
+    padding 20px 0
     @media (max-width 1000px)
         flex-direction column
 

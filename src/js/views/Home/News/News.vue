@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import {Component, Mixins} from 'vue-property-decorator';
-    import Link from "@/js/views/home/Link.vue";
+    import Link from "@/js/views/Home/Link.vue";
     import BigHeader from "@/js/components/BigHeader.vue";
     import Slider from "./Slider.vue";
     import bus from "@/js/common/bus";

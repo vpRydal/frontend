@@ -3,7 +3,8 @@
         <div class="footer__container container">
             <div class="footer__flex-wrapper flex-wrapper">
                 <div class="footer__col footer__col_first">
-                    <p class="footer__address">г. Севастополь, ул. Фиолентовское шоссе, 1/2</p>
+
+                    <p class="footer__address"><a class="link link_white" href="https://yandex.ru/maps/959/sevastopol/?ll=33.482039%2C44.582682&mode=search&oid=243991293869&ol=biz&z=17.92" target="_blank">г. Севастополь, ул. Фиолентовское шоссе, 1/2</a></p>
                     <ul class="contacts-list">
                         <li class="contacts-list__item" v-for="(contact, index) of contacts" :key="index">
                             <span class="contacts-list__name">{{ contact.name }}</span>: <a

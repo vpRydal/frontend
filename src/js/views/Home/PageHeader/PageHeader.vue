@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import {Component, Mixins} from 'vue-property-decorator';
-    import Slide from "@/js/views/home/PageHeader/Slide.vue";
+    import Slide from "@/js/views/Home/PageHeader/Slide.vue";
     import SliderNav from "@/js/components/SliderNav.vue";
     import SliderOnMainPage, {Slide as TSlide} from "@/js/api/sliderOnMainPage";
     import bus from "@/js/common/bus";

@@ -27,7 +27,6 @@ import {Route} from "vue-router";
 export default class NavLinks extends Vue {
     onClickNavLink(linkId: number):void {
         const routeIsHome = this.$route.name === 'home'
-
         if (linkId === 3) {
             if (!routeIsHome) {
                 this.goToHome().then(() => {

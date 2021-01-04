@@ -12,13 +12,14 @@
                     +7(978)734-58-55</p>
             </div>
             <div class="catalog__objects">
-                <Object area="32.5" title="Нежилое помещение" price="550" :img-path="imgTown"/>
-                <Object area="32.5" title="Нежилое помещение" price="550" :img-path="imgTown"/>
-                <Object area="32.5" title="Нежилое помещение" price="550" :img-path="imgTown"/>
-                <Object area="32.5" title="Нежилое помещение" price="550" :img-path="imgTown"/>
-                <Object area="32.5" title="Нежилое помещение" price="550" :img-path="imgTown"/>
-                <Object area="32.5" title="Нежилое помещение" price="550" :img-path="imgTown"/>
-                <Object area="32.5" title="Нежилое помещение" price="550" :img-path="imgTown"/>
+                <Object
+                    v-if="objects.length"
+                    v-for="(object, index) in objects"
+                    :key="index"
+                    :area="object.area"
+                    :title="object.name"
+                    :price="object.price"
+                    :img-path="object.img_path"/>
             </div>
             <Pagination class="catalog__paginate"/>
         </div>
@@ -28,6 +29,7 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 import Object from "@/js/components/Object.vue";
+import RentObject from "@/js/api/RentObject";
 import imgTown from "@/assets/img/town.png";
 import Pagination from "@/js/components/widgets/Paginate.vue";
 
@@ -41,7 +43,13 @@ import Pagination from "@/js/components/widgets/Paginate.vue";
     }
 })
 export default class Catalog extends Vue {
+    objects: Array<RentObject> = []
 
+    created(): void {
+        RentObject.getList().then(({ data }) => {
+            this.objects = data
+        })
+    }
 }
 </script>
 
@@ -68,18 +76,18 @@ export default class Catalog extends Vue {
         display grid
         grid-template-columns 1fr 1fr 1fr
         margin-bottom 60px
-        @media (max-width 1320px)
+        grid-gap 35px
+
+        @media (max-width 1000px)
             grid-template-columns 1fr 1fr
-        @media (max-width 860px)
+        @media (max-width 650px)
             grid-template-columns 1fr
 
         & .object
             margin 15px auto
-            width 350px
+            width 100%
             & .object__img
                 padding 0 0 54% 0
-            @media (max-width 500px)
-                width 100%
 
     &__paginate
         margin-bottom 70px

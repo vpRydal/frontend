@@ -31,7 +31,7 @@ import $ from 'jquery'
     components: {},
     props: {
         area: {
-            type: String,
+            type: Number,
             required: true
         },
         title: {
@@ -39,7 +39,7 @@ import $ from 'jquery'
             required: true
         },
         price: {
-            type: String,
+            type: Number,
             required: true
         },
         imgPath: {
