@@ -1,18 +1,33 @@
 .btn
-    &, &:focus, &:active
+    &, &:focus
         background white
         color mainColorDark
         font-size 1rem
         padding 10px 0
+
+    &_primary
         transition background-color linear .2s
-
-    &:focus
-        background-color mainColorDark
-
-    &_main
         background-color mainColor
 
+        &:hover
+            background-color getColorWithOpacity(mainColorDark, .8)
+
+        &:focus
+            background-color mainColorDark
+
         &, &:focus
+            color white
+
+    &_secondary
+        transition background-color linear .2s, color linear .2s
+        color mainColorDark
+
+        &:hover
+            background-color mainColor
+            color white
+
+        &:focus
+            background-color mainColorDark
             color white
 
     &_sm

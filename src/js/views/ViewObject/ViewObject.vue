@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div class="view-object__btn-wrapper">
-                <button class="btn btn_main btn_sm" @click="openRentModal">Арендовать</button>
+                <button class="btn btn_primary btn_sm" @click="openRentModal">Арендовать</button>
             </div>
             <div class="view-object__offers offers">
                 <h2 class="offers__title">Интересные предложения</h2>

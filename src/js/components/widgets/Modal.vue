@@ -20,7 +20,7 @@
                         <div class="footer">
                             <slot name="footer">
                                 <slot name="btn-close">
-                                    <button class="btn btn_main btn_sm" @click="$emit('close')">Закрыть</button>
+                                    <button class="btn btn_secondary btn_sm" @click="$emit('close')">Закрыть</button>
                                 </slot>
                             </slot>
                         </div>

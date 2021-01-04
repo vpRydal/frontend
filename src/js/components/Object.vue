@@ -18,7 +18,7 @@
             </div>
         </div>
         <router-link class="stretched-link"
-                     :to="{name: 'viewObject', props: {category: 'category-name', 'id': 'fghfgh'}}">
+                     :to="{name: 'viewObject', params: {category: 'category-name', 'id': 'fghfgh'}}">
         </router-link>
     </div>
 </template>
