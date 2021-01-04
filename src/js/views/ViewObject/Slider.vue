@@ -31,7 +31,7 @@ import {Component, Vue, Watch} from "vue-property-decorator";
 @Component({
     data: () => ({
         imgTown
-    })
+    }),
 })
 export default class Slider extends Vue {
     enterClass = 'anim-enter-from-left'
@@ -87,6 +87,12 @@ export default class Slider extends Vue {
         }
 
         this.isMouseClicked = false
+    }
+
+    beforeDestroy(): void {
+        if (this.intervalId) {
+            clearInterval(this.intervalId)
+        }
     }
 }
 </script>

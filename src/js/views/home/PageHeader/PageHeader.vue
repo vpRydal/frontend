@@ -113,6 +113,10 @@ import {Component, Mixins} from 'vue-property-decorator';
 
         beforeDestroy(): void {
             bus.$off('scroll-to-info')
+
+            if (this.idInterval) {
+                clearInterval(this.idInterval)
+            }
         }
     }
 </script>

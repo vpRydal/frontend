@@ -5,7 +5,7 @@
                 <div class="nav-bar__header header">
                     <div class="flex-wrapper flex-wrapper_J-SB">
                         <ibg :src="logoImg" class="header__logo"/>
-                        <span class="header__cross" @click="handleClose"></span>
+                        <span class="header__cross cross" @click="handleClose"></span>
                     </div>
                 </div>
                 <Search v-if="$windowWidth <= 500" class="nav-bar__search" always-open full-size/>
@@ -152,24 +152,4 @@ export default class NavBar extends Vue {
     &__logo
         height 80px
         width 80px
-
-    &__cross
-        display block
-        position relative
-        height 50px
-        width 50px
-        cursor pointer
-
-        &:before, &:after
-            top 50%
-            content ''
-            background-color black
-            position absolute
-            display block
-            width 40px
-            height 2px
-            transform rotate(45deg)
-
-        &:after
-            transform rotate(-45deg)
 </style>

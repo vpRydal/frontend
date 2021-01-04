@@ -4,7 +4,28 @@
             :show="isShowRentModal"
             @close="isShowRentModal = false"
         >
-                <h3 slot="header">Ваша заявка</h3>
+            <h3 slot="header">Ваша заявка</h3>
+            <form action="" slot="content" class="form">
+                <div class="row form__row form__row_no-margin-sm">
+                    <div class="form__group col-6 col-12-sm">
+                        <label for="fio" class="form__label">ФИО</label>
+                        <input type="text" id="fio" class="form__control">
+                    </div>
+                    <div class="form__group col-6 col-12-sm">
+                        <label for="phone" class="form__label">Номер телефона</label>
+                        <input type="tel" id="phone" class="form__control">
+                    </div>
+                </div>
+                <div class="form__group">
+                    <label for="email" class="form__label">Email</label>
+                    <input type="email" id="email" class="form__control">
+                </div>
+                <div class="form__group">
+                    <label for="message" class="form__label">Сообщение</label>
+                    <textarea id="message" class="form__control" rows="4"></textarea>
+                </div>
+            </form>
+            <button class="btn btn_primary btn_sm" slot="btn-ok">Отправить</button>
         </Modal>
         <div class="container">
             <nav class="view-object__nav nav">
@@ -97,14 +118,20 @@ export default class ViewObject extends Vue {
 
     &__content
         display flex
-        margin-bottom 100px
+        margin-bottom 40px
         @media (max-width 1000px)
+            margin-bottom 0
             flex-direction column
 
     &__col
         flex 1 1 50%
         @media (max-width 1000px)
             flex 1 1 100%
+
+    &__btn-wrapper
+        display flex
+        justify-content center
+        margin-bottom 100px
 
 .nav
     color mainColor

@@ -6,7 +6,7 @@
                     <slot name="full-header">
                         <div class="modal__header header">
                             <slot name="header"></slot>
-                            <button class="modal__close" @click="$emit('close')">x</button>
+                            <button class="modal__close cross cross_sm" @click="$emit('close')"></button>
                         </div>
                     </slot>
                     <slot name="full-content">
@@ -19,8 +19,11 @@
                     <slot name="full-footer">
                         <div class="footer">
                             <slot name="footer">
+                                <slot name="btn-ok">
+                                    <button class="footer__btn btn btn_secondary btn_sm" @click="$emit('close')">Ок</button>
+                                </slot>
                                 <slot name="btn-close">
-                                    <button class="btn btn_secondary btn_sm" @click="$emit('close')">Закрыть</button>
+                                    <button class="footer__btn btn btn_secondary btn_bordered btn_sm" @click="$emit('close')">Закрыть</button>
                                 </slot>
                             </slot>
                         </div>
@@ -62,66 +65,53 @@ export default class Modal extends Vue {
 @import "~@/stylus/mixins.styl"
 
 
-contentPaddingX = 20
-contentPaddingY = 15
+contentPaddingX = 60
+contentPaddingY = 35
 
 .modal
     background-color white
     margin 0 auto
-    width 600px
+    max-width 600px
+    @media (max-width 600px)
+        width 100%
 
     &__close
-        position relative
-        color black
-        padding 10px 15px
-        font-weight 600
-        display block
         margin-left  30px
-
-        &, &:after
-            transition background-color ease-in .3s
-
-        &:after
-            z-index -1
-            content ''
-            position absolute
-            width 100%
-            height 100%
-            top 0
-            left 0
-
-
-        &:hover
-            background-color mainColor
-            &:after
-                background-color mainColor
 
     &-wrapper
         position fixed
         top 0
         left 0
-        width 100%
         height 100%
+        width 100%
         background-color rgba(0, 0, 0, .4)
         z-index 3
         display flex
         align-items center
 
-
     &-leave-active
-        transition transform linear .3s, opacity linear .5s
+        transition opacity linear .5s
+
+        & .modal
+            transition transform linear .3s
 
     &-enter-active
-        transition transform ease-in .3s, opacity ease-in .5s
+        transition opacity ease-in .5s
+
+        & .modal
+            transition transform ease-in .3s
 
     &-enter-to, &-leave
-        transform unset
         opacity 1
+
+        & .modal
+            transform unset
 
 
     &-enter, &-leave-to
-        transform translateY(-100%)
         opacity 0
+        & .modal
+            transform scale(0)
 
 
 .header
@@ -138,6 +128,15 @@ contentPaddingY = 15
         max-height 600px
 .footer
     padding (contentPaddingY)px (contentPaddingX)px
+    display flex
+    justify-content flex-end
+
+    &__btn
+        margin 0 10px
+        &:first-child
+            margin-left 0
+        &:last-child
+            margin-right 0
 
 </style>
 

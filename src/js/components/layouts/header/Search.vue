@@ -103,6 +103,7 @@ export default class Search extends Vue {
         border-bottom mainColor solid 1px
         color mainColor
         text-decoration none
+        border-radius unset
 
         &:after
             content ''
