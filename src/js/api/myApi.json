@@ -2,122 +2,122 @@
   "objects": [
     {
       "id": 1,
-      "img_path": "/img/objects/town.png",
+      "img_path": "/frontend/img/objects/town.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 19.80,
       "price": 550,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 2,
-      "img_path": "/img/objects/town1.png",
+      "img_path": "/frontend/img/objects/town1.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 30,
       "price": 230,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 3,
-      "img_path": "/img/objects/town2.png",
+      "img_path": "/frontend/img/objects/town2.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 10,
       "price": 450,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 4,
-      "img_path": "/img/objects/town3.png",
+      "img_path": "/frontend/img/objects/town3.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 15.12,
       "price": 112,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 5,
-      "img_path": "/img/objects/town4.png",
+      "img_path": "/frontend/img/objects/town4.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 22.3,
       "price": 760,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 6,
-      "img_path": "/img/objects/town.png",
+      "img_path": "/frontend/img/objects/town.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 17.86,
       "price": 364.34,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 7,
-      "img_path": "/img/objects/town1.png",
+      "img_path": "/frontend/img/objects/town1.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 11.12,
       "price": 412,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 8,
-      "img_path": "/img/objects/town2.png",
+      "img_path": "/frontend/img/objects/town2.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 33.2,
       "price": 214,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     }
   ]
