@@ -6,8 +6,8 @@
                     <p class="footer__address">г. Севастополь, ул. Фиолентовское шоссе, 1/2</p>
                     <ul class="contacts-list">
                         <li class="contacts-list__item" v-for="(contact, index) of contacts" :key="index">
-                            <span class="contacts-list__name">{{ contact.name }}</span>: <span
-                            class="contacts-list__value">{{ contact.value }}</span>
+                            <span class="contacts-list__name">{{ contact.name }}</span>: <a
+                            class="contacts-list__value link link_white" :href="contact.type === 'tel'? `tel:${contact.value}`: `mail-to:${contact.value}`">{{ contact.value }}</a>
                         </li>
                     </ul>
                 </div>
@@ -26,10 +26,10 @@
                         <p class="footer__departments">Отдел аренды:</p>
                         <ul class="departments__list">
                             <li class="departments__item">
-                                <span>+7 (978) 734-58-99</span><span>+7 (918) 473-08-39</span>
+                                <a class="link link_white" href="tel:+7 (978) 734-58-99">+7 (978) 734-58-99</a><a class="link link_white" href="tel:+7 (918) 473-08-39">+7 (918) 473-08-39</a>
                             </li>
                             <li class="departments__item">
-                                <span>+7 (978) 734-58-55</span><span>+7 (978) 268-72-55</span>
+                                <a href="tel:+7 (978) 734-58-55" class="link link_white">+7 (978) 734-58-55</a><a class="link link_white" href="tel:+7 (978) 268-72-55">+7 (978) 268-72-55</a>
                             </li>
                         </ul>
                     </div>
@@ -49,6 +49,7 @@ import bus from "@/js/common/bus";
 type Contact = {
     name: string;
     value: string;
+    type: string;
 }
 
 @Component({
@@ -59,8 +60,8 @@ type Contact = {
 })
 export default class Footer extends Mixins(ScrollTo) {
     contacts: Array<Contact> = [
-        {name: 'Менеджер проекта', value: '+7(978) 801-43-83 '},
-        {name: 'e-mail', value: 'elena@sferos.com, irina@sferos.com'},
+        {name: 'Менеджер проекта', value: '+7(978) 801-43-83 ', type: 'tel'},
+        {name: 'e-mail', value: 'elena@sferos.com, irina@sferos.com', type: 'email'},
     ]
 
     created():void {
