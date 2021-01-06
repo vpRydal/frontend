@@ -9,7 +9,19 @@
                     Меняйте стоимость, метраж, планировку, назначение и другие параметры – находите самое лучшее
                     помещение!
                     Кроме того, вы можете воспользоваться услугой «онлайн-консультант» или позвонить по телефону:
-                    +7(978)734-58-55</p>
+                    <a href="tel:+7(978)734-58-55" class="link">+7(978)734-58-55</a>
+                </p>
+            </div>
+            <div>
+                <Select
+                    multiple
+                    :options="[
+                         {value: 'offices', label: 'Офисы'},
+                         {value: 'hangars', label: 'Ангары'},
+                         {value: '2', label: 'Ангары'},
+                         {value: '1', label: 'Ангары'}
+                     ]"
+                />
             </div>
             <div class="catalog__objects">
                 <Object
@@ -32,9 +44,10 @@ import Object from "@/js/components/Object.vue";
 import RentObject from "@/js/api/RentObject";
 import imgTown from "@/assets/img/town.png";
 import Pagination from "@/js/components/widgets/Paginate.vue";
+import Select from "@/js/components/ui/Select.vue";
 
 @Component({
-    components: {Pagination, Object},
+    components: {Select, Pagination, Object},
     data: () => ({
         imgTown
     }),
@@ -46,8 +59,8 @@ export default class Catalog extends Vue {
     objects: Array<RentObject> = []
 
     created(): void {
-        console.log(this.$route.query   )
-        RentObject.getList().then(({ data }) => {
+        console.log(this.$route.query)
+        RentObject.getList().then(({data}) => {
             this.objects = data
         })
     }
@@ -87,6 +100,7 @@ export default class Catalog extends Vue {
         & .object
             margin 15px auto
             width 100%
+
             & .object__img
                 padding 0 0 54% 0
 
