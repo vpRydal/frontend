@@ -9,7 +9,7 @@
                             :key="index" class="slider__slide"
                             :title="slide.title"
                             :text="slide.text"
-                            :img-path="slide.imgPath"
+                            :img-path="slide.image_path"
                     />
                 </transition>
             </div>
@@ -31,7 +31,7 @@
 import {Component, Mixins} from 'vue-property-decorator';
     import Slide from "@/js/views/Home/PageHeader/Slide.vue";
     import SliderNav from "@/js/components/SliderNav.vue";
-    import SliderOnMainPage, {Slide as TSlide} from "@/js/api/sliderOnMainPage";
+    import SlideOnMainPage from "@/js/api/SlideOnMainPage";
     import bus from "@/js/common/bus";
     import {ScrollTo} from "@/js/mixins/common";
 
@@ -58,11 +58,11 @@ import {Component, Mixins} from 'vue-property-decorator';
 
     export default class PageHeader extends Mixins(ScrollTo) {
         currentSlideIndex = -1;
-        slides: Array<TSlide> = [];
+        slides: Array<SlideOnMainPage> = [];
 
         idInterval = 0;
         mounted():void {
-          SliderOnMainPage.get().then(({data}) => {
+          SlideOnMainPage.get().then(({data}) => {
             this.slides = data
           })
             this.$nextTick(() => {

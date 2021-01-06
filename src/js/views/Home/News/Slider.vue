@@ -25,7 +25,7 @@ import {Component, Vue} from 'vue-property-decorator';
 import Slide from "./Slide.vue";
 import Slick from "vue-slick";
 import SliderNav from "@/js/components/SliderNav.vue";
-import News from "@/js/api/news";
+import News from "@/js/api/News";
 
 @Component({
   components: {SliderNav, Slide, Slick},
