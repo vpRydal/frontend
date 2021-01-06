@@ -39,28 +39,30 @@
                     <li class="nav_item"><a href="" class="nav__link link">Название</a></li>
                 </ul>
             </nav>
-            <div v-if="viewObject" class="view-object__content">
+            <div v-if="viewRealty" class="view-object__content">
                 <div class="view-object__col">
                     <Slider
-                        :images="viewObject.images"
+                        :images="viewRealty.images"
                     />
                 </div>
                 <div class="view-object__col view-object__object-info object-info">
-                    <h1 class="object-info__name">{{ viewObject.name }}</h1>
+                    <h1 class="object-info__name">{{ viewRealty.name }}</h1>
                     <ul class="object-info__parameters parameters fw-600">
                         <li class="parameters__item">
                             <span class="parameters__name">Хозяйственное назначение</span>:<span class="parameters__value">Офисы</span>
                         </li>
                         <li class="parameters__item"><span class="parameters__name">Площадь</span>:<span
-                            class="parameters__value">{{ viewObject.area }} кв. м.</span></li>
+                            class="parameters__value">{{ viewRealty.area }} кв. м.</span></li>
                         <li class="parameters__item">
-                            <span class="parameters__name">Цена: </span><span class="parameters__value">{{ viewObject.price }}</span>
+                            <span class="parameters__name">Цена: </span><span class="parameters__value">{{
+                                viewRealty.price
+                            }}</span>
                         </li>
                         <li class="parameters__item">
                             <span class="parameters__name"></span>До 30.12.2020<span class="parameters__value"></span>
                         </li>
                     </ul>
-                    <p class="object-info__description fw-600">{{ viewObject.description }}</p>
+                    <p class="object-info__description fw-600">{{ viewRealty.description }}</p>
                 </div>
             </div>
             <div class="view-object__btn-wrapper">
@@ -71,8 +73,8 @@
                 <div class="offers__body">
                     <Object
                         class="offers__object"
-                        v-if="objects.length"
-                        v-for="(object, index) in objects"
+                        v-if="realtys.length"
+                        v-for="(object, index) in realtys"
                         :key="index"
                         :area="object.area"
                         :title="object.name"
@@ -89,10 +91,10 @@
 <script lang="ts">
 import {Component, Vue} from "vue-property-decorator";
 import Slider from "./Slider.vue";
-import Object from "@/js/components/Object.vue";
+import Object from "@/js/components/Realty.vue";
 import imgTown from '@/assets/img/town.png'
 import Modal from "@/js/components/widgets/Modal.vue";
-import RentObject from "@/js/api/RentObject";
+import Realty from "@/js/api/Realty";
 
 
 @Component({
@@ -102,16 +104,16 @@ import RentObject from "@/js/api/RentObject";
     })
 })
 export default class ViewObject extends Vue {
-    objects: Array<RentObject> = []
-    viewObject: RentObject | false = false
+    realtys: Array<Realty> = []
+    viewRealty: Realty | false = false
     isShowRentModal = false
 
     created(): void {
-        RentObject.getList().then(({ data }) => {
-            this.objects = data.slice(0, 3)
+        Realty.getList().then(({ data }) => {
+            this.realtys = data.slice(0, 3)
         })
-        RentObject.get().then(({ data }) => {
-            this.viewObject = data
+        Realty.get().then(({ data }) => {
+            this.viewRealty = data
         })
     }
 

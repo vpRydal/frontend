@@ -40,8 +40,8 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
-import Object from "@/js/components/Object.vue";
-import RentObject from "@/js/api/RentObject";
+import Object from "@/js/components/Realty.vue";
+import Realty from "@/js/api/Realty";
 import imgTown from "@/assets/img/town.png";
 import Pagination from "@/js/components/widgets/Paginate.vue";
 import Select from "@/js/components/ui/Select.vue";
@@ -56,11 +56,11 @@ import Select from "@/js/components/ui/Select.vue";
     }
 })
 export default class Catalog extends Vue {
-    objects: Array<RentObject> = []
+    objects: Array<Realty> = []
 
     created(): void {
         console.log(this.$route.query)
-        RentObject.getList().then(({data}) => {
+        Realty.getList().then(({data}) => {
             this.objects = data
         })
     }

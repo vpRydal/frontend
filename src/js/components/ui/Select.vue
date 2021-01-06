@@ -25,9 +25,7 @@
                 >{{ option.label }}
                 </li>
             </ul>
-
         </div>
-
     </div>
 </template>
 
