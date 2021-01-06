@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Mixins, Watch} from 'vue-property-decorator';
+import {Component, Mixins, Ref, Watch} from 'vue-property-decorator';
 import vkImg from '@/assets/img/vk.png'
 import fImg from '@/assets/img/f.png'
 import {ScrollTo} from "@/js/mixins/common";
@@ -79,6 +79,8 @@ export default class Footer extends Mixins(ScrollTo) {
     contacts: Array<Contact> = []
     rentDepartContacts: Array<Array<Contact>> = []
     emails: Array<string> = []
+    @Ref('emails')
+    refEmails!: Array<HTMLElement>
 
     created():void {
         bus.$on('scroll-to-contacts', () => {
@@ -112,9 +114,7 @@ export default class Footer extends Mixins(ScrollTo) {
     @Watch('emails')
     watchEmails(): void {
         this.$nextTick(() => {
-            const emails = this.$refs['emails'] as Array<HTMLElement>
-
-            $(emails.slice(0, emails.length - 1))
+            $(this.refEmails.slice(0, this.refEmails.length - 1))
                 .after($('<span>', {text: ','}).css('margin-right', 5))
         })
     }

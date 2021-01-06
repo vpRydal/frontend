@@ -30,12 +30,10 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue, Watch} from "vue-property-decorator";
+import {Component, Emit, Prop, Vue, Watch} from "vue-property-decorator";
+import {option} from "@/js/common/types";
 
-type option = {
-    value: string | number;
-    label: string
-}
+
 
 @Component({})
 export default class Select extends Vue {
@@ -56,7 +54,14 @@ export default class Select extends Vue {
     selectedOptions: Array<option> = []
     showBody = false
 
-    onSelectOption(option: option): void {
+    @Emit('changedOption')
+    @Watch('selectedOptions')
+    watchSelectedOptions(val: Array<option>): option | Array<option> {
+        return this.multiple ? val : val[0]
+    }
+
+    @Emit('selectedOption')
+    onSelectOption(option: option): option | Array<option> {
         if (!this.multiple) {
             this.selectedOptions = []
             this.selectedOptions.push(option)
@@ -66,7 +71,7 @@ export default class Select extends Vue {
             }
         }
 
-        this.$emit('changedOption', this.multiple ? this.selectedOptions : this.selectedOptions[0])
+        return this.multiple ? this.selectedOptions : this.selectedOptions[0]
     }
 
     onPopOption(option: option): void {
@@ -114,7 +119,6 @@ export default class Select extends Vue {
         display flex
         transition border ease-out .1s
         cursor pointer
-        margin-bottom 5px
         overflow hidden
 
         &_active
@@ -163,6 +167,7 @@ export default class Select extends Vue {
         width 94%
         border lightgray solid 1px
         padding 5px
+        margin-top 5px
         box-shadow getColorWithOpacity(lightgray, .6) 3px 3px 7px
 
 
@@ -173,6 +178,7 @@ export default class Select extends Vue {
     &__text
         position relative
         padding-right 15px
+        white-space nowrap
 
     &__cross
         position absolute

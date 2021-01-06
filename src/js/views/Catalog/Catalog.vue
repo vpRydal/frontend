@@ -15,24 +15,23 @@
             <div>
                 <Select
                     multiple
-                    :options="[
-                         {value: 'offices', label: 'Офисы'},
-                         {value: 'hangars', label: 'Ангары'},
-                         {value: '2', label: 'Ангары'},
-                         {value: '1', label: 'Ангары'}
-                     ]"
+                    :options="realtyTypes"
+                    @changedOption="onChangeOption"
                 />
             </div>
-            <div class="catalog__objects">
-                <Object
-                    v-if="objects.length"
-                    v-for="(object, index) in objects"
-                    :key="index"
-                    :area="object.area"
-                    :title="object.name"
-                    :price="object.price"
-                    :img-path="object.img_path"/>
-            </div>
+                <transition-group class="catalog__objects" tag="div" name="realty" :css="false" @before-enter="beforeEnter" @enter="onEnter">
+                    <Realty
+                        class="realty"
+                        v-if="realty.length"
+                        v-for="(object, index) in realty"
+                        :key="index + object.id"
+                        :area="object.area"
+                        :title="object.name"
+                        :price="object.price"
+                        :img-path="object.img_path"
+                        :data-index="index"
+                    />
+                </transition-group>
             <Pagination class="catalog__paginate"/>
         </div>
     </div>
@@ -40,14 +39,17 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
-import Object from "@/js/components/Realty.vue";
-import Realty from "@/js/api/Realty";
+import Realty from "@/js/components/Realty.vue";
+import Realty_ from "@/js/api/Realty";
+import RealtyType from "@/js/api/RealtyType";
 import imgTown from "@/assets/img/town.png";
 import Pagination from "@/js/components/widgets/Paginate.vue";
 import Select from "@/js/components/ui/Select.vue";
+import {option} from "@/js/common/types";
+import $ from "jquery";
 
 @Component({
-    components: {Select, Pagination, Object},
+    components: {Select, Pagination, Realty},
     data: () => ({
         imgTown
     }),
@@ -56,13 +58,36 @@ import Select from "@/js/components/ui/Select.vue";
     }
 })
 export default class Catalog extends Vue {
-    objects: Array<Realty> = []
+    realty: Array<Realty_> = []
+    realtyTypes: Array<option> = []
 
     created(): void {
-        console.log(this.$route.query)
-        Realty.getList().then(({data}) => {
-            this.objects = data
+        Realty_.getList().then(({data}) => {
+            this.realty = data
         })
+        RealtyType.getList().then(({data}) => {
+            this.realtyTypes = data.map(value => ({value: value.id, label: value.name} as option))
+        })
+    }
+
+    beforeEnter(el: HTMLElement): void {
+        $(el).css('opacity', 0)
+    }
+
+    onEnter(el: HTMLElement, done: () => void): void {
+        if (el) {
+            let delay = Number(el.dataset.index) * 150
+
+            setTimeout(() => {
+                $(el).animate({
+                    opacity: 1
+                }, "fast", done)
+            }, delay)
+        }
+    }
+
+    onChangeOption(option: option | Array<option>): void {
+        console.log(option)
     }
 }
 </script>
@@ -106,4 +131,15 @@ export default class Catalog extends Vue {
 
     &__paginate
         margin-bottom 70px
+
+.realty
+
+    &-enter-active, &-leave-active
+        transition opacity linear .5s
+
+    &-enter-to, &-leave
+        opacity 1
+
+    &-enter, &-leave-to
+        opacity 0
 </style>
