@@ -46,6 +46,7 @@ export default class Catalog extends Vue {
     objects: Array<RentObject> = []
 
     created(): void {
+        console.log(this.$route.query   )
         RentObject.getList().then(({ data }) => {
             this.objects = data
         })

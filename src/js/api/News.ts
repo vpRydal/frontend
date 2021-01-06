@@ -8,7 +8,7 @@ class News {
     createdAt?: string;
 
     /* eslint-disable */
-    static get(options?:any): Promise<AxiosResponse<News[]>> {
+    static getList(options?:any): Promise<AxiosResponse<News[]>> {
         return new Promise<AxiosResponse<News[]>>((resolve) => {
             resolve({ data: api.news } as AxiosResponse<News[]>)
         })

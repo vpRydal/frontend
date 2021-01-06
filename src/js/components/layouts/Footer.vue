@@ -7,8 +7,23 @@
                     <p class="footer__address"><a class="link link_white" href="https://yandex.ru/maps/959/sevastopol/?ll=33.482039%2C44.582682&mode=search&oid=243991293869&ol=biz&z=17.92" target="_blank">г. Севастополь, ул. Фиолентовское шоссе, 1/2</a></p>
                     <ul class="contacts-list">
                         <li class="contacts-list__item" v-for="(contact, index) of contacts" :key="index">
-                            <span class="contacts-list__name">{{ contact.name }}</span>: <a
-                            class="contacts-list__value link link_white" :href="contact.type === 'tel'? `tel:${contact.value}`: `mail-to:${contact.value}`">{{ contact.value }}</a>
+                            <span class="contacts-list__name">{{ contact.name }}</span><span class="contacts-list__dote">:</span>
+                            <a class="contacts-list__value link link_white"
+                               :href="contact.text.includes('@') ? `mail-to:${contact.text}`: `tel:${contact.text}`"
+                            >{{ contact.text }}</a>
+                        </li>
+                        <li
+                            v-if="emails.length"
+                            class="contacts-list__item"
+                        >
+                            <span class="contacts-list__name">e-mail</span><span class="contacts-list__dote">:</span>
+                            <a
+                                v-for="(email, index) in emails"
+                                :key="index"
+                                class="contacts-list__value link link_white contacts-list__value_email"
+                                :href="`mail-to:${email}`"
+                                ref="emails"
+                            >{{ email }}</a>
                         </li>
                     </ul>
                 </div>
@@ -26,11 +41,15 @@
                     <div class="departments">
                         <p class="footer__departments">Отдел аренды:</p>
                         <ul class="departments__list">
-                            <li class="departments__item">
-                                <a class="link link_white" href="tel:+7 (978) 734-58-99">+7 (978) 734-58-99</a><a class="link link_white" href="tel:+7 (918) 473-08-39">+7 (918) 473-08-39</a>
-                            </li>
-                            <li class="departments__item">
-                                <a href="tel:+7 (978) 734-58-55" class="link link_white">+7 (978) 734-58-55</a><a class="link link_white" href="tel:+7 (978) 268-72-55">+7 (978) 268-72-55</a>
+                            <li
+                                v-for="(contacts, index) in rentDepartContacts"
+                                :key="index"
+                                class="departments__item"
+                            >
+                                <a
+                                    v-for="(contact, index) in contacts"
+                                    :key="index"
+                                    class="link link_white" :href="`tel:${contact.text}`">{{ contact.text }}</a>
                             </li>
                         </ul>
                     </div>
@@ -41,17 +60,14 @@
 </template>
 
 <script lang="ts">
-import {Component, Mixins} from 'vue-property-decorator';
+import {Component, Mixins, Watch} from 'vue-property-decorator';
 import vkImg from '@/assets/img/vk.png'
 import fImg from '@/assets/img/f.png'
 import {ScrollTo} from "@/js/mixins/common";
 import bus from "@/js/common/bus";
+import Contact from "@/js/api/Contact";
+import $ from "jquery";
 
-type Contact = {
-    name: string;
-    value: string;
-    type: string;
-}
 
 @Component({
     data: () => ({
@@ -60,14 +76,46 @@ type Contact = {
     })
 })
 export default class Footer extends Mixins(ScrollTo) {
-    contacts: Array<Contact> = [
-        {name: 'Менеджер проекта', value: '+7(978) 801-43-83 ', type: 'tel'},
-        {name: 'e-mail', value: 'elena@sferos.com, irina@sferos.com', type: 'email'},
-    ]
+    contacts: Array<Contact> = []
+    rentDepartContacts: Array<Array<Contact>> = []
+    emails: Array<string> = []
 
     created():void {
         bus.$on('scroll-to-contacts', () => {
             this.scrollTo(this.$refs['footer'] as HTMLElement)
+        })
+
+        Contact.getList().then((response) => {
+            let counter = 0
+            let tempList: Array<Contact> = []
+
+            response.data.forEach(contact => {
+                if (contact.is_rent_depart) {
+                    tempList.push(contact)
+
+                    if (++counter == 2) {
+                        counter = 0
+                        this.rentDepartContacts.push(tempList)
+                        tempList = []
+                    }
+                } else {
+                    if (contact.text?.includes('@')) {
+                        this.emails.push(contact.text)
+                    } else {
+                        this.contacts.push(contact)
+                    }
+                }
+            })
+        })
+    }
+
+    @Watch('emails')
+    watchEmails(): void {
+        this.$nextTick(() => {
+            const emails = this.$refs['emails'] as Array<HTMLElement>
+
+            $(emails.slice(0, emails.length - 1))
+                .after($('<span>', {text: ','}).css('margin-right', 5))
         })
     }
 
@@ -120,10 +168,16 @@ export default class Footer extends Mixins(ScrollTo) {
     font-size 1em
 
     &__item
+        display flex
         margin-bottom 15px
+        flex-wrap wrap
 
         &:last-child
             margin-bottom 0
+
+.contacts-list
+    &__dote, &__comma
+        margin-right 5px
 
 .social-link
     position relative

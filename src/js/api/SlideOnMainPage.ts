@@ -7,7 +7,7 @@ class SlideOnMainPage {
     title?: string
 
     /* eslint-disable */
-    static get(options?:any): Promise<AxiosResponse<SlideOnMainPage[]>> {
+    static getList(options?:any): Promise<AxiosResponse<SlideOnMainPage[]>> {
         return new Promise<AxiosResponse<SlideOnMainPage[]>>((resolve) => {
             resolve({ data: api.sliderSlides } as AxiosResponse<SlideOnMainPage[]>)
         })

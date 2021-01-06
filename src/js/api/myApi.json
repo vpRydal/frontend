@@ -174,5 +174,49 @@
       "text": "Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.",
       "title": "Аренда офисов и производсвенных помещений"
     }
+  ],
+  "contacts": [
+    {
+      "id": 1,
+      "name": "Менеджер проекта",
+      "text": "+7(978) 801-43-83",
+      "is_rent_depart": false
+    },
+    {
+      "id": 2,
+      "name": "email",
+      "text": "elena@sferos.com",
+      "is_rent_depart": false
+    },
+    {
+      "id": 3,
+      "name": "email",
+      "text": "irina@sferos.com",
+      "is_rent_depart": false
+    },
+    {
+      "id": 4,
+      "name": "",
+      "text": "+7 (978) 734-58-55",
+      "is_rent_depart": true
+    },
+    {
+      "id": 5,
+      "name": "",
+      "text": "+7 (978) 268-72-55",
+      "is_rent_depart": true
+    },
+    {
+      "id": 6,
+      "name": "",
+      "text": "+7 (978) 734-58-99",
+      "is_rent_depart": true
+    },
+    {
+      "id": 7,
+      "name": "",
+      "text": "+7 (918) 473-08-39",
+      "is_rent_depart": true
+    }
   ]
 }

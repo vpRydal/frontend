@@ -62,7 +62,7 @@ import {Component, Mixins} from 'vue-property-decorator';
 
         idInterval = 0;
         mounted():void {
-          SlideOnMainPage.get().then(({data}) => {
+          SlideOnMainPage.getList().then(({data}) => {
             this.slides = data
           })
             this.$nextTick(() => {
