@@ -1,13 +1,13 @@
 <template>
     <div class="slide">
         <div class="slide__body">
-            <h1 class="slide__title">{{ title }}</h1>
-            <p class="slide__text">{{ text }}</p>
+            <h1 class="slide__title">{{ header }}</h1>
+            <p class="slide__text">{{ content }}</p>
             <div class="slide__learn-more learn-more">Узнать подробнее
                 <span class="learn-more__arrow"></span>
                 <span class="learn-more__circle"></span></div>
         </div>
-        <ibg class="slide__town" :src="imgPath"/>
+        <ibg class="slide__town" :src="image"/>
     </div>
 </template>
 
@@ -16,15 +16,15 @@
 
     @Component({
         props: {
-            title: {
+            header: {
                 type: String,
                 required: true
             },
-            text: {
+            content: {
                 type: String,
                 required: true
             },
-            imgPath: {
+            image: {
                 type: String,
                 required: true
             }

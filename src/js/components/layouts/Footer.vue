@@ -7,10 +7,10 @@
                     <p class="footer__address"><a class="link link_white" href="https://yandex.ru/maps/959/sevastopol/?ll=33.482039%2C44.582682&mode=search&oid=243991293869&ol=biz&z=17.92" target="_blank">г. Севастополь, ул. Фиолентовское шоссе, 1/2</a></p>
                     <ul class="contacts-list">
                         <li class="contacts-list__item" v-for="(contact, index) of contacts" :key="index">
-                            <span class="contacts-list__name">{{ contact.name }}</span><span class="contacts-list__dote">:</span>
+                            <span class="contacts-list__name">{{ contact.header }}</span><span class="contacts-list__dote">:</span>
                             <a class="contacts-list__value link link_white"
-                               :href="contact.text.includes('@') ? `mail-to:${contact.text}`: `tel:${contact.text}`"
-                            >{{ contact.text }}</a>
+                               :href="contact.content.includes('@') ? `mail-to:${contact.content}`: `tel:${contact.content}`"
+                            >{{ contact.content }}</a>
                         </li>
                         <li
                             v-if="emails.length"
@@ -49,7 +49,7 @@
                                 <a
                                     v-for="(contact, index) in contacts"
                                     :key="index"
-                                    class="link link_white" :href="`tel:${contact.text}`">{{ contact.text }}</a>
+                                    class="link link_white" :href="`tel:${contact.content}`">{{ contact.content }}</a>
                             </li>
                         </ul>
                     </div>
@@ -101,8 +101,8 @@ export default class Footer extends Mixins(ScrollTo) {
                         tempList = []
                     }
                 } else {
-                    if (contact.text?.includes('@')) {
-                        this.emails.push(contact.text)
+                    if (contact.content?.includes('@')) {
+                        this.emails.push(contact.content)
                     } else {
                         this.contacts.push(contact)
                     }

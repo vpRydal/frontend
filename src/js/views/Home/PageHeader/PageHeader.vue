@@ -7,9 +7,9 @@
                             v-for="(slide, index) of slides"
                             v-if="currentSlideIndex === index"
                             :key="index" class="slider__slide"
-                            :title="slide.title"
-                            :text="slide.text"
-                            :img-path="slide.image_path"
+                            :header="slide.header"
+                            :content="slide.content"
+                            :image="slide.image"
                     />
                 </transition>
             </div>

@@ -2,10 +2,9 @@ import {AxiosResponse} from "axios";
 import api from "./myApi.json";
 
 class News {
-    img?: string;
-    title?: string;
-    text?: string;
-    createdAt?: string;
+    photo?: string;
+    header?: string;
+    content?: string;
 
     /* eslint-disable */
     static getList(options?:any): Promise<AxiosResponse<News[]>> {

@@ -3,8 +3,9 @@ import api from "./myApi.json";
 
 class Contact {
     id?: number
-    title?: string;
-    text?: string;
+    header?: string;
+    content?: string;
+    type?: string;
     is_rent_depart?: boolean;
 
     /* eslint-disable */

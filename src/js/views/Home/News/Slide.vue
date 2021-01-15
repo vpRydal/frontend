@@ -1,10 +1,10 @@
 <template>
     <div class="slide">
         <div class="slide__flex-wrapper flex-wrapper">
-            <ibg :src="img" class="slide__img"/>
+            <ibg :src="photo" class="slide__img"/>
             <div class="slide__body">
-                <h3 class="slide__title">{{ title }}</h3>
-                <p class="slide__text">{{ text }}</p>
+                <h3 class="slide__title">{{ header }}</h3>
+                <p class="slide__text">{{ content }}</p>
             </div>
         </div>
     </div>
@@ -15,15 +15,15 @@
 
     @Component({
         props: {
-            text: {
+            content: {
                 type: String,
                 required: true
             },
-            img: {
+            photo: {
                 type: String,
                 required: true
             },
-            title: {
+            header: {
                 type: String,
                 required: true
             }

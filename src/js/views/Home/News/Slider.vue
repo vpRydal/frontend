@@ -3,9 +3,9 @@
     <Slick v-if="slides.length" :options="slickOptions" @beforeChange="handleBeforeChange" ref="slick" class="slider__slick-slider">
       <Slide v-for="(news, index) in slides"
              :key="index + 123"
-             :title="news.title"
-             :text="news.text"
-             :img="news.img"
+             :header="news.header"
+             :content="news.content"
+             :photo="news.photo"
       />
     </Slick>
     <SliderNav
