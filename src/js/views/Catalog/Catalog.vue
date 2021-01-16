@@ -40,7 +40,13 @@
                         :data-index="index"
                     />
                 </transition-group>
-            <Pagination class="catalog__paginate"/>
+            <Pagination class="catalog__paginate"
+                        :current-page="paginatorData.currentPage"
+                        :items-on-page="paginatorData.itemsOnPage"
+                        :total-items="paginatorData.totalItems"
+                        :total-pages="paginatorData.totalPages"
+                        @onChangePage="paginatorData.currentPage = $event"
+            />
         </div>
     </div>
 </template>
@@ -51,7 +57,7 @@ import Realty from "@/js/components/Realty.vue";
 import Realty_ from "@/js/api/Realty";
 import RealtyType from "@/js/api/RealtyType";
 import imgTown from "@/assets/img/town.png";
-import Pagination from "@/js/components/widgets/Paginate.vue";
+import Pagination from "@/js/components/widgets/Paginator.vue";
 import Select from "@/js/components/ui/Select.vue";
 import {option} from "@/js/common/types";
 import $ from "jquery";
@@ -70,6 +76,12 @@ export default class Catalog extends Vue {
     realty: Array<Realty_> = []
     realtyTypes: Array<option> = []
     realtyLength = 0
+    paginatorData = {
+        currentPage: 1,
+        itemsOnPage: 10,
+        totalItems: 100,
+        totalPages: 9
+    }
 
     created(): void {
         this.$store.commit('queryParams/setQueryParams', this.$route.query)
@@ -80,6 +92,13 @@ export default class Catalog extends Vue {
         RealtyType.getList().then(({data}) => {
             this.realtyTypes = data.map(value => ({value: value.id, label: value.name} as option))
             this.realtyLength = this.realtyTypes.length
+
+            setTimeout(() => {
+                this.paginatorData = {
+                    ...this.paginatorData,
+                    currentPage: 3
+                }
+            }, 3000)
         })
     }
 

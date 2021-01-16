@@ -1,5 +1,6 @@
 import {AxiosResponse} from "axios";
 import api from "./myApi.json";
+import {paginatorFromResponse} from "@/js/common/types";
 
 export default class Realty {
     id?: number
@@ -9,6 +10,8 @@ export default class Realty {
     price?: number
     area?: number
     images?: Array<string>
+
+    paginator?: paginatorFromResponse
 
     /* eslint-disable */
     static getList(options?: any): Promise<AxiosResponse<Realty[]>> {

@@ -6,3 +6,16 @@ export type option = {
 export type catalogQueryParams = {
 
 }
+
+export type paginatorFromResponse = {
+    meta: {
+
+    };
+    links: {
+
+    }
+}
+
+export type paginator = {
+
+}
