@@ -1,30 +1,32 @@
 <template>
-    <div class="page-header container container_big">
-        <div class="page-header__slider slider">
-            <div class="slider__container">
-                <transition name="slide" duration="800" mode="out-in">
-                    <Slide
+        <div class="page-header__bg">
+            <div class="page-header container container_big">
+                <div class="page-header__slider slider">
+                <div class="slider__container">
+                    <transition name="slide" duration="800" mode="out-in">
+                        <Slide
                             v-for="(slide, index) of slides"
                             v-if="currentSlideIndex === index"
                             :key="index" class="slider__slide"
                             :header="slide.header"
                             :content="slide.content"
                             :image="slide.image"
-                    />
-                </transition>
-            </div>
-            <div class="flex-wrapper flex-wrapper_J-FE">
-                <SliderNav
-                    v-if="slides.length"
+                        />
+                    </transition>
+                </div>
+                <div class="flex-wrapper flex-wrapper_J-FE">
+                    <SliderNav
+                        v-if="slides.length"
                         class="slider__nav"
                         @prev="prevHandler"
                         @next="nextHandler"
                         :count-slides="slides.length"
                         :current-slide-index="currentSlideIndex"
-                />
+                    />
+                </div>
+            </div>
             </div>
         </div>
-    </div>
 </template>
 
 <script lang="ts">
@@ -125,11 +127,10 @@ import {Component, Mixins} from 'vue-property-decorator';
     @import '~@/stylus/colors.styl'
 
     .page-header
-        background-color mainColor
-        padding 200px 110px 0 110px
+        padding 150px 110px 0 110px
         color white
         display flex
-        margin-top 200px
+        margin-top 150px
         justify-content space-between
         margin-bottom 220px
         @media (max-width 1600px)
@@ -137,6 +138,9 @@ import {Component, Mixins} from 'vue-property-decorator';
         @media (max-width 1180px)
             padding-top 100px
             margin-top 0
+
+        &__bg
+            background-color mainColor
 
     .slider
         width 100%

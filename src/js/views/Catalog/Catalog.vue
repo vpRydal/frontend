@@ -27,7 +27,7 @@
                     </template>
                 </Range>
             </div>
-                <transition-group class="catalog__objects" tag="div" name="realty" :css="false" @before-enter="beforeEnter" @enter="onEnter">
+                <transition-group class="catalog__objects" tag="div" name="realty" :css="false" @before-enter="beforeEnter" @enter="onEnter" @leave="onLeave">
                     <Realty
                         class="realty"
                         v-if="realty.length"
@@ -69,6 +69,7 @@ import Range from "@/js/components/ui/Range.vue";
 export default class Catalog extends Vue {
     realty: Array<Realty_> = []
     realtyTypes: Array<option> = []
+    realtyLength = 0
 
     created(): void {
         Realty_.getList().then(({data}) => {
@@ -76,6 +77,10 @@ export default class Catalog extends Vue {
         })
         RealtyType.getList().then(({data}) => {
             this.realtyTypes = data.map(value => ({value: value.id, label: value.name} as option))
+            this.realtyLength = this.realtyTypes.length
+            setTimeout(() => {
+                this.realty = []
+            }, 3000)
         })
     }
 
@@ -90,6 +95,18 @@ export default class Catalog extends Vue {
             setTimeout(() => {
                 $(el).animate({
                     opacity: 1
+                }, "fast", done)
+            }, delay)
+        }
+    }
+
+    onLeave(el: HTMLElement, done: () => void): void {
+        if (el) {
+            let delay = (this.realtyLength - Number(el.dataset.index)) * 100
+
+            setTimeout(() => {
+                $(el).animate({
+                    opacity: 0
                 }, "fast", done)
             }, delay)
         }

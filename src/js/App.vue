@@ -1,8 +1,8 @@
 <template>
-    <main v-touch:swipe.right="handleSwipeRight" v-touch:swipe.left="handleSwipeLeft">
+    <main v-touch:swipe.right="handleSwipeRight" v-touch:swipe.left="handleSwipeLeft" class="main">
         <NavBar/>
         <Header/>
-        <router-view class="view"/>
+        <router-view class="main__view"/>
         <Footer/>
     </main>
 </template>
@@ -51,6 +51,12 @@ export default class App extends Vue {
 </script>
 
 <style lang="stylus" scoped>
-.view
-    padding-top 110px
+.main
+    display flex
+    flex-direction column
+    height 100%
+
+    &__view
+        padding-top 110px
+        flex 1 1 100%
 </style>
