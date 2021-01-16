@@ -12,12 +12,20 @@
                     <a href="tel:+7(978)734-58-55" class="link">+7(978)734-58-55</a>
                 </p>
             </div>
-            <div>
+            <div class="flex-wrapper flex-wrapper_J-SB">
                 <Select
                     multiple
                     :options="realtyTypes"
                     @changedOption="onChangeOption"
                 />
+                <Range
+                    :min="0"
+                    :max="1000"
+                >
+                    <template v-slot:info="{currentMin, currentMax}">
+                        {{ currentMin }}Р | {{ currentMax }}Р
+                    </template>
+                </Range>
             </div>
                 <transition-group class="catalog__objects" tag="div" name="realty" :css="false" @before-enter="beforeEnter" @enter="onEnter">
                     <Realty
@@ -47,9 +55,10 @@ import Pagination from "@/js/components/widgets/Paginate.vue";
 import Select from "@/js/components/ui/Select.vue";
 import {option} from "@/js/common/types";
 import $ from "jquery";
+import Range from "@/js/components/ui/Range.vue";
 
 @Component({
-    components: {Select, Pagination, Realty},
+    components: {Range, Select, Pagination, Realty},
     data: () => ({
         imgTown
     }),

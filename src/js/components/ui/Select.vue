@@ -111,6 +111,7 @@ export default class Select extends Vue {
 .select
     position relative
     max-width 200px
+    width 100%
 
     &__head
         border lightgray solid 1px

@@ -2,7 +2,13 @@
     <div class="range" ref="range">
         <button class="range__btn range__btn_left" ref="range-btn-left"></button>
         <div class="range__info" ref="range-info">
-            <div class="range__info-text">{{ currentMin }} | {{ currentMax }}</div>
+            <div class="range__info-body">
+                <div class="range__info-text">
+                    <slot name="info" :currentMin="currentMin" :currentMax="currentMax">
+                        {{ currentMin }} | {{ currentMax }}
+                    </slot>
+                </div>
+            </div>
         </div>
         <div class="range__track" ref="range-track">
             <div class="range__track-left-part" ref="range-track-left"></div>
@@ -14,12 +20,31 @@
 </template>
 
 <script lang="ts">
-import {Component, Ref, Vue, Watch} from "vue-property-decorator";
+import {Component, Emit, Prop, Ref, Vue, Watch} from "vue-property-decorator";
 import $ from "jquery";
+import {mapGetters} from "vuex";
 
 
-@Component({})
+@Component({
+    computed: {
+        ...mapGetters('common', {
+            $windowWidth: 'windowWidth'
+        })
+    }
+})
 export default class Range extends Vue {
+    @Prop({
+        required: true,
+        type: Number
+    })
+    min!: number
+
+    @Prop({
+        required: true,
+        type: Number
+    })
+    max!: number
+
     @Ref('range-btn-left')
     btnLeft!: HTMLElement
 
@@ -48,6 +73,7 @@ export default class Range extends Vue {
     $trackMiddle = $(this.trackMiddle)
     $trackLeft = $(this.trackLeft)
     $rangeInfo = $(this.rangeInfo)
+    $windowWidth!: number
 
     maxLeftPos = 0
     maxRightPos = 0
@@ -57,10 +83,20 @@ export default class Range extends Vue {
     currentPosLeft = 0
     width = 0
     middleTrackWidth = 0
-    min = 0
-    max = 900
     currentMax = 0
     currentMin = 0
+
+    @Emit('onChangedRange')
+    changedRange(): {max: number, min: number, currentMax: number, currentMin: number} {
+        const {min, max, currentMax, currentMin} = this;
+
+        return {min, max, currentMax, currentMin}
+    }
+
+    @Watch('$windowWidth')
+    watchWindowWidth(): void {
+        this.updateInfoPosition()
+    }
 
     @Watch('currentPosRight')
     watchCurrentPosRight(val: number): void {
@@ -77,10 +113,10 @@ export default class Range extends Vue {
     }
 
     @Watch('middleTrackWidth')
-    watchMiddleTrackWidth(val: number): void {
-        let leftP = 100 * (this.$trackLeft.width()) / this.width
+    watchMiddleTrackWidth(): void {
+        let leftP = 100 * (this.$trackLeft.width() as number) / this.width
         let left = leftP / 100
-        let rightP = 100 * (this.$trackRight.width()) / this.width
+        let rightP = 100 * (this.$trackRight.width() as number) / this.width
         let right = rightP / 100
 
         this.currentMax = right > .01 ? Math.round(this.max - this.max * right ) : this.max
@@ -102,6 +138,7 @@ export default class Range extends Vue {
 
     onMouseMovBtnRight(event: TouchEvent | MouseEvent): void {
         let pos;
+        event.stopPropagation()
 
         if (event.type === 'mousemove') {
             // @ts-ignore
@@ -121,6 +158,7 @@ export default class Range extends Vue {
 
     onMouseMovBtnLeft(event: TouchEvent | MouseEvent): void {
         let pos;
+        event.stopPropagation()
 
         if (event.type === 'mousemove') {
             // @ts-ignore
@@ -153,26 +191,43 @@ export default class Range extends Vue {
             this.$rangeInfo = $(this.rangeInfo)
             this.width = this.$range.width() as number
 
-            this.$btnRight.on('mousedown touchstart', () => {
-                // @ts-ignore
-                $(document).on('mousemove touchmove', this.onMouseMovBtnRight)
-            });
-            $(document).on('mouseup touchend', () => {
-                // @ts-ignore
-                $(document).off('mousemove touchmove', this.onMouseMovBtnRight)
-            });
-            this.$btnLeft.on('mousedown touchstart', () => {
-                // @ts-ignore
-                $(document).on('mousemove touchmove', this.onMouseMovBtnLeft)
-            });
-            $(document).on('mouseup touchend', () => {
-                // @ts-ignore
-                $(document).off('mousemove touchmove', this.onMouseMovBtnLeft)
-            });
-
+            this.$btnRight.on('mousedown', this.onMouseMoveStartedRightBtn);
+            this.$btnRight.on('touchstart', this.onMouseMoveStartedRightBtn);
+            this.$btnLeft.on('mousedown', this.onMouseMoveStartedLeftBtn);
+            this.$btnLeft.on('touchstart', this.onMouseMoveStartedLeftBtn);
+            $(document).on('touchend', this.onMouseUp);
+            $(document).on('mouseup', this.onMouseUp);
 
             this.updateInfoPosition()
         })
+    }
+
+    onMouseUp(): void {
+        // @ts-ignore
+        $(document).off('mousemove', this.onMouseMovBtnLeft)
+        // @ts-ignore
+        $(document).off('touchmove', this.onMouseMovBtnLeft)
+        // @ts-ignore
+        $(document).off('mousemove', this.onMouseMovBtnRight)
+        // @ts-ignore
+        $(document).off('touchmove', this.onMouseMovBtnRight)
+    }
+    onMouseMoveStartedLeftBtn (): void {
+        // @ts-ignore
+        $(document).on('mousemove', this.onMouseMovBtnLeft)
+        // @ts-ignore
+        $(document).on('touchmove', this.onMouseMovBtnLeft)
+    }
+    onMouseMoveStartedRightBtn (): void {
+        // @ts-ignore
+        $(document).on('mousemove', this.onMouseMovBtnRight)
+        // @ts-ignore
+        $(document).on('touchmove', this.onMouseMovBtnRight)
+    }
+    beforeDestroy(): void {
+        $(document).off('mouseup', this.onMouseUp)
+        // @ts-ignore
+        $(document).off('touchend', this.onMouseUp)
     }
 }
 
@@ -194,7 +249,11 @@ export default class Range extends Vue {
         position absolute
         background-color gray
         color white
-        top -300%
+        top -400%
+        white-space nowrap
+
+        &-body
+            padding 5px 10px
 
         &-text
             position relative
@@ -206,7 +265,7 @@ export default class Range extends Vue {
                 border: 5px solid transparent;
                 border-top: 5px solid gray;
                 left calc(50% - 5px)
-                bottom -10px
+                bottom -15px
 
     &__track
         z-index 1
