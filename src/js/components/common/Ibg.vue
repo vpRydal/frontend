@@ -1,5 +1,6 @@
 <template>
   <div
+      @click="$emit('click')"
       class="ibg"
       :style="{'background-image': `url('${src}')`}"
   >

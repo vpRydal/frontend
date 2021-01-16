@@ -134,7 +134,7 @@ import {Component, Mixins} from 'vue-property-decorator';
         justify-content space-between
         margin-bottom 220px
         @media (max-width 1600px)
-            padding 200px 25px 0 25px
+            padding 150px 25px 0 25px
         @media (max-width 1180px)
             padding-top 100px
             margin-top 0

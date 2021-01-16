@@ -69,10 +69,7 @@ export default class Header extends Vue {
         display flex
         align-items center
         margin 0 auto
-        padding-top 5px
-        padding-bottom 5px
-        @media (max-width 1200px)
-            padding 5px 40px
+        padding 5px 40px
 
     &__logo
         height 50px
@@ -94,7 +91,6 @@ export default class Header extends Vue {
 
     &__search
         margin-left auto
-        margin-right 130px
         @media (max-width 1240px)
             margin-right 0
 
