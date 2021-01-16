@@ -27,7 +27,7 @@
                     </template>
                 </Range>
             </div>
-                <transition-group class="catalog__objects" tag="div" name="realty" :css="false" @before-enter="beforeEnter" @enter="onEnter" @leave="onLeave">
+                <transition-group v-if="!inRequestState" @after-leave="inRequestState = true" class="catalog__objects" tag="div" name="realty" :css="false" @before-enter="beforeEnter" @enter="onEnter" @leave="onLeave">
                     <Realty
                         class="realty"
                         v-if="realty.length"
@@ -40,12 +40,15 @@
                         :data-index="index"
                     />
                 </transition-group>
+                <div v-else class="catalog__loader">
+                    <Preloader lg/>
+                </div>
             <Pagination class="catalog__paginate"
                         :current-page="paginatorData.currentPage"
                         :items-on-page="paginatorData.itemsOnPage"
                         :total-items="paginatorData.totalItems"
                         :total-pages="paginatorData.totalPages"
-                        @onChangePage="paginatorData.currentPage = $event"
+                        @onChangePage="onChangePage"
             />
         </div>
     </div>
@@ -62,9 +65,10 @@ import Select from "@/js/components/ui/Select.vue";
 import {option} from "@/js/common/types";
 import $ from "jquery";
 import Range from "@/js/components/ui/Range.vue";
+import Preloader from "@/js/components/widgets/Preloader.vue";
 
 @Component({
-    components: {Range, Select, Pagination, Realty},
+    components: {Range, Select, Pagination, Realty, Preloader},
     data: () => ({
         imgTown
     }),
@@ -76,6 +80,7 @@ export default class Catalog extends Vue {
     realty: Array<Realty_> = []
     realtyTypes: Array<option> = []
     realtyLength = 0
+    inRequestState = false
     paginatorData = {
         currentPage: 1,
         itemsOnPage: 10,
@@ -92,13 +97,6 @@ export default class Catalog extends Vue {
         RealtyType.getList().then(({data}) => {
             this.realtyTypes = data.map(value => ({value: value.id, label: value.name} as option))
             this.realtyLength = this.realtyTypes.length
-
-            setTimeout(() => {
-                this.paginatorData = {
-                    ...this.paginatorData,
-                    currentPage: 3
-                }
-            }, 3000)
         })
     }
 
@@ -120,7 +118,8 @@ export default class Catalog extends Vue {
 
     onLeave(el: HTMLElement, done: () => void): void {
         if (el) {
-            let delay = (this.realtyLength - Number(el.dataset.index)) * 100
+            let index = el.dataset.index as number
+            let delay = (this.realtyLength - index) * 150
 
             setTimeout(() => {
                 $(el).animate({
@@ -133,6 +132,19 @@ export default class Catalog extends Vue {
     onChangeOption(option: option | Array<option>): void {
         console.log(option)
     }
+
+    onChangePage(page: number): void {
+        let tempRealty = this.realty
+        this.realty = []
+        this.paginatorData.currentPage = page
+
+        setTimeout(() => {
+            this.inRequestState = false
+            this.$nextTick(() => {
+                this.realty = tempRealty
+            })
+        }, 1000)
+    }
 }
 </script>
 
@@ -140,6 +152,12 @@ export default class Catalog extends Vue {
 .catalog
     margin-top 40px
     margin-bottom 75px
+
+    &__loader
+        display flex
+        justify-content center
+        align-items center
+        margin-bottom 75px
 
     &__titles
         margin-bottom 57px
