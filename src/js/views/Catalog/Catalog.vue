@@ -118,7 +118,7 @@ export default class Catalog extends Vue {
 
     onLeave(el: HTMLElement, done: () => void): void {
         if (el) {
-            let index = el.dataset.index as number
+            let index = Number(el.dataset.index)
             let delay = (this.realtyLength - index) * 150
 
             setTimeout(() => {
