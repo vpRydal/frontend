@@ -20,13 +20,18 @@
 .link
     color mainColor
 
-
     &:hover
         text-decoration underline
         color mainColor
+
     &_white
         &, &:hover
             color: white;
+
+    &_disabled
+        &, &:hover
+            color gray
+            text-decoration unset
 
 
 .cursor-pointer

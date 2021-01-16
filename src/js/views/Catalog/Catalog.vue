@@ -72,15 +72,14 @@ export default class Catalog extends Vue {
     realtyLength = 0
 
     created(): void {
+        this.$store.commit('queryParams/setQueryParams', this.$route.query)
+
         Realty_.getList().then(({data}) => {
             this.realty = data
         })
         RealtyType.getList().then(({data}) => {
             this.realtyTypes = data.map(value => ({value: value.id, label: value.name} as option))
             this.realtyLength = this.realtyTypes.length
-            setTimeout(() => {
-                this.realty = []
-            }, 3000)
         })
     }
 

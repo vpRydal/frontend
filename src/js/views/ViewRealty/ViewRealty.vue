@@ -34,9 +34,9 @@
                         <router-link :to="{name: 'home'}" class="nav__link link">Главная</router-link>
                     </li>
                     <li class="nav_item"><span class="nav__divider">-</span></li>
-                    <li class="nav_item"><a href="" class="nav__link link">Тип</a></li>
+                    <li class="nav_item"><router-link :to="{name: 'catalog', query: $store.getters['queryParams/queryParams'] || {}}" class="nav__link link">Каталог</router-link></li>
                     <li class="nav_item"><span class="nav__divider">-</span></li>
-                    <li class="nav_item"><a href="" class="nav__link link">Название</a></li>
+                    <li class="nav_item"><a class="nav__link link link_disabled">Название</a></li>
                 </ul>
             </nav>
             <div v-if="viewRealty" class="view-object__content">
