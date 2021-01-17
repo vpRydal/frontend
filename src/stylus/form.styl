@@ -1,10 +1,15 @@
 .form
     display flex
     flex-direction column
+    font-size .9em
+
 
     &__label
         margin-bottom 5px
-        font-size .9rem
+        font-size .9em
+
+        input[type=checkbox] + &
+            margin-bottom 0
 
     &__group
         margin-bottom 10px
@@ -43,7 +48,7 @@
         border 1px solid lightgrey
         height 25px
         color mainColorDark
-        font-size .9rem
+        font-size .9em
         padding 5px
         transition border ease-in-out .2s
         border-radius unset
@@ -54,3 +59,41 @@
         &:focus
             outline unset
             border 1px solid mainColorLight
+
+        input[type=checkbox]&
+            display none
+            & + label
+                position relative
+                display flex
+                padding-left 20px
+                cursor pointer
+
+                &:before
+                    content ''
+                    display block
+                    top 2px
+                    left 0
+                    position absolute
+                    width 10px
+                    height 10px
+                    border-radius 3px
+                    padding 2px
+                    border 1px solid mainColor
+
+                &:after
+                    left 0
+                    top 2px
+                    position absolute
+                    content ''
+                    display block
+                    height 12px
+                    width 12px
+                    margin 2px
+                    border-radius 2px
+                    background-color white
+                    transition background-color ease-out .3s
+
+            &:checked
+                & + label
+                    &:after
+                        background-color mainColor

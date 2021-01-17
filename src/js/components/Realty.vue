@@ -135,12 +135,24 @@ export default class Item extends Vue {
 @import "~@/stylus/colors.styl"
 @import "~@/stylus/mixins.styl"
 
+.m2, .p
+    font-size .6em
+    position absolute
+    top 0
+    right 0
+
+.p
+    left 0
+    font-size .7em
+    right auto
+
 .object
     position relative
     width 400px
-    height 250px
+    min-height  250px
     display flex
     overflow hidden
+    font-size 16px
 
     &__img
         width 100%
@@ -150,10 +162,10 @@ export default class Item extends Vue {
         color white
         margin-right 5px
         margin-top 10px
-        font-size 17px
         flex 1 1 100%
         display flex
         align-items center
+        font-size 1em
         & h3
             width 100%
 
@@ -163,7 +175,7 @@ export default class Item extends Vue {
         position absolute
         bottom 0
         display flex
-        font-size 17px
+        font-size 1em
         flex-direction column
         transition background-color linear .5s
         justify-content center
@@ -206,7 +218,7 @@ export default class Item extends Vue {
     &__area
         margin-left auto
         display block
-        font-size 10px
+        font-size .9em
         position relative
         align-self flex-end
         padding-right 15px
@@ -228,15 +240,4 @@ export default class Item extends Vue {
         padding-right 13px
         padding-left 10px
         margin-right 10px
-
-.m2, .p
-    font-size 9px
-    position absolute
-    top 0
-    right 0
-
-.p
-    left 0
-    font-size 12px
-    right auto
 </style>

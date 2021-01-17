@@ -10,6 +10,7 @@
                 </div>
             </div>
         </div>
+        <span class="range__info-arrow" ref="range-info-arrow"></span>
         <div class="range__track" ref="range-track">
             <div class="range__track-left-part" ref="range-track-left"></div>
             <div class="range__track-middle-part" ref="range-track-middle"></div>
@@ -22,6 +23,7 @@
 <script lang="ts">
 import {Component, Emit, Prop, Ref, Vue, Watch} from "vue-property-decorator";
 import $ from "jquery";
+import JQuery from "jquery";
 import {mapGetters} from "vuex";
 
 
@@ -65,16 +67,19 @@ export default class Range extends Vue {
 
     @Ref('range-info')
     rangeInfo!: HTMLElement
+    @Ref('range-info-arrow')
+    rangeInfoArrow!: HTMLElement
 
-    $btnLeft = $(this.btnLeft)
-    $btnRight = $(this.btnRight)
-    $range = $(this.range)
-    $trackRight = $(this.trackRight)
-    $trackMiddle = $(this.trackMiddle)
-    $trackLeft = $(this.trackLeft)
-    $rangeInfo = $(this.rangeInfo)
+    $btnLeft!: JQuery<HTMLElement>
+    $btnRight!: JQuery<HTMLElement>
+    $range!: JQuery<HTMLElement>
+    $trackRight!: JQuery<HTMLElement>
+    $trackMiddle!: JQuery<HTMLElement>
+    $trackLeft!: JQuery<HTMLElement>
+    $rangeInfo!: JQuery<HTMLElement>
+    $rangeInfoArrow!:JQuery<HTMLElement>
+
     $windowWidth!: number
-
     maxLeftPos = 0
     maxRightPos = 0
     startPos = 0
@@ -85,6 +90,13 @@ export default class Range extends Vue {
     middleTrackWidth = 0
     currentMax = 0
     currentMin = 0
+    middleTrackCenterPos = 0
+    trackLeftWidth = 0
+    trackRightWidth = 0
+    rangeInfoWidth = 0
+    rangeInfoArrowWidth = 0
+    btnLeftWidth = 0
+    btnRightWidth = 0
 
     @Emit('onChangedRange')
     changedRange(): {max: number, min: number, currentMax: number, currentMin: number} {
@@ -106,33 +118,52 @@ export default class Range extends Vue {
     }
 
     @Watch('currentPosLeft')
-    watchCurrentPosLeft(val: number): void {
-        this.$trackLeft.css('width', `${Math.floor((val * 100) / this.width)}%`)
+    watchCurrentPosLeft(): void {
+        this.$trackLeft.css('width', `${Math.floor((this.currentPosLeft * 100) / this.width)}%`)
         this.setWidthMiddleTrack()
         this.updateInfoPosition()
     }
 
     @Watch('middleTrackWidth')
     watchMiddleTrackWidth(): void {
-        let leftP = 100 * (this.$trackLeft.width() as number) / this.width
-        let left = leftP / 100
-        let rightP = 100 * (this.$trackRight.width() as number) / this.width
-        let right = rightP / 100
+        let leftP = (this.$trackLeft.width() as number) / this.width
+        let rightP = (this.$trackRight.width() as number) / this.width
 
-        this.currentMax = right > .01 ? Math.round(this.max - this.max * right ) : this.max
-        this.currentMin = left > .01 ? Math.round(this.max * left) : this.min
+        this.currentMax = this.max - Math.ceil(rightP * (this.max))
+        this.currentMin = Math.ceil(leftP * (this.max - this.min)) + this.min
     }
 
 
     setWidthMiddleTrack(): void {
         let width = (this.width / 2) - this.currentPosLeft + (this.width / 2) - this.currentPosRight
         this.$trackMiddle.css('width', `${Math.ceil((width * 100) / this.width)}%`)
+        this.middleTrackWidth = this.$trackMiddle.width() as number
     }
 
     updateInfoPosition(): void {
         this.middleTrackWidth = this.$trackMiddle.width() as number;
         let pos = ((this.width - this.currentPosRight) - this.middleTrackWidth / 2) - (this.$rangeInfo.width() as number / 2)
-        this.$rangeInfo.css('left', pos)
+
+        const rangeInfoWidth = this.$rangeInfo.width() as number
+
+
+
+        if (0 >= pos) {
+            this.$rangeInfo.css('left', 0)
+            this.$rangeInfo.css('right', '')
+            this.$rangeInfoArrow.css('left', pos + (rangeInfoWidth / 2) - 5)
+        } else if (this.width + this.btnRightWidth <= pos + rangeInfoWidth) {
+            this.$rangeInfo.css('right', 0)
+            this.$rangeInfo.css('left', '')
+
+            this.$rangeInfoArrow.css('left', pos + (rangeInfoWidth / 2) - 5)
+        } else {
+            this.$rangeInfo.css('right', '')
+            this.$rangeInfo.css('left', '')
+
+            this.$rangeInfo.css('left', pos)
+            this.$rangeInfoArrow.css('left', pos + (rangeInfoWidth / 2 ) - 5)
+        }
 
     }
 
@@ -152,7 +183,7 @@ export default class Range extends Vue {
         if (0 < pos && pos < this.width && this.currentPosLeft < (this.width - pos) ) {
             this.currentPosRight = pos
 
-            this.$btnRight.css('right', pos - ((this.$btnRight.width() as number) / 2))
+            this.$btnRight.css('right', pos - (this.btnRightWidth / 2))
         }
     }
 
@@ -173,7 +204,7 @@ export default class Range extends Vue {
         if (0 < pos && pos < this.width && pos < (this.width - this.currentPosRight)) {
             this.currentPosLeft = pos
 
-            this.$btnLeft.css('left', pos - ((this.$btnLeft.width() as number) / 2))
+            this.$btnLeft.css('left', pos - (this.btnLeftWidth / 2))
         }
     }
 
@@ -189,7 +220,14 @@ export default class Range extends Vue {
             this.$trackLeft = $(this.trackLeft)
             this.$trackMiddle = $(this.trackMiddle)
             this.$rangeInfo = $(this.rangeInfo)
+            this.$rangeInfoArrow = $(this.rangeInfoArrow)
             this.width = this.$range.width() as number
+            this.trackLeftWidth = this.$trackLeft.width() as number
+            this.trackRightWidth = this.$trackRight.width() as number
+            this.rangeInfoWidth = this.$rangeInfo.width() as number
+            this.rangeInfoArrowWidth = this.$rangeInfoArrow.width() as number
+            this.btnRightWidth = this.$btnRight.width() as number
+            this.btnLeftWidth = this.$btnLeft.width() as number
 
             this.$btnRight.on('mousedown', this.onMouseMoveStartedRightBtn);
             this.$btnRight.on('touchstart', this.onMouseMoveStartedRightBtn);
@@ -198,10 +236,19 @@ export default class Range extends Vue {
             $(document).on('touchend', this.onMouseUp);
             $(document).on('mouseup', this.onMouseUp);
 
-            this.updateInfoPosition()
+            addEventListener('resize', this.onResize)
+
+            this.middleTrackWidth = this.width
+            this.$nextTick(() => {
+                this.watchCurrentPosLeft()
+            })
         })
     }
-
+    onResize(): void {
+        this.$nextTick(() => {
+            this.watchCurrentPosLeft()
+        })
+    }
     onMouseUp(): void {
         // @ts-ignore
         $(document).off('mousemove', this.onMouseMovBtnLeft)
@@ -244,6 +291,7 @@ export default class Range extends Vue {
     height 10px
     background-color getColorWithOpacity(gray, .4)
     border-radius 50px
+    margin 0 10px
 
     &__info
         position absolute
@@ -252,20 +300,20 @@ export default class Range extends Vue {
         top -400%
         white-space nowrap
 
+        &-arrow
+            position absolute
+            content ''
+            display block
+            border: 5px solid transparent;
+            border-top: 5px solid gray;
+            bottom 7px
+
         &-body
             padding 5px 10px
 
         &-text
             position relative
             width 100%
-
-            &:after
-                position absolute
-                content ''
-                border: 5px solid transparent;
-                border-top: 5px solid gray;
-                left calc(50% - 5px)
-                bottom -15px
 
     &__track
         z-index 1
