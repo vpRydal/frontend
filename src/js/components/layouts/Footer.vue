@@ -128,8 +128,10 @@ export default class Footer extends Mixins(ScrollTo) {
 <style scoped lang="stylus">
 @import "../../../stylus/colors.styl"
 .footer
+    position relative
     font-size 1.1rem
     background-color: mainColor
+    z-index 2
 
     &__container
         padding 45px 0

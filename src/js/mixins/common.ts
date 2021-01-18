@@ -10,7 +10,6 @@ export class ScrollTo extends Mixins() {
 
             if (target instanceof HTMLElement) {
                 scrollEndPoint = $(target).offset()?.top as number
-                console.log(scrollEndPoint)
             } else {
                 scrollEndPoint = target
             }

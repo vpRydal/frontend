@@ -19,3 +19,8 @@ export type paginatorFromResponse = {
 export type paginator = {
 
 }
+
+export type equipment = {
+    id: number;
+    title: string
+}

@@ -25,6 +25,7 @@ import {Component, Emit, Prop, Ref, Vue, Watch} from "vue-property-decorator";
 import $ from "jquery";
 import JQuery from "jquery";
 import {mapGetters} from "vuex";
+import bus from "@/js/common/bus";
 
 
 @Component({
@@ -77,7 +78,7 @@ export default class Range extends Vue {
     $trackMiddle!: JQuery<HTMLElement>
     $trackLeft!: JQuery<HTMLElement>
     $rangeInfo!: JQuery<HTMLElement>
-    $rangeInfoArrow!:JQuery<HTMLElement>
+    $rangeInfoArrow!: JQuery<HTMLElement>
 
     $windowWidth!: number
     maxLeftPos = 0
@@ -99,7 +100,7 @@ export default class Range extends Vue {
     btnRightWidth = 0
 
     @Emit('onChangedRange')
-    changedRange(): {max: number, min: number, currentMax: number, currentMin: number} {
+    changedRange(): { max: number, min: number, currentMax: number, currentMin: number } {
         const {min, max, currentMax, currentMin} = this;
 
         return {min, max, currentMax, currentMin}
@@ -111,8 +112,8 @@ export default class Range extends Vue {
     }
 
     @Watch('currentPosRight')
-    watchCurrentPosRight(val: number): void {
-        this.$trackRight.css('width', `${Math.floor((val * 100) / this.width)}%`)
+    watchCurrentPosRight(): void {
+        this.$trackRight.css('width', `${Math.floor((this.currentPosRight * 100) / this.width)}%`)
         this.setWidthMiddleTrack()
         this.updateInfoPosition()
     }
@@ -147,7 +148,6 @@ export default class Range extends Vue {
         const rangeInfoWidth = this.$rangeInfo.width() as number
 
 
-
         if (0 >= pos) {
             this.$rangeInfo.css('left', 0)
             this.$rangeInfo.css('right', '')
@@ -162,7 +162,7 @@ export default class Range extends Vue {
             this.$rangeInfo.css('left', '')
 
             this.$rangeInfo.css('left', pos)
-            this.$rangeInfoArrow.css('left', pos + (rangeInfoWidth / 2 ) - 5)
+            this.$rangeInfoArrow.css('left', pos + (rangeInfoWidth / 2) - 5)
         }
 
     }
@@ -180,7 +180,7 @@ export default class Range extends Vue {
         }
 
 
-        if (0 < pos && pos < this.width && this.currentPosLeft < (this.width - pos) ) {
+        if (0 < pos && pos < this.width && this.currentPosLeft < (this.width - pos)) {
             this.currentPosRight = pos
 
             this.$btnRight.css('right', pos - (this.btnRightWidth / 2))
@@ -237,6 +237,7 @@ export default class Range extends Vue {
             $(document).on('mouseup', this.onMouseUp);
 
             addEventListener('resize', this.onResize)
+            bus.$on('update-range', this.onResize)
 
             this.middleTrackWidth = this.width
             this.$nextTick(() => {
@@ -244,11 +245,12 @@ export default class Range extends Vue {
             })
         })
     }
+
     onResize(): void {
-        this.$nextTick(() => {
-            this.watchCurrentPosLeft()
-        })
+        this.maxRightPos = ($(this.range).offset()?.left as number) + ($(this.range).innerWidth() as number)
+        this.maxLeftPos = ($(this.range).offset()?.left as number)
     }
+
     onMouseUp(): void {
         // @ts-ignore
         $(document).off('mousemove', this.onMouseMovBtnLeft)
@@ -259,22 +261,27 @@ export default class Range extends Vue {
         // @ts-ignore
         $(document).off('touchmove', this.onMouseMovBtnRight)
     }
-    onMouseMoveStartedLeftBtn (): void {
+
+    onMouseMoveStartedLeftBtn(): void {
         // @ts-ignore
         $(document).on('mousemove', this.onMouseMovBtnLeft)
         // @ts-ignore
         $(document).on('touchmove', this.onMouseMovBtnLeft)
     }
-    onMouseMoveStartedRightBtn (): void {
+
+    onMouseMoveStartedRightBtn(): void {
         // @ts-ignore
         $(document).on('mousemove', this.onMouseMovBtnRight)
         // @ts-ignore
         $(document).on('touchmove', this.onMouseMovBtnRight)
     }
+
     beforeDestroy(): void {
         $(document).off('mouseup', this.onMouseUp)
         // @ts-ignore
         $(document).off('touchend', this.onMouseUp)
+        removeEventListener('resize', this.onResize)
+        bus.$off('update-range', this.onResize)
     }
 }
 

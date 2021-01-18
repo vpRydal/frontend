@@ -38,6 +38,9 @@
     .slide
         display flex
         font-size 36px
+        position relative
+        z-index 5
+
         @media (max-width 900px)
             font-size 25px
         @media (max-width 300px)
