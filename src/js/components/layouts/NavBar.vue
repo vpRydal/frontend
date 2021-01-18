@@ -99,7 +99,7 @@ export default class NavBar extends Vue {
     position fixed
     width 100%
     height 100%
-    z-index 4
+    z-index 6
     top 0
     left 0
 

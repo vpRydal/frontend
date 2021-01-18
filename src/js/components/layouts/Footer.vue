@@ -131,10 +131,11 @@ export default class Footer extends Mixins(ScrollTo) {
     position relative
     font-size 1.1rem
     background-color: mainColor
-    z-index 2
+    z-index 1
 
     &__container
         padding 45px 0
+        position: relative
         @media (max-width 1200px)
             padding 45px 20px
 

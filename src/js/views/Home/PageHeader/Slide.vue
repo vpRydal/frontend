@@ -39,7 +39,6 @@
         display flex
         font-size 36px
         position relative
-        z-index 5
 
         @media (max-width 900px)
             font-size 25px
@@ -69,10 +68,13 @@
                 margin-left 0
 
         &__town
+            position relative
             width 552px
             height 812px
             margin-top -330px
             margin-left auto
+            z-index 5
+
             @media (max-width 1460px)
                 width 0
                 height 0

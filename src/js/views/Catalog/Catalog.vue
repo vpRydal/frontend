@@ -26,7 +26,7 @@
                 <span class="types__item">Развитая инфраструктура</span>
                 <span class="types__item">Охраняемая территория, видеонаблюдение</span>
             </div>
-            <div class="catalog__main-content" style="height: 920px">
+            <div class="catalog__main-content">
                 <Filters class="catalog__filters"
                          :in-request-state="inRequestState"
                          :open="isOpenedFilters"

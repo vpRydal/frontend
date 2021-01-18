@@ -209,6 +209,7 @@ export default class Filters extends Vue {
     transition transform ease-out .5s, background-color ease-out .1s
     padding-right 25px
     height 100%
+    margin-left -10px
 
     @media (max-width 800px)
         transform translateX(-100%)
@@ -234,6 +235,7 @@ export default class Filters extends Vue {
         padding-right 10px
         overflow-y auto
         padding-bottom 19px
+        padding-left 10px
 
     &__title
         padding-top 15px
