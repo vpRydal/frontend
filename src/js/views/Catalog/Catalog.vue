@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Ref} from 'vue-property-decorator';
+    import {Component, Ref, Watch} from 'vue-property-decorator';
 import Realty from "@/js/components/Realty.vue";
 import Realty_ from "@/js/api/Realty";
 import imgTown from "@/assets/img/town.png";
@@ -77,6 +77,7 @@ import Preloader from "@/js/components/widgets/Preloader.vue";
 import Filters from "@/js/views/Catalog/Filters.vue";
 import {mapGetters} from "vuex";
 import {ScrollTo} from "@/js/mixins/common";
+import {objectWIthAnyProperties} from "@/js/common/types";
 
 @Component({
     components: {Filters, Range, Select, Pagination, Realty, Preloader},
@@ -89,6 +90,9 @@ import {ScrollTo} from "@/js/mixins/common";
     computed: {
         ...mapGetters('common', {
             $windowWidth: 'windowWidth'
+        }),
+        ...mapGetters('queryParams', {
+            $queryParams: 'params'
         })
     }
 })
@@ -97,18 +101,20 @@ export default class Catalog extends ScrollTo {
     realtyLength = 0
     inRequestState = false
     isOpenedFilters = false
+    $queryParams!: objectWIthAnyProperties
     paginatorData = {
         currentPage: 1,
         itemsOnPage: 10,
         totalItems: 100,
         totalPages: 9
     }
-
     @Ref('realty')
     refRealty!: HTMLElement
 
     created(): void {
-        this.$store.commit('queryParams/setQueryParams', this.$route.query)
+        if (this.$route.query.filters) {
+            this.$store.commit('queryParams/setQueryParams', JSON.parse(this.$route.query.filters as string))
+        }
 
         Realty_.getList().then(({data}) => {
             this.realty = data
@@ -116,12 +122,20 @@ export default class Catalog extends ScrollTo {
         })
     }
 
-    beforeEnter(el: HTMLElement): void {
-        $(el).css('opacity', 0)
+    @Watch('$queryParams', {deep: true})
+    watchQueryParams(val: objectWIthAnyProperties): void {
+        let filters = JSON.stringify(val)
+
+        console.log(filters)
+
+        // TODO: переместить на слбытие поиска
+/*        if (filters !== this.$route.query.filters) {
+            this.$router.push({query: {filters: JSON.stringify(val)}})
+        }*/
     }
 
-    onOpenFilters(): void {
-        this.isOpenedFilters = true;
+    beforeEnter(el: HTMLElement): void {
+        $(el).css('opacity', 0)
     }
 
     onEnter(el: HTMLElement, done: () => void): void {
@@ -148,7 +162,6 @@ export default class Catalog extends ScrollTo {
                     duration: 'fast',
                     complete: () => {
                         if ((this.realtyLength - 1) === index) {
-                            console.log(5431)
                             this.$nextTick(() => {
                                 this.inRequestState = true
                             })
@@ -160,10 +173,8 @@ export default class Catalog extends ScrollTo {
         }
     }
 
-    onAfterLeave(): void {
-        this.$nextTick(() => {
-            this.inRequestState = true
-        })
+    onOpenFilters(): void {
+        this.isOpenedFilters = true
     }
 
     onChangePage(page: number): void {
@@ -238,6 +249,7 @@ export default class Catalog extends ScrollTo {
         justify-content center
         align-items center
         margin-bottom 75px
+        flex 1 1 100%
 
     &__titles
         margin-bottom 57px
@@ -254,9 +266,10 @@ export default class Catalog extends ScrollTo {
         font-size 19px
 
     &__realty-wrapper
-        margin-left 260px
         width 100%
         transition margin ease-out .5s
+        display flex
+        flex-direction column
 
         @media (max-width 800px)
             margin-left 0

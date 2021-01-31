@@ -1,17 +1,28 @@
-import {Module, VuexModule, Mutation } from 'vuex-module-decorators'
-import {catalogQueryParams} from "@/js/common/types";
+import {Module, VuexModule, Mutation, Action} from 'vuex-module-decorators'
+import {minMax, objectWIthAnyProperties} from "@/js/common/types";
+import {Vue} from "vue-property-decorator";
 
-@Module({name: 'QueryParams', namespaced: true})
+
+@Module({name: 'queryParams', namespaced: true})
 export default class CatalogQueryParams extends VuexModule {
-    _queryParams: catalogQueryParams = {}
+    _params: objectWIthAnyProperties = {}
 
-    get queryParams(): catalogQueryParams {
-        return this._queryParams
+    get params(): objectWIthAnyProperties {
+        return this._params
     }
 
+    @Mutation
+    setQueryParams(params: objectWIthAnyProperties): void {
+        this._params = params
+    }
 
     @Mutation
-    setQueryParams(params: catalogQueryParams): void {
-        this._queryParams = params
+    _addParam({name, value}: {name: string, value: string | Array<number> | minMax}): void {
+        Vue.set(this._params, name, value)
+    }
+
+    @Action({commit: '_addParam'})
+    addParam(payload: {name: string, value: string | Array<number> | minMax}): {name: string, value: string | Array<number> | minMax} {
+        return payload
     }
 }
