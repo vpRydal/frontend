@@ -206,7 +206,7 @@ export default class Range extends Vue {
         if (0 < pos && pos < this.width && this.currentPosLeft < (this.width - pos)) {
             this.currentPosRight = pos
 
-            this.$btnRight.css('right', pos - (this.btnRightWidth))
+            this.$btnRight.css('right', pos - (this.btnRightWidth / 2))
         }
     }
     onMouseMoveBtnLeft(event: TouchEvent | MouseEvent): void {
