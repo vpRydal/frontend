@@ -3,7 +3,9 @@
         <div
                 v-if="open || $windowWidth >= 800"
                 class="filters" :class="{'filters_open': open, 'filters_sticky': sticky && $windowWidth >= 800}"
-                ref="filters">
+                ref="filters"
+        >
+            <div class="filters__bg" v-if="open" @click="open = false"></div>
             <div class="filters__wrapper" :class="{'filters__wrapper_sticky': sticky && $windowWidth >= 800}"
                  ref="wrapper">
                 <div class="filters__container" @click.stop ref="container">
@@ -276,10 +278,10 @@
             transform translateX(-100%)
             padding-top 110px
 
+
         &_open
             position fixed
             width 98%
-            background-color rgba(0, 0, 0, .5)
             z-index 2
             transform unset
             height 100%
@@ -295,6 +297,9 @@
 
 
         &__wrapper
+            position relative
+            z-index 2
+
             &_sticky
                 position absolute
                 top 0
@@ -304,6 +309,14 @@
         &_sticky
             padding-left 245px
 
+        &__bg
+            position absolute
+            background-color rgba(0, 0, 0, .5)
+            height 100%
+            width 100%
+            top 0
+            left 0
+            z-index 1
 
         &__container
             position relative
@@ -337,17 +350,23 @@
             &-label
                 padding-top 3px
 
-    .filters
         &-enter-active, &-leave-active
-            transition transform ease-out .5s, opacity ease-out .5s
+            & ^[0]__wrapper
+                transition transform ease-out .5s
+            & ^[0]__bg
+                transition opacity ease-out .2s
 
         &-enter, &-leave-to
-            opacity 0
-            transform translateX(-100%)
+            & ^[0]__wrapper
+                transform translateX(-100%)
+            & ^[0]__bg
+                opacity 0
 
         &-enter-to, &-leave
-            opacity 1
-            transform unset
+            & ^[0]__wrapper
+                transform unset
+            & ^[0]__bg
+                opacity 1
 
 
 </style>
