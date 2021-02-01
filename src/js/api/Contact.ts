@@ -8,6 +8,8 @@ class Contact {
     type?: string;
     is_rent_depart?: boolean;
 
+     static readonly EMAIL = 'email'
+
     /* eslint-disable */
     static getList(options?:any): Promise<AxiosResponse<Contact[]>> {
         return new Promise<AxiosResponse<Contact[]>>((resolve) => {

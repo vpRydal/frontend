@@ -142,7 +142,7 @@
         areaModel = {min: 0, max: 0}
         $addParam!: (payload: {name: string, value: string | Array<number> | minMax}) => void
 
-    @Ref('filters')
+        @Ref('filters')
         refFilters!: HTMLElement
         @Ref('container')
         refContainer!: HTMLElement
@@ -223,6 +223,8 @@
                 if (topWindow < (this.$refWrapper.offset()?.top as number)) {
                     this.$refWrapper.css('top', window.scrollY - (this.$refFilters.offset()?.top as number))
                 }
+            } else {
+                this.$refWrapper.css('top', '')
             }
         }
 

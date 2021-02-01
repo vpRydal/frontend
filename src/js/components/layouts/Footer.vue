@@ -76,11 +76,9 @@ import $ from "jquery";
     })
 })
 export default class Footer extends Mixins(ScrollTo) {
-    contacts: Array<Contact> = []
-    rentDepartContacts: Array<Array<Contact>> = []
-    emails: Array<string> = []
     @Ref('emails')
     refEmails!: Array<HTMLElement>
+    responseData: Array<Contact> = []
 
     created():void {
         bus.$on('scroll-to-contacts', () => {
@@ -88,26 +86,7 @@ export default class Footer extends Mixins(ScrollTo) {
         })
 
         Contact.getList().then((response) => {
-            let counter = 0
-            let tempList: Array<Contact> = []
-
-            response.data.forEach(contact => {
-                if (contact.is_rent_depart) {
-                    tempList.push(contact)
-
-                    if (++counter == 2) {
-                        counter = 0
-                        this.rentDepartContacts.push(tempList)
-                        tempList = []
-                    }
-                } else {
-                    if (contact.content?.includes('@')) {
-                        this.emails.push(contact.content)
-                    } else {
-                        this.contacts.push(contact)
-                    }
-                }
-            })
+            this.responseData = response.data
         })
     }
 
@@ -117,6 +96,37 @@ export default class Footer extends Mixins(ScrollTo) {
             $(this.refEmails.slice(0, this.refEmails.length - 1))
                 .after($('<span>', {text: ','}).css('margin-right', 5))
         })
+    }
+
+    get emails(): Array<string> {
+        return this.responseData
+            .filter(contact => contact.type === Contact.EMAIL)
+            .map(contact => contact.content as string)
+    }
+
+    get contacts(): Array<Contact> {
+        return this.responseData
+            .filter(contact => contact.type !== Contact.EMAIL && !contact.is_rent_depart)
+    }
+
+    get rentDepartContacts(): Array<Array<Contact>> {
+        const res: Array<Array<Contact>> = []
+        let counter = 0
+        let tempList: Array<Contact> = []
+
+        this.responseData.forEach(contact => {
+            if (contact.is_rent_depart) {
+                tempList.push(contact)
+
+                if (++counter == 2) {
+                    counter = 0
+                    res.push(tempList)
+                    tempList = []
+                }
+            }
+        })
+
+        return res
     }
 
     beforeDestroy(): void {
