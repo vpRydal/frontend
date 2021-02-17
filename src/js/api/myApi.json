@@ -6,6 +6,8 @@
       "name": "Lorem ipsum dolor sit amet",
       "area": 19.80,
       "price": 550,
+      "latitude": 44.58217870865952,
+      "longitude": 33.55737926479875,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -21,6 +23,8 @@
       "name": "Lorem ipsum dolor sit amet",
       "area": 30,
       "price": 230,
+      "latitude": 44.59677612423578,
+      "longitude": 33.552229423490154,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -36,6 +40,8 @@
       "name": "Lorem ipsum dolor sit amet",
       "area": 10,
       "price": 450,
+      "latitude": 44.587438877009525,
+      "longitude": 33.47000362392961,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -51,6 +57,8 @@
       "name": "Lorem ipsum dolor sit amet",
       "area": 15.12,
       "price": 112,
+      "latitude": 44.60352158169553,
+      "longitude": 33.58467342373429,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -66,6 +74,8 @@
       "name": "Lorem ipsum dolor sit amet",
       "area": 22.3,
       "price": 760,
+      "latitude": 44.56389606818065,
+      "longitude": 33.48667314754207,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -81,6 +91,8 @@
       "name": "Lorem ipsum dolor sit amet",
       "area": 17.86,
       "price": 364.34,
+      "latitude": 44.568848774339926,
+      "longitude": 33.59178098780951,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -96,6 +108,8 @@
       "name": "Lorem ipsum dolor sit amet",
       "area": 11.12,
       "price": 412,
+      "latitude": 44.52151435223796,
+      "longitude": 33.565744207800485,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -111,6 +125,8 @@
       "name": "Lorem ipsum dolor sit amet",
       "area": 33.2,
       "price": 214,
+      "latitude": 44.57302958713985,
+      "longitude": 33.56103893295109,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",

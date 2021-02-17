@@ -9,6 +9,8 @@ export default class Realty {
     description?: string
     price?: number
     area?: number
+    latitude?: number
+    longitude?: number
     images?: Array<string>
 
     paginator?: paginatorFromResponse
