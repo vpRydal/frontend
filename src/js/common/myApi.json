@@ -2,7 +2,7 @@
   "realty": [
     {
       "id": 1,
-      "img_path": "/img/objects/town.png",
+      "img_path": "/frontend/img/objects/town.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 19.80,
       "price": 550,
@@ -10,16 +10,16 @@
       "longitude": 33.55737926479875,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 2,
-      "img_path": "/img/objects/town1.png",
+      "img_path": "/frontend/img/objects/town1.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 30,
       "price": 230,
@@ -27,16 +27,16 @@
       "longitude": 33.552229423490154,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 3,
-      "img_path": "/img/objects/town2.png",
+      "img_path": "/frontend/img/objects/town2.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 10,
       "price": 450,
@@ -44,16 +44,16 @@
       "longitude": 33.47000362392961,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 4,
-      "img_path": "/img/objects/town3.png",
+      "img_path": "/frontend/img/objects/town3.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 15.12,
       "price": 112,
@@ -61,16 +61,16 @@
       "longitude": 33.58467342373429,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 5,
-      "img_path": "/img/objects/town4.png",
+      "img_path": "/frontend/img/objects/town4.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 22.3,
       "price": 760,
@@ -78,16 +78,16 @@
       "longitude": 33.48667314754207,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 6,
-      "img_path": "/img/objects/town.png",
+      "img_path": "/frontend/img/objects/town.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 17.86,
       "price": 364.34,
@@ -95,16 +95,16 @@
       "longitude": 33.59178098780951,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 7,
-      "img_path": "/img/objects/town1.png",
+      "img_path": "/frontend/img/objects/town1.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 11.12,
       "price": 412,
@@ -112,16 +112,16 @@
       "longitude": 33.565744207800485,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     },
     {
       "id": 8,
-      "img_path": "/img/objects/town2.png",
+      "img_path": "/frontend/img/objects/town2.png",
       "name": "Lorem ipsum dolor sit amet",
       "area": 33.2,
       "price": 214,
@@ -129,64 +129,64 @@
       "longitude": 33.56103893295109,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
-        "/img/objects/town.png",
-        "/img/objects/town1.png",
-        "/img/objects/town2.png",
-        "/img/objects/town3.png",
-        "/img/objects/town4.png"
+        "/frontend/img/objects/town.png",
+        "/frontend/img/objects/town1.png",
+        "/frontend/img/objects/town2.png",
+        "/frontend/img/objects/town3.png",
+        "/frontend/img/objects/town4.png"
       ]
     }
   ],
   "news": [
     {
-      "photo": "/img/objects/town.png",
+      "photo": "/frontend/img/objects/town.png",
       "header": "Как правильно составить обращение",
       "content": "По данным регионального управления Росстата, граждане довольно активно обращаются в органы государственной власти, местного самоуправления и к их должностным лицам. Подавляющее большинство составляют обращения о нарушениях прав граждан в сферах трудового, жилищного законодательства, ЖКХ, здравоохранения, образования, по пенсионным вопросам, на нарушения земельного законодательства, прав малого и среднего бизнеса."
     },
     {
-      "photo": "/img/objects/town1.png",
+      "photo": "/frontend/img/objects/town1.png",
       "header": "Как правильно составить обращение",
       "content": "По данным регионального управления Росстата, граждане довольно активно обращаются в органы государственной власти, местного самоуправления и к их должностным лицам. Подавляющее большинство составляют обращения о нарушениях прав граждан в сферах трудового, жилищного законодательства, ЖКХ, здравоохранения, образования, по пенсионным вопросам, на нарушения земельного законодательства, прав малого и среднего бизнеса."
     },
     {
-      "photo": "/img/objects/town2.png",
+      "photo": "/frontend/img/objects/town2.png",
       "header": "Как правильно составить обращение",
       "content": "По данным регионального управления Росстата, граждане довольно активно обращаются в органы государственной власти, местного самоуправления и к их должностным лицам. Подавляющее большинство составляют обращения о нарушениях прав граждан в сферах трудового, жилищного законодательства, ЖКХ, здравоохранения, образования, по пенсионным вопросам, на нарушения земельного законодательства, прав малого и среднего бизнеса."
     },
     {
-      "photo": "/img/objects/town3.png",
+      "photo": "/frontend/img/objects/town3.png",
       "header": "Как правильно составить обращение",
       "content": "По данным регионального управления Росстата, граждане довольно активно обращаются в органы государственной власти, местного самоуправления и к их должностным лицам. Подавляющее большинство составляют обращения о нарушениях прав граждан в сферах трудового, жилищного законодательства, ЖКХ, здравоохранения, образования, по пенсионным вопросам, на нарушения земельного законодательства, прав малого и среднего бизнеса."
     },
     {
-      "photo": "/img/objects/town4.png",
+      "photo": "/frontend/img/objects/town4.png",
       "header": "Как правильно составить обращение",
       "content": "По данным регионального управления Росстата, граждане довольно активно обращаются в органы государственной власти, местного самоуправления и к их должностным лицам. Подавляющее большинство составляют обращения о нарушениях прав граждан в сферах трудового, жилищного законодательства, ЖКХ, здравоохранения, образования, по пенсионным вопросам, на нарушения земельного законодательства, прав малого и среднего бизнеса."
     }
   ],
   "sliderSlides": [
     {
-      "image": "/img/objects/town.png",
+      "image": "/frontend/img/objects/town.png",
       "content": "Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.",
       "header": "Аренда офисов и производсвенных помещений"
     },
     {
-      "image": "/img/objects/town.png",
+      "image": "/frontend/img/objects/town.png",
       "content": "Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.",
       "header": "Аренда офисов и производсвенных помещений"
     },
     {
-      "image": "/img/objects/town.png",
+      "image": "/frontend/img/objects/town.png",
       "content": "Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.",
       "header": "Аренда офисов и производсвенных помещений"
     },
     {
-      "image": "/img/objects/town.png",
+      "image": "/frontend/img/objects/town.png",
       "content": "Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.",
       "header": "Аренда офисов и производсвенных помещений"
     },
     {
-      "image": "/img/objects/town.png",
+      "image": "/frontend/img/objects/town.png",
       "content": "Производственные помещения, цеха, бизнес центр и много других дополнительных зданий и  сооружений в совокупности создают технопарк со всей инфраструктурой.",
       "header": "Аренда офисов и производсвенных помещений"
     }
