@@ -30,7 +30,7 @@
                 :coords="[44.616495, 33.525126]"
                 zoom="13"
                 style="width: 100%; height: 600px;"
-                :behaviors="['drag', 'scrollZoom', 'multiTouch']"
+                :behaviors="['drag', 'dblClickZoom', 'multiTouch']"
                 :controls="['zoomControl']"
                 map-type="map"
                 @options-change="onMapClick"
@@ -40,15 +40,24 @@
                 <ymap-marker
                     v-for="(realtyItem, idx) in realty"
                     :key="idx"
-                    marker-id="2"
-                    marker-type="placemark"
+                    :marker-id="idx"
                     :coords="[realtyItem.latitude, realtyItem.longitude]"
-                    hint-content="Hint content 1"
                     :balloon="{header: 'header', body: 'body', footer: 'footer'}"
                     :icon="{layout: 'islands#32a1d0HomeIcon'}"
-                    :balloonTemplate = "getBalloonTemplate(realtyItem)"
                     cluster-name="1"
-                ></ymap-marker>
+                    @balloonopen="bus.$emit('yandex-map::open-balloon-' + realtyItem.id)"
+                    @balloonclose="bus.$emit('yandex-map::close-balloon-' + realtyItem.id)"
+                >
+                    <Balloon slot="balloon"
+                        :area="realtyItem.area"
+                        :description="realtyItem.description"
+                        :img_path="realtyItem.img_path"
+                        :name="realtyItem.name"
+                        :price="realtyItem.price"
+                        :id="realtyItem.id"
+                    ></Balloon>
+
+                </ymap-marker>
             </yandex-map>
             <div class="catalog__main-content">
                 <Filters class="catalog__filters"
@@ -70,6 +79,7 @@
                             :price="object.price"
                             :img-path="object.img_path"
                             :data-index="index"
+                            :id="object.id"
                         />
                     </transition-group>
                     <div v-else class="catalog__loader">
@@ -91,7 +101,7 @@
 <script lang="ts">
 import {Component, Ref, Watch} from 'vue-property-decorator';
 import Realty from "@/js/components/Realty.vue";
-import Realty_ from "@/js/api/Realty";
+import Realty_ from "@/js/models/Realty";
 import imgTown from "@/assets/img/town.png";
 import Pagination from "@/js/components/widgets/Paginator.vue";
 import Select from "@/js/components/ui/Select.vue";
@@ -102,22 +112,17 @@ import Filters from "@/js/views/Catalog/Filters.vue";
 import {mapGetters} from "vuex";
 import {ScrollTo} from "@/js/mixins/common";
 import {objectWIthAnyProperties} from "@/js/common/types";
+import bus from "@/js/common/bus";
 // @ts-ignore
-import { yandexMap, ymapMarker } from "vue-yandex-maps";
+import {yandexMap, ymapMarker} from "vue-yandex-maps";
+import Balloon from "@/js/components/widgets/Balloon.vue";
 
 
 @Component({
-    components: {Filters, Range, Select, Pagination, Realty, Preloader,  yandexMap, ymapMarker },
+    components: {Balloon, Filters, Range, Select, Pagination, Realty, Preloader, yandexMap, ymapMarker},
     data: () => ({
         imgTown,
-        placemarks: [
-      {
-        coords: [54.8, 39.8],
-        properties: {}, // define properties here
-        options: {}, // define options here
-        clusterName: "1",
-      }
-    ]
+        bus
     }),
     metaInfo: {
         title: 'Аренда помещений Севастополь',
@@ -157,32 +162,24 @@ export default class Catalog extends ScrollTo {
 
     }
 
-    @Watch('$queryParams', { deep: true })
+    @Watch('$queryParams', {deep: true})
     watchQueryParams(val: objectWIthAnyProperties): void {
         let filters = JSON.stringify(val)
 
         console.log(filters)
 
         // TODO: переместить на событие поиска
-/*        if (filters !== this.$route.query.filters) {
-            this.$router.push({query: {filters: JSON.stringify(val)}})
-        }*/
+        /*        if (filters !== this.$route.query.filters) {
+                    this.$router.push({query: {filters: JSON.stringify(val)}})
+                }*/
     }
 
     beforeEnter(el: HTMLElement): void {
         $(el).css('opacity', 0)
     }
 
-    getBalloonTemplate (realty: Realty_): string {
-        return `
-        <div class="balloon">
-        <h3>${realty.name}</h3>
-        </div>
-        `
-    }
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    onMapInit (map: any): void {
+    onMapInit(map: any): void {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
         map.events.add('boundschange', function (e: any) {
             let newZoom = e.get('newZoom')
@@ -205,7 +202,7 @@ export default class Catalog extends ScrollTo {
         }
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    onMapClick (e: any): void {
+    onMapClick(e: any): void {
         console.log(e)
     }
     onLeave(el: HTMLElement, done: () => void): void {
@@ -252,8 +249,6 @@ export default class Catalog extends ScrollTo {
 
 <style scoped lang="stylus">
 @import "~@/stylus/colors.styl"
-.balloon
-    color red
 .btn
     &-enter-active, &-leave-active
         transition transform ease-out .5s, opacity ease-out .5s
@@ -399,9 +394,4 @@ export default class Catalog extends ScrollTo {
             height 3px
             border-radius 50%
             background-color black
-</style>
-
-<style lang="stylus">
-.balloon
-    color red
 </style>

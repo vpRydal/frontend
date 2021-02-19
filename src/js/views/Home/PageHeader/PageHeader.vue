@@ -33,7 +33,7 @@
 import {Component, Mixins} from 'vue-property-decorator';
     import Slide from "@/js/views/Home/PageHeader/Slide.vue";
     import SliderNav from "@/js/components/SliderNav.vue";
-    import SlideOnMainPage from "@/js/api/SlideOnMainPage";
+    import SlideOnMainPage from "@/js/models/SlideOnMainPage";
     import bus from "@/js/common/bus";
     import {ScrollTo} from "@/js/mixins/common";
 

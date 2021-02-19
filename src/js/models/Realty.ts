@@ -1,5 +1,5 @@
 import {AxiosResponse} from "axios";
-import api from "./myApi.json";
+import api from "../common/myApi.json";
 import {paginatorFromResponse} from "@/js/common/types";
 
 export default class Realty {

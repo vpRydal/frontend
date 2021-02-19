@@ -78,7 +78,7 @@
     import {Component, Prop, Ref, Vue, Watch} from "vue-property-decorator";
     import Range from "@/js/components/ui/Range.vue";
     import Select from "@/js/components/ui/Select.vue";
-    import RealtyType from "@/js/api/RealtyType";
+    import RealtyType from "@/js/models/RealtyType";
     import $ from "jquery";
     import { mapGetters, mapMutations} from "vuex";
     import bus from "@/js/common/bus";
@@ -190,7 +190,9 @@
         }
 
         onClick(): void {
-            this.$emit('close')
+            if (this.open) {
+                this.$emit('close')
+            }
         }
 
         onResize(): void {

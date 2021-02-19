@@ -1,0 +1,84 @@
+@import "../colors.styl"
+@import "../mixins.styl"
+
+.balloon
+    padding 18px 0 0 18px
+    max-width 275px
+    font-size 1rem
+
+
+    @media (max-width 400px)
+        font-size .8rem
+        max-width 200px
+
+    &__img
+        responsiveImg()
+        max-height 175px
+        width 100%
+        display block
+        margin-bottom 10px
+
+    &__name
+        color mainColor
+        font-size 1em
+        font-weight bold
+        margin-bottom 5px
+
+    &__area
+        color mainColorDark
+        font-size 0.7em
+        font-weight 600
+
+    &__desc
+        font-size 0.7em
+        color gray
+        margin-bottom 10px
+
+    &__footer
+        margin-left -30px
+        display flex
+        justify-content space-between
+        align-items center
+
+    &__btn
+        font-size .8em
+        padding 5px 10px
+        display block
+        max-width 150px
+        width 106px
+
+        &:focus
+            padding 5px 10px
+
+        @media (max-width 400px)
+            width 95px
+            padding 5px 10px
+
+
+    &__price
+        &-wrapper
+            font-size .8em
+            font-weight 600
+            color white
+            background-color mainColorDark
+            display inline-flex
+            padding 4px 38px
+            position absolute
+
+            &:after
+                content: '';
+                display: block;
+                position: absolute;
+                right: -15px;
+                top: 0;
+                transition: border linear 0.47s;
+                border-top: 0 solid transparent;
+                border-left: 18px solid #071a3c;
+                border-bottom: 28px solid white;
+
+
+            @media (max-width 400px)
+                padding: 2px 20px;
+                &:after
+                    border-left: 15px solid #071a3c;
+                    border-bottom: 24px solid white;

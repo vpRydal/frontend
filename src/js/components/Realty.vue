@@ -18,7 +18,7 @@
             </div>
         </div>
         <router-link class="stretched-link"
-                     :to="{name: 'viewRealty', params: {category: 'category-name', 'id': 'fghfgh'}}">
+                     :to="{name: 'viewRealty', params: {category: 'category-name', 'id': this.id}}">
         </router-link>
     </div>
 </template>
@@ -44,6 +44,10 @@ import $ from 'jquery'
         },
         imgPath: {
             type: String,
+            required: true
+        },
+        id: {
+            type: Number,
             required: true
         }
     }

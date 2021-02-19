@@ -80,7 +80,7 @@
                         :title="object.name"
                         :price="object.price"
                         :img-path="object.img_path"
-
+                        :id="object.id"
                     />
                 </div>
             </div>
@@ -94,7 +94,7 @@ import Slider from "./Slider.vue";
 import Object from "@/js/components/Realty.vue";
 import imgTown from '@/assets/img/town.png'
 import Modal from "@/js/components/widgets/Modal.vue";
-import Realty from "@/js/api/Realty";
+import Realty from "@/js/models/Realty";
 
 
 @Component({

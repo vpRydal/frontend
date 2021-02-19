@@ -65,7 +65,7 @@ import vkImg from '@/assets/img/vk.png'
 import fImg from '@/assets/img/f.png'
 import {ScrollTo} from "@/js/mixins/common";
 import bus from "@/js/common/bus";
-import Contact from "@/js/api/Contact";
+import Contact from "@/js/models/Contact";
 import $ from "jquery";
 
 
