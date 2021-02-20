@@ -1,7 +1,7 @@
 <template>
     <div class="catalog">
         <transition name="btn">
-            <button v-if="!isOpenedFilters" class="catalog__btn-open-filters" @click.stop="onOpenFilters"></button>
+            <button v-if="!isOpenedSidebar" class="catalog__btn-open-filters" @click.stop="onOpenFilters"></button>
         </transition>
 
         <div class="container">
@@ -26,53 +26,18 @@
                 <span class="types__item">Развитая инфраструктура</span>
                 <span class="types__item">Охраняемая территория, видеонаблюдение</span>
             </div>
-            <yandex-map
-                :coords="[44.616495, 33.525126]"
-                zoom="13"
-                style="width: 100%; height: 600px;"
-                :behaviors="['drag', 'dblClickZoom', 'multiTouch']"
-                :controls="['zoomControl']"
-                map-type="map"
-                @options-change="onMapClick"
-                @map-was-initialized="onMapInit"
-                ref="map"
-            >
-                <ymap-marker
-                    v-for="(realtyItem, idx) in realty"
-                    :key="idx"
-                    :marker-id="idx"
-                    :coords="[realtyItem.latitude, realtyItem.longitude]"
-                    :balloon="{header: 'header', body: 'body', footer: 'footer'}"
-                    :icon="{layout: 'islands#32a1d0HomeIcon'}"
-                    cluster-name="1"
-                    @balloonopen="bus.$emit('yandex-map::open-balloon-' + realtyItem.id)"
-                    @balloonclose="bus.$emit('yandex-map::close-balloon-' + realtyItem.id)"
-                >
-                    <Balloon slot="balloon"
-                        :area="realtyItem.area"
-                        :description="realtyItem.description"
-                        :img_path="realtyItem.img_path"
-                        :name="realtyItem.name"
-                        :price="realtyItem.price"
-                        :id="realtyItem.id"
-                    ></Balloon>
-
-                </ymap-marker>
-            </yandex-map>
-            <div class="catalog__main-content">
-                <Filters class="catalog__filters"
-                         :in-request-state="inRequestState"
-                         :open="isOpenedFilters"
-                         @close="isOpenedFilters = false"
-                />
-                <div class="catalog__realty-wrapper" ref="realty">
+            <div class="catalog__main-content" :class="{ 'catalog__main-content_with-realty':  !$onlyMap}">
+                <LeftSideBar class="catalog__sidebar" :height="mapHeight" :open="isOpenedSidebar" @close="isOpenedSidebar = false"/>
+                <Map class="catalog__map"/>
+                <div v-if="!$onlyMap"
+                    class="catalog__realty-wrapper" ref="realty">
                     <transition-group v-if="!inRequestState" class="catalog__objects" tag="div" name="realty"
                                       :css="false"
                                       @before-enter="beforeEnter" @enter="onEnter" @leave="onLeave">
                         <Realty
                             class="realty"
-                            v-if="realty.length"
-                            v-for="(object, index) in realty"
+                            v-if="$realty.length"
+                            v-for="(object, index) in $realty"
                             :key="index + object.id"
                             :area="object.area"
                             :title="object.name"
@@ -100,26 +65,28 @@
 
 <script lang="ts">
 import {Component, Ref, Watch} from 'vue-property-decorator';
+import {getModule} from "vuex-module-decorators";
+import {mapGetters} from "vuex";
+import $ from "jquery";
 import Realty from "@/js/components/Realty.vue";
-import Realty_ from "@/js/models/Realty";
+import RealtyModel from "@/js/models/Realty";
 import imgTown from "@/assets/img/town.png";
 import Pagination from "@/js/components/widgets/Paginator.vue";
 import Select from "@/js/components/ui/Select.vue";
-import $ from "jquery";
 import Range from "@/js/components/ui/Range.vue";
 import Preloader from "@/js/components/widgets/Preloader.vue";
 import Filters from "@/js/views/Catalog/Filters.vue";
-import {mapGetters} from "vuex";
+import CatalogModule from "@/js/store/modules/catalog";
 import {ScrollTo} from "@/js/mixins/common";
 import {objectWIthAnyProperties} from "@/js/common/types";
 import bus from "@/js/common/bus";
-// @ts-ignore
-import {yandexMap, ymapMarker} from "vue-yandex-maps";
 import Balloon from "@/js/components/widgets/Balloon.vue";
+import LeftSideBar from "@/js/views/Catalog/LeftSideBar.vue";
+import Map from "@/js/views/Catalog/Map.vue";
 
 
 @Component({
-    components: {Balloon, Filters, Range, Select, Pagination, Realty, Preloader, yandexMap, ymapMarker},
+    components: {Map, LeftSideBar, Balloon, Filters, Range, Select, Pagination, Realty, Preloader},
     data: () => ({
         imgTown,
         bus
@@ -133,15 +100,21 @@ import Balloon from "@/js/components/widgets/Balloon.vue";
         }),
         ...mapGetters('queryParams', {
             $queryParams: 'params'
-        })
-    }
+        }),
+        ...mapGetters('catalog', {
+            $realty: 'realty',
+            $onlyMap: 'onlyMap',
+        }),
+    },
 })
 export default class Catalog extends ScrollTo {
-    realty: Array<Realty_> = []
     realtyLength = 0
     inRequestState = false
-    isOpenedFilters = false
+    isOpenedSidebar = false
     $queryParams!: objectWIthAnyProperties
+    $realty!: Array <RealtyModel>
+    $onlyMap!: boolean
+    catalogModule: CatalogModule
     paginatorData = {
         currentPage: 1,
         itemsOnPage: 10,
@@ -149,46 +122,16 @@ export default class Catalog extends ScrollTo {
         totalPages: 9
     }
     @Ref('realty') refRealty!: HTMLElement
+    get mapHeight (): number { return window.innerHeight - 120 }
 
-    created(): void {
-        if (this.$route.query.filters) {
-            this.$store.commit('queryParams/setQueryParams', JSON.parse(this.$route.query.filters as string))
-        }
+    constructor() {
+        super();
 
-        Realty_.getList().then(({data}) => {
-            this.realty = data
-            this.realtyLength = this.realty.length
-        })
-
-    }
-
-    @Watch('$queryParams', {deep: true})
-    watchQueryParams(val: objectWIthAnyProperties): void {
-        let filters = JSON.stringify(val)
-
-        console.log(filters)
-
-        // TODO: переместить на событие поиска
-        /*        if (filters !== this.$route.query.filters) {
-                    this.$router.push({query: {filters: JSON.stringify(val)}})
-                }*/
+        this.catalogModule = getModule(CatalogModule, this.$store)
     }
 
     beforeEnter(el: HTMLElement): void {
         $(el).css('opacity', 0)
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    onMapInit(map: any): void {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-        map.events.add('boundschange', function (e: any) {
-            let newZoom = e.get('newZoom')
-            let oldZoom = e.get('oldZoom')
-
-            if (newZoom != oldZoom) {
-                console.log(e.get('newBounds'))
-            }
-        });
     }
     onEnter(el: HTMLElement, done: () => void): void {
         if (el) {
@@ -201,10 +144,7 @@ export default class Catalog extends ScrollTo {
             }, delay)
         }
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    onMapClick(e: any): void {
-        console.log(e)
-    }
+
     onLeave(el: HTMLElement, done: () => void): void {
         if (el) {
             let index = Number(el.dataset.index)
@@ -228,21 +168,44 @@ export default class Catalog extends ScrollTo {
         }
     }
     onOpenFilters(): void {
-        this.isOpenedFilters = true
+        this.isOpenedSidebar = true
     }
     onChangePage(page: number): void {
-        let tempRealty = this.realty
-        this.realty = []
+        let tempRealty = this.$realty
+        this.catalogModule._setRealty([])
         this.paginatorData.currentPage = page
-        this.scrollTo(this.refRealty, -120)
+        this.scrollTo(this.refRealty, -200)
 
         setTimeout(() => {
             this.inRequestState = false
             this.$nextTick(() => {
-                this.realty = tempRealty
-
+                getModule(CatalogModule, this.$store).setRealty(tempRealty)
             })
         }, 1000)
+    }
+
+    created(): void {
+        if (this.$route.query.filters) {
+            this.$store.commit('queryParams/setQueryParams', JSON.parse(this.$route.query.filters as string))
+        }
+
+        RealtyModel.getList().then(({data}) => {
+            this.realtyLength = data.length
+            getModule(CatalogModule, this.$store).setRealty(data)
+        })
+
+    }
+
+    @Watch('$queryParams', {deep: true})
+    watchQueryParams(val: objectWIthAnyProperties): void {
+        let filters = JSON.stringify(val)
+
+        console.log(filters)
+
+        // TODO: переместить на событие поиска    $setRealty (realty: Array <Realty_>): void =
+        /*        if (filters !== this.$route.query.filters) {
+                    this.$router.push({query: {filters: JSON.stringify(val)}})
+                }*/
     }
 }
 </script>
@@ -322,6 +285,7 @@ export default class Catalog extends ScrollTo {
         transition margin ease-out .5s
         display flex
         flex-direction column
+        grid-area realty
 
         @media (max-width 800px)
             margin-left 0
@@ -348,12 +312,27 @@ export default class Catalog extends ScrollTo {
             font-size 15px
 
 
-    &__paginate
-        margin-bottom 70px
+    &__map
+        grid-area map
+        margin-bottom 25px
 
     &__main-content
         position relative
-        display flex
+        display grid
+        grid-template-columns 300px 1fr 1fr
+        grid-template-areas: "sidebar map map"
+
+        &_with-realty
+            grid-template-areas: "sidebar map map" "sidebar realty realty"
+
+        @media (max-width 800px)
+            grid-template-columns 1fr 1fr
+            grid-template-areas: "map map" "realty realty"
+
+
+    &__sidebar
+        grid-area sidebar
+
 
 .realty
     &-enter-active, &-leave-active

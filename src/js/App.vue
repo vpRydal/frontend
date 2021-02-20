@@ -12,6 +12,9 @@ import Header from "./components/layouts/header/Header.vue";
 import Footer from "./components/layouts/Footer.vue";
 import NavBar from "./components/layouts/NavBar.vue";
 import {Component, Vue} from 'vue-property-decorator';
+import $ from "jquery";
+import {getModule} from "vuex-module-decorators";
+import CatalogModule from "@/js/store/modules/catalog";
 
 @Component({
     components: {NavBar, Footer, Header},
@@ -25,6 +28,12 @@ import {Component, Vue} from 'vue-property-decorator';
                 content: 'Технопарк Маяк, Ассоциация Технопарк Маяк',
             }
         ]
+    },
+    watch: {
+        $route (): void {
+            $('body').css('overflow', '')
+            getModule(CatalogModule, this.$store).setOnlyMap(false)
+        }
     }
 })
 export default class App extends Vue {

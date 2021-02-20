@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import common from './common'
-import queryParams from "@/js/store/catalogQueryParams";
+import common from './modules/common'
+import catalog from './modules/catalog'
+import queryParams from "@/js/store/modules/catalogQueryParams";
 
 
 Vue.use(Vuex)
@@ -21,6 +22,7 @@ export default new Vuex.Store({
   },
   modules: {
     common,
-    queryParams
+    queryParams,
+    catalog
   }
 })
