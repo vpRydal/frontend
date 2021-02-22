@@ -173,7 +173,7 @@ export default class Footer extends Mixins(ScrollTo) {
     &__address, &__departments
         font-size 1em
         color white
-        font-family Raleway-Regular
+        font-family Inter-Regular
         margin-bottom 40px
 
 .contacts-list, .departments
