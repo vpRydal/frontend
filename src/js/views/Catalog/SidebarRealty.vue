@@ -1,24 +1,22 @@
 <template>
     <div class="sidebar-realty">
-        <Realty v-for="(realty, idx) in $realty"
+        <RealtyCard2 v-for="(realty, idx) in $realty"
                 :key="idx"
                 :id="realty.id"
                 :price="realty.price"
                 :area="realty.area"
-                :img-path="realty.img_path"
-                :title="realty.name"
                 class="sidebar-realty__realty"
-        />
+         :description="realty.description" :name="realty.name" :img-path="realty.img_path"/>
     </div>
 </template>
 
 <script lang="ts">
 import {Component, Vue} from "vue-property-decorator";
-import Realty from "../../components/Realty.vue";
 import {mapGetters} from "vuex";
+import RealtyCard2 from "@/js/components/RealtyCard2.vue";
 
 @Component({
-    components: {Realty},
+    components: {RealtyCard2},
     computed: {
         ...mapGetters('catalog', {
             $realty: 'realty'
@@ -37,10 +35,10 @@ export default class SidebarRealty extends Vue {
     justify-content center
 
     &__realty
-        max-width 100%
-        height 150px
-        min-height 150px
-        margin-bottom 15px
+        max-width: 100%;
+        min-height: 150px;
+        margin-bottom: 15px;
+        box-shadow: -7px 6px 9px 1px rgba(0, 0, 0, .2);
 
         &:last-child
             margin-bottom 0

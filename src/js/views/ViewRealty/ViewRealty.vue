@@ -91,7 +91,7 @@
 <script lang="ts">
 import {Component, Vue} from "vue-property-decorator";
 import Slider from "./Slider.vue";
-import Object from "@/js/components/Realty.vue";
+import Object from "@/js/components/RealtyCard.vue";
 import imgTown from '@/assets/img/town.png'
 import Modal from "@/js/components/widgets/Modal.vue";
 import Realty from "@/js/models/Realty";

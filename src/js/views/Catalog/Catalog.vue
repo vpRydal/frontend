@@ -68,7 +68,7 @@ import {Component, Ref, Watch} from 'vue-property-decorator';
 import {getModule} from "vuex-module-decorators";
 import {mapGetters} from "vuex";
 import $ from "jquery";
-import Realty from "@/js/components/Realty.vue";
+import Realty from "@/js/components/RealtyCard.vue";
 import RealtyModel from "@/js/models/Realty";
 import imgTown from "@/assets/img/town.png";
 import Pagination from "@/js/components/widgets/Paginator.vue";
@@ -319,7 +319,7 @@ export default class Catalog extends ScrollTo {
     &__main-content
         position relative
         display grid
-        grid-template-columns 300px 1fr 1fr
+        grid-template-columns 320px 1fr 1fr
         grid-template-areas: "sidebar map map"
 
         &_with-realty

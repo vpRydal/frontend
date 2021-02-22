@@ -7,7 +7,7 @@
                 </div>
                 <transition name="type" mode="out-in">
                     <SidebarRealty v-if="showRealty"/>
-                    <Filters v-else :open="false" class="filters" />
+                    <Filters v-else :open="false" class="filters" ref="filters"/>
                 </transition>
             </div>
         </div>
@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Emit, Prop, Vue, Watch} from "vue-property-decorator";
+import {Component, Emit, Prop, Ref, Vue, Watch} from "vue-property-decorator";
 import Filters from "./Filters.vue";
 import SidebarRealty from "@/js/views/Catalog/SidebarRealty.vue";
 import {mapGetters} from "vuex";
@@ -36,6 +36,7 @@ export default class LeftSideBar extends Vue {
     showRealty = false
     @Prop({ default: false }) height!: number | boolean
     @Prop({ required: true }) open!: boolean
+    @Ref('filters') refFilters!: Filters
 
     @Emit('close')
     emitClose (): void {
@@ -62,7 +63,7 @@ export default class LeftSideBar extends Vue {
     &__wrapper
         position sticky
         top 110px
-        overflow-y scroll
+        overflow-y auto
         margin-right 5px
         padding-right 10px
         max-width  300px

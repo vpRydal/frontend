@@ -28,7 +28,7 @@
                 <Balloon slot="balloon"
                          :area="realtyItem.area"
                          :description="realtyItem.description"
-                         :img_path="realtyItem.img_path"
+                         :img-path="realtyItem.img_path"
                          :name="realtyItem.name"
                          :price="realtyItem.price"
                          :id="realtyItem.id"

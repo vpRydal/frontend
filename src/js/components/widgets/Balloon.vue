@@ -1,32 +1,31 @@
 <template>
-    <div class="balloon" ref="balloon" :id="balloonId">
-        <img class="balloon__img" :src="img_path" alt="">
-        <h3 class="balloon__name">{{ name }}</h3>
-        <span class="balloon__area">Площадь {{ area }} м2</span>
-        <p class="balloon__desc">{{ descriptionValue }}</p>
-        <div class="balloon__footer">
-            <span></span>
-            <div class="balloon__price-wrapper">
-                <span class="balloon__price">р {{ price }} м2</span>
-            </div>
-            <button class="btn btn_primary btn_sm balloon__btn">
-                Подробнее
-            </button>
-        </div>
-    </div>
+  <div :id="balloonId">
+    <RealtyCard2
+        :description="description"
+        :name="name"
+        :area="area"
+        :id="id"
+        :img-path="imgPath"
+        :price="price"
+    />
+  </div>
+
 </template>
 
 <script lang="ts">
 import $ from 'jquery'
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator'
 import bus from "@/js/common/bus";
+import RealtyCard2 from "@/js/components/RealtyCard2.vue";
 
-@Component({})
+@Component({
+  components: {RealtyCard2}
+})
 export default class Balloon extends Vue {
     @Ref('balloon')
     refBalloon!: HTMLElement
     @Prop({ required: true })
-    img_path!: string
+    imgPath!: string
     @Prop({ required: true })
     name!: string
     @Prop({ required: true })
@@ -69,5 +68,4 @@ export default class Balloon extends Vue {
 </script>
 
 <style scoped lang="stylus">
-@import "~@/stylus/blocks/yandex-map-balloon.styl"
 </style>

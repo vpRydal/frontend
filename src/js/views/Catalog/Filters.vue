@@ -185,9 +185,13 @@ export default class Filters extends Vue {
     }
 
     onResize(): void {
-        if (this.open) {
-            $(this.refContainer).height(`${window.innerHeight - 120}`)
-        }
+      this.resize()
+    }
+
+    resize (force=false): void {
+      if (this.open || force) {
+        $(this.refContainer).height(`${window.innerHeight - 120}`)
+      }
     }
 
     created(): void {
