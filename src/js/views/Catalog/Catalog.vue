@@ -27,11 +27,11 @@
                 <span class="types__item">Охраняемая территория, видеонаблюдение</span>
             </div>
             <div class="catalog__main-content" :class="{ 'catalog__main-content_with-realty':  !$onlyMap}">
-                <LeftSideBar class="catalog__sidebar" :height="mapHeight" :open="isOpenedSidebar" @close="isOpenedSidebar = false"/>
+                <LeftSideBar class="catalog__sidebar" :height="mapHeight" :open="isOpenedSidebar" @close="isOpenedSidebar = false" @filter="onFilter"/>
                 <Map class="catalog__map"/>
                 <div v-if="!$onlyMap"
                     class="catalog__realty-wrapper" ref="realty">
-                    <transition-group v-if="!inRequestState" class="catalog__objects" tag="div" name="realty"
+                    <transition-group class="catalog__objects" tag="div" name="realty"
                                       :css="false"
                                       @before-enter="beforeEnter" @enter="onEnter" @leave="onLeave">
                         <Realty
@@ -47,15 +47,15 @@
                             :id="object.id"
                         />
                     </transition-group>
-                    <div v-else class="catalog__loader">
+                    <div v-if="inRequestState" class="catalog__loader">
                         <Preloader lg/>
                     </div>
                     <Pagination class="catalog__paginate"
-                                :current-page="paginatorData.currentPage"
-                                :items-on-page="paginatorData.itemsOnPage"
-                                :total-items="paginatorData.totalItems"
-                                :total-pages="paginatorData.totalPages"
-                                @onChangePage="onChangePage"
+                                :value="paginator.currentPage"
+                                :items-on-page="paginator.itemsOnPage"
+                                :total-items="paginator.totalItems"
+                                :total-pages="paginator.totalPages"
+                                @input="onSelectedPage"
                     />
                 </div>
             </div>
@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Ref, Watch} from 'vue-property-decorator';
+import {Component, Ref} from 'vue-property-decorator';
 import {getModule} from "vuex-module-decorators";
 import {mapGetters} from "vuex";
 import $ from "jquery";
@@ -83,6 +83,8 @@ import bus from "@/js/common/bus";
 import Balloon from "@/js/components/widgets/Balloon.vue";
 import LeftSideBar from "@/js/views/Catalog/LeftSideBar.vue";
 import Map from "@/js/views/Catalog/Map.vue";
+import {AxiosResponse} from "axios";
+import Paginator from "@/js/common/helpers/Paginator";
 
 
 @Component({
@@ -115,12 +117,7 @@ export default class Catalog extends ScrollTo {
     $realty!: Array <RealtyModel>
     $onlyMap!: boolean
     catalogModule: CatalogModule
-    paginatorData = {
-        currentPage: 1,
-        itemsOnPage: 10,
-        totalItems: 100,
-        totalPages: 9
-    }
+    paginator = new Paginator
     @Ref('realty') refRealty!: HTMLElement
     get mapHeight (): number { return window.innerHeight - 120 }
 
@@ -144,11 +141,10 @@ export default class Catalog extends ScrollTo {
             }, delay)
         }
     }
-
     onLeave(el: HTMLElement, done: () => void): void {
         if (el) {
             let index = Number(el.dataset.index)
-            let delay = (this.realtyLength - index) * 150
+            let delay = (this.realtyLength - index) * 100
 
             setTimeout(() => {
                 $(el).animate({
@@ -156,9 +152,12 @@ export default class Catalog extends ScrollTo {
                 }, {
                     duration: 'fast',
                     complete: () => {
-                        if ((this.realtyLength - 1) === index) {
+                        if (index === 0) {
                             this.$nextTick(() => {
-                                this.inRequestState = true
+                                this.getRealty({ page: this.paginator.currentPage })
+                                    .finally(() => {
+                                        this.scrollTo(this.refRealty, -200)
+                                    })
                             })
                         }
                         done();
@@ -170,18 +169,35 @@ export default class Catalog extends ScrollTo {
     onOpenFilters(): void {
         this.isOpenedSidebar = true
     }
-    onChangePage(page: number): void {
-        let tempRealty = this.$realty
+    onSelectedPage (page: number): void {
+        this.paginator.currentPage = page
         this.catalogModule._setRealty([])
-        this.paginatorData.currentPage = page
-        this.scrollTo(this.refRealty, -200)
 
-        setTimeout(() => {
+    }
+    onFilter (): void {
+        this.paginator.currentPage = 0
+        this.catalogModule._setRealty([])
+    }
+
+    getRealty (options: { page?: number } = {}): Promise<AxiosResponse<Paginator<RealtyModel>>> {
+        this.inRequestState = true
+
+        return RealtyModel.getList({ ...this.$queryParams, ...options, count: 12 }).then((response) => {
+            const paginator = response.data
+            const filters = JSON.stringify(this.$queryParams)
+
+            /*this.$router.replace({query: {filters: JSON.stringify(filters)}}).catch()*/
+
+            Paginator.initPaginator(paginator)
+
+            this.realtyLength = paginator.data.length
+            this.paginator = paginator
+
+            getModule(CatalogModule, this.$store).setRealty(paginator.data)
             this.inRequestState = false
-            this.$nextTick(() => {
-                getModule(CatalogModule, this.$store).setRealty(tempRealty)
-            })
-        }, 1000)
+
+            return response
+        })
     }
 
     created(): void {
@@ -189,23 +205,7 @@ export default class Catalog extends ScrollTo {
             this.$store.commit('queryParams/setQueryParams', JSON.parse(this.$route.query.filters as string))
         }
 
-        RealtyModel.getList().then(({data}) => {
-            this.realtyLength = data.length
-            getModule(CatalogModule, this.$store).setRealty(data)
-        })
-
-    }
-
-    @Watch('$queryParams', {deep: true})
-    watchQueryParams(val: objectWIthAnyProperties): void {
-        let filters = JSON.stringify(val)
-
-        console.log(filters)
-
-        // TODO: переместить на событие поиска    $setRealty (realty: Array <Realty_>): void =
-        /*        if (filters !== this.$route.query.filters) {
-                    this.$router.push({query: {filters: JSON.stringify(val)}})
-                }*/
+        this.getRealty()
     }
 }
 </script>

@@ -7,7 +7,7 @@
                 </div>
                 <transition name="type" mode="out-in">
                     <SidebarRealty v-if="showRealty"/>
-                    <Filters v-else :open="false" class="filters" ref="filters"/>
+                    <Filters v-else :open="false" class="filters" ref="filters" @filter="$emit('filter')"/>
                 </transition>
             </div>
         </div>
@@ -54,6 +54,12 @@ export default class LeftSideBar extends Vue {
     @Watch('open')
     watchOpen(val: boolean): void {
         $('body').css('overflow', val ? 'hidden' : '')
+    }
+    @Watch('$onlyMap')
+    watchOnlyMap(val: boolean): void {
+        if (!val && this.showRealty) {
+            this.showRealty = false
+        }
     }
 }
 </script>

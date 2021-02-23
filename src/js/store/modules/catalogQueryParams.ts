@@ -17,12 +17,12 @@ export default class CatalogQueryParams extends VuexModule {
     }
 
     @Mutation
-    _addParam({name, value}: {name: string, value: string | Array<number> | minMax}): void {
+    _addParam({name, value}: { name: string, value: string | number | Array<number> | minMax }): void {
         Vue.set(this._params, name, value)
     }
 
     @Action({commit: '_addParam'})
-    addParam(payload: {name: string, value: string | Array<number> | minMax}): {name: string, value: string | Array<number> | minMax} {
+    addParam(payload: { name: string, value: string | number | Array<number> | minMax }): { name: string, value: string | number | Array<number> | minMax } {
         return payload
     }
 }

@@ -5,15 +5,10 @@
                 <h3 class="filters__title">Что вы ищете?</h3>
                 <div class="filters__section">
                     <h4 class="filters__section-title">Хозяйственное назначение</h4>
-                    <div v-for="(type, index ) in realtyTypes"
-                         class="form__group"
-                         :key="`realty-type-${index}`">
-                        <input type="checkbox" class="form__control" :id="`realty-type-${index}`" :value="type.id"
-                               v-model="realtyTypesModel"/>
-                        <label :for="`realty-type-${index}`" class="filters__form-label form__label flex-wrapper">{{
-                                type.name
-                            }}</label>
-                    </div>
+                    <Select
+                    :options="realtyTypeOptions"
+                    v-model="realtyTypesModel"
+                />
                 </div>
                 <div class="filters__section">
                     <h4 class="filters__section-title">Оснащение</h4>
@@ -59,7 +54,7 @@
                 </div>
             </div>
             <div class="flex-wrapper flex-wrapper_J-C">
-                <button class="btn btn_primary btn_sm">Найти</button>
+                <button class="btn btn_primary btn_sm" @click="$emit('filter')">Найти</button>
             </div>
         </div>
     </div>
@@ -73,7 +68,7 @@ import RealtyType from "@/js/models/RealtyType";
 import $ from "jquery";
 import {mapGetters, mapMutations} from "vuex";
 import bus from "@/js/common/bus";
-import {equipment, minMax, objectWIthAnyProperties} from "@/js/common/types";
+import {equipment, minMax, objectWIthAnyProperties, option} from "@/js/common/types";
 
 
 @Component({
@@ -124,14 +119,21 @@ export default class Filters extends Vue {
             title: 'Мебелью укомплектован'
         }
     ]
-    realtyTypesModel: Array<number> = []
+    realtyTypesModel = -1
     realtyEquipmentModel: Array<number> = []
     sticky = false
     $windowWidth!: number
     $queryParams!: objectWIthAnyProperties
     priceModel = {min: 0, max: 0}
     areaModel = {min: 0, max: 0}
-    $addParam!: (payload: { name: string, value: string | Array<number> | minMax }) => void
+    $addParam!: (payload: { name: string, value: string | number | Array<number> | minMax }) => void
+    get realtyTypeOptions (): Array <option> {
+        return this.realtyTypes.reduce((acc, value) => {
+            acc.push({ label: value.name, value: value.id as number })
+
+            return acc
+        }, [] as Array <option>)
+    }
 
     @Ref('container')
     refContainer!: HTMLElement
@@ -144,8 +146,8 @@ export default class Filters extends Vue {
 
 
     @Watch('realtyTypesModel')
-    watchRealtyTypesModel(model: Array<number>): void {
-        this.$addParam({name: 'types', value: model})
+    watchRealtyTypesModel(value: number): void {
+        this.$addParam({ name: 'type', value })
     }
 
     @Watch('realtyEquipmentModel')
@@ -199,7 +201,7 @@ export default class Filters extends Vue {
             this.realtyTypes = data
 
             this.realtyEquipmentModel = this.$queryParams.equipments as Array<number> || []
-            this.realtyTypesModel = this.$queryParams.types as Array<number> || []
+            this.realtyTypesModel = this.$queryParams.type as number || -1
             this.priceModel = this.$queryParams.price as minMax || {min: 0, max: 0}
             this.areaModel = this.$queryParams.area as minMax || {min: 0, max: 0}
         })

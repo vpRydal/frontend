@@ -1,14 +1,19 @@
 import {AxiosResponse} from "axios";
 import api from "../common/myApi.json";
+import http from "@/js/common/http";
 
 export default class RealtyType {
     id?: number
     name?: string
 
-    /* eslint-disable */
-    static getList(options?: any): Promise<AxiosResponse<RealtyType[]>> {
-        return new Promise<AxiosResponse<RealtyType[]>>((resolve) => {
-            resolve({data: api.realtyType} as AxiosResponse<RealtyType[]>)
-        })
+    static getList(params: { [key: string]: number | string | undefined } = {}): Promise<AxiosResponse<RealtyType[]>> {
+
+        if (process.env.VUE_APP_USE_LOCAL_API === 'false') {
+            return http.get<RealtyType[]>('types', { params: params })
+        } else {
+            return new Promise<AxiosResponse<RealtyType[]>>((resolve) => {
+                resolve({ data: api.realtyType } as AxiosResponse<RealtyType[]>)
+            })
+        }
     }
 }

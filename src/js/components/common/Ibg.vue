@@ -2,7 +2,7 @@
   <div
       @click="$emit('click')"
       class="ibg"
-      :style="{'background-image': `url('${src}')`}"
+      :style="{'background-image': `url('${ basePath + '/' + src}')`}"
   >
   </div>
 </template>
@@ -20,6 +20,9 @@ import {Component, Vue} from 'vue-property-decorator';
   }
 })
 export default class Ibg extends Vue {
+    get basePath (): string {
+        return process.env.VUE_APP_URL
+    }
 }
 </script>
 

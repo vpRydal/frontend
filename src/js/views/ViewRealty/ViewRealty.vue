@@ -110,7 +110,7 @@ export default class ViewObject extends Vue {
 
     created(): void {
         Realty.getList().then(({ data }) => {
-            this.realtys = data.slice(0, 3)
+            this.realtys = data.data.slice(0, 3)
         })
         Realty.get().then(({ data }) => {
             this.viewRealty = data

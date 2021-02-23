@@ -2,61 +2,54 @@
     <div class="paginate">
         <button class="paginate__item paginate__item_prev" :disabled="!allowPrevPage" @click="changePage(prevPage)">Предыдущая</button>
         <transition name="btn">
-            <button v-if="allowPrevPage" class="paginate__item" @click="changePage(prevPage)">{{ prevPage + 1}}</button>
+            <button v-if="allowPrevPage" class="paginate__item" @click="changePage(prevPage)">{{ prevPage  }}</button>
         </transition>
-        <button class="paginate__item paginate__item_selected">{{ currentPage + 1 }}</button>
+        <button class="paginate__item paginate__item_selected">{{ value }}</button>
         <transition name="btn">
-            <button v-if="allowNextPage" class="paginate__item" @click="changePage(nextPage)">{{ nextPage + 1}}</button>
+            <button v-if="allowNextPage" class="paginate__item" @click="changePage(nextPage)">{{ nextPage }}</button>
         </transition>
         <button class="paginate__item paginate__item_next" :disabled="!allowNextPage" @click="changePage(nextPage)">Следующая</button>
     </div>
 </template>
 
 <script lang="ts">
-import {Component, Emit, Prop, Vue, Watch} from "vue-property-decorator";
+import {Component, Emit, Prop, Vue} from "vue-property-decorator";
 
 @Component({
 })
 export default class Paginate extends Vue {
-    prevPage = 0
-    nextPage = 0
-    allowPrevPage = false
-    allowNextPage = true
-
     @Prop({
-        required: true,
-        type: Number
+        required: true
     })
     totalPages!: number
     @Prop({
-        required: true,
-        type: Number
+        required: true
     })
     totalItems!: number
     @Prop({
-        required: true,
-        type: Number
+        required: true
     })
     itemsOnPage!: number
     @Prop({
-        required: true,
-        type: Number
+        required: true
     })
-    currentPage!: number
+    value!: number
 
-    @Watch('totalItems', {immediate: true})
-    @Watch('itemsOnPage', {immediate: true})
-    @Watch('currentPage', {immediate: true})
-    @Watch('totalPages', {immediate: true})
-    watchProps(): void {
-        this.prevPage = this.currentPage - 1;
-        this.nextPage = this.currentPage + 1;
-
-        this.allowPrevPage = this.prevPage >= 0
-        this.allowNextPage = this.nextPage <= this.totalPages
+    get allowNextPage (): boolean {
+        return this.nextPage <= this.totalPages
     }
 
-    @Emit('onChangePage')
+    get allowPrevPage (): boolean {
+        return this.prevPage > 0
+    }
+    get prevPage (): number {
+        return this.value - 1
+    }
+    get nextPage (): number {
+        return this.value + 1
+    }
+
+    @Emit('input')
     changePage(page: number): number {
         return page
     }

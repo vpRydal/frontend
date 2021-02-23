@@ -3,19 +3,33 @@ export type option = {
     label: string
 }
 
-export type catalogQueryParams = {}
-
-export type paginatorFromResponse = {
-    meta: {};
-    links: {}
-}
-
 export type minMax = {
     min: number
     max: number
 }
+export type paginatorLinks = {
+    first: string | null;
+    last: string | null;
+    next: string | null;
+    prev: string | null;
+}
 
-export type paginator = {}
+export type paginatorMeta = {
+    current_page: number;
+    from: number;
+    last_page: number;
+    path: string;
+    per_page: number;
+    to: number;
+    total: number;
+}
+
+export type paginatorData = {
+    currentPage: number;
+    itemsOnPage: number;
+    totalItems: number;
+    totalPages: number;
+}
 
 export type equipment = {
     id: number;
