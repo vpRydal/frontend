@@ -61,6 +61,8 @@ import {getModule} from "vuex-module-decorators";
 import CatalogModule from "@/js/store/modules/catalog";
 import $ from 'jquery'
 import bus from '@/js/common/bus'
+import {AxiosResponse} from "axios";
+import {objectWIthAnyProperties} from "@/js/common/types";
 
 
 @Component({
@@ -72,24 +74,34 @@ import bus from '@/js/common/bus'
         ...mapGetters('catalog', {
             $realty: 'realty',
             $onlyMap: 'onlyMap',
-        })
+        }),
+        ...mapGetters('queryParams', {
+            $queryParams: 'params'
+        }),
     }
 })
 export default class Map extends Vue {
     get mapHeight (): number { return window.innerHeight -165 }
     $realty!: Array <RealtyModel>
     $onlyMap!: boolean
+    $queryParams!: objectWIthAnyProperties
     @Ref('map-container') refMapContainer!: HTMLElement
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     onMapInit(map: any): void {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        let _this = this
         // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
         map.events.add('boundschange', function (e: any) {
             let newZoom = e.get('newZoom')
             let oldZoom = e.get('oldZoom')
 
             if (newZoom != oldZoom) {
-                console.log(e.get('newBounds'))
+                const bounds = e.get('newBounds')
+
+                console.log(bounds)
+
+                _this.getRealty({ longitudeMin: bounds[0][1] , longitudeMax: bounds[1][0], latitudeMin: bounds[0][0], latitudeMax: bounds[1][1]/*, latitudeMax: bounds[1][1], longitudeMin: bounds[0][0], longitudeMax: bounds[1][0]*/ })
             }
         });
     }
@@ -105,6 +117,26 @@ export default class Map extends Vue {
             $("html, body").stop().animate({ scrollTop: $(this.refMapContainer).offset()?.top as number - 110 }, 500, 'swing');
         }
     }
+    getRealty (options: {  latitudeMin: number, latitudeMax?: number, longitudeMin?: number, longitudeMax?: number }): Promise<AxiosResponse<Array<RealtyModel>>> {
+        let add = this.$queryParams.equipments ? (this.$queryParams.equipments as unknown as Array<string>).reduce((acc: { [name: string]: boolean }, val: string) => {
+            acc[val] = true
+
+            return acc
+        }, {}) : {}
+
+        delete this.$queryParams.equipments
+
+        return RealtyModel.getListMap({ ...this.$queryParams, ...add, ...options, count: 12}).then((response) => {
+            const realties = response.data
+            const filters = JSON.stringify(this.$queryParams)
+
+            /*this.$router.replace({query: {filters: JSON.stringify(filters)}}).catch()*/
+
+            getModule(CatalogModule, this.$store).setRealty(realties)
+            return response
+        })
+    }
+
 }
 </script>
 

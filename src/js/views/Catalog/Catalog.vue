@@ -27,10 +27,11 @@
                 <span class="types__item">Охраняемая территория, видеонаблюдение</span>
             </div>
             <div class="catalog__main-content" :class="{ 'catalog__main-content_with-realty':  !$onlyMap}">
-                <LeftSideBar class="catalog__sidebar" :height="mapHeight" :open="isOpenedSidebar" @close="isOpenedSidebar = false" @filter="onFilter"/>
+                <LeftSideBar class="catalog__sidebar" :height="mapHeight" :open="isOpenedSidebar"
+                             @close="isOpenedSidebar = false" @filter="onFilter"/>
                 <Map class="catalog__map"/>
                 <div v-if="!$onlyMap"
-                    class="catalog__realty-wrapper" ref="realty">
+                     class="catalog__realty-wrapper" ref="realty">
                     <transition-group class="catalog__objects" tag="div" name="realty"
                                       :css="false"
                                       @before-enter="beforeEnter" @enter="onEnter" @leave="onLeave">
@@ -114,12 +115,15 @@ export default class Catalog extends ScrollTo {
     inRequestState = false
     isOpenedSidebar = false
     $queryParams!: objectWIthAnyProperties
-    $realty!: Array <RealtyModel>
+    $realty!: Array<RealtyModel>
     $onlyMap!: boolean
     catalogModule: CatalogModule
     paginator = new Paginator
     @Ref('realty') refRealty!: HTMLElement
-    get mapHeight (): number { return window.innerHeight - 120 }
+
+    get mapHeight(): number {
+        return window.innerHeight - 120
+    }
 
     constructor() {
         super();
@@ -130,6 +134,7 @@ export default class Catalog extends ScrollTo {
     beforeEnter(el: HTMLElement): void {
         $(el).css('opacity', 0)
     }
+
     onEnter(el: HTMLElement, done: () => void): void {
         if (el) {
             let delay = Number(el.dataset.index) * 150
@@ -141,6 +146,7 @@ export default class Catalog extends ScrollTo {
             }, delay)
         }
     }
+
     onLeave(el: HTMLElement, done: () => void): void {
         if (el) {
             let index = Number(el.dataset.index)
@@ -154,7 +160,7 @@ export default class Catalog extends ScrollTo {
                     complete: () => {
                         if (index === 0) {
                             this.$nextTick(() => {
-                                this.getRealty({ page: this.paginator.currentPage })
+                                this.getRealty({page: this.paginator.currentPage})
                                     .finally(() => {
                                         this.scrollTo(this.refRealty, -200)
                                     })
@@ -166,23 +172,33 @@ export default class Catalog extends ScrollTo {
             }, delay)
         }
     }
+
     onOpenFilters(): void {
         this.isOpenedSidebar = true
     }
-    onSelectedPage (page: number): void {
+
+    onSelectedPage(page: number): void {
         this.paginator.currentPage = page
         this.catalogModule._setRealty([])
 
     }
-    onFilter (): void {
+
+    onFilter(): void {
         this.paginator.currentPage = 0
         this.catalogModule._setRealty([])
     }
 
-    getRealty (options: { page?: number } = {}): Promise<AxiosResponse<Paginator<RealtyModel>>> {
+    getRealty(options: { page?: number } = {}): Promise<AxiosResponse<Paginator<RealtyModel>>> {
         this.inRequestState = true
+        let add = this.$queryParams.equipments ? (this.$queryParams.equipments as unknown as Array<string>).reduce((acc: { [name: string]: boolean }, val: string) => {
+            acc[val] = true
 
-        return RealtyModel.getList({ ...this.$queryParams, ...options, count: 12 }).then((response) => {
+            return acc
+        }, {}) : {}
+
+        delete this.$queryParams.equipments
+
+        return RealtyModel.getList({ ...this.$queryParams, ...add, ...options, count: 12}).then((response) => {
             const paginator = response.data
             const filters = JSON.stringify(this.$queryParams)
 
@@ -205,7 +221,11 @@ export default class Catalog extends ScrollTo {
             this.$store.commit('queryParams/setQueryParams', JSON.parse(this.$route.query.filters as string))
         }
 
-        this.getRealty()
+        if (this.$onlyMap) {
+            this.getRealtyForMap()
+        } else {
+            this.getRealty()
+        }
     }
 }
 </script>
