@@ -24,7 +24,7 @@ export default class Realty extends BaseModel{
             })
         }
     }
-    static getListMap(params: { [key: string]: number | string | undefined } = {}): Promise<AxiosResponse<Array<Realty>>> {
+    static getListMap(params: { [key: string]: number | string | undefined | Array<number> } = {}): Promise<AxiosResponse<Array<Realty>>> {
         if (process.env.VUE_APP_USE_LOCAL_API === 'false') {
             return http.get<Array<Realty>>('realties/map', { params: params })
         } else {

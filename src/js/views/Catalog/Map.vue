@@ -3,8 +3,8 @@
         <yandex-map
             v-if="$onlyMap"
             class="catalog__map"
-            :coords="[44.616495, 33.525126]"
-            zoom="13"
+            :coords="center"
+            zoom="19"
             style="width: 100%"
             :style="{height: `${mapHeight}px`}"
             :behaviors="['drag', 'scrollZoom', 'multiTouch']"
@@ -86,22 +86,49 @@ export default class Map extends Vue {
     $onlyMap!: boolean
     $queryParams!: objectWIthAnyProperties
     @Ref('map-container') refMapContainer!: HTMLElement
+    center = [44.583460, 33.482296]
+    maxBounds = [[0, 0], [0, 0]]
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     onMapInit(map: any): void {
-        // eslint-disable-next-line @typescript-eslint/no-this-alias
-        let _this = this
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-        map.events.add('boundschange', function (e: any) {
+/*        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+        map.events.add('boundschange', (e: any) => {
             let newZoom = e.get('newZoom')
             let oldZoom = e.get('oldZoom')
 
             if (newZoom != oldZoom) {
                 const bounds = e.get('newBounds')
 
-                console.log(bounds)
+                this.center = map.getCenter()
 
-                _this.getRealty({ longitudeMin: bounds[0][1] , longitudeMax: bounds[1][0], latitudeMin: bounds[0][0], latitudeMax: bounds[1][1]/*, latitudeMax: bounds[1][1], longitudeMin: bounds[0][0], longitudeMax: bounds[1][0]*/ })
+                this.getRealty({ longitudeMin: bounds[0][1] , longitudeMax: bounds[1][0], latitudeMin: bounds[0][0], latitudeMax: bounds[1][1]/!*, latitudeMax: bounds[1][1], longitudeMin: bounds[0][0], longitudeMax: bounds[1][0]*!/ })
+            }
+        });*/
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+        map.events.add('actionend', (e: any) => {
+            const bounds = map.getBounds()
+
+            if (this.maxBounds[0][0] < bounds[0][0]  || this.maxBounds[0][1] < bounds[0][1] || this.maxBounds[1][0] < bounds[1][0] || this.maxBounds[1][1] < bounds[1][1]) {
+                if (this.maxBounds[0][0] < bounds[0][0]) {
+                    this.maxBounds[0][0] = bounds[0][0]
+                }
+                if (this.maxBounds[0][1] < bounds[0][1]) {
+                    this.maxBounds[0][1] = bounds[0][1]
+                }
+                if (this.maxBounds[1][0] < bounds[1][0]) {
+                    this.maxBounds[1][0] = bounds[1][0]
+                }
+                if (this.maxBounds[1][1] < bounds[1][1]) {
+                    this.maxBounds[1][1] = bounds[1][1]
+                }
+
+                this.getRealty({ latitudeMin: bounds[0][0] , latitudeMax: bounds[1][0], longitudeMin: bounds[0][1], longitudeMax: bounds[1][1],
+                    exceptedId: this.$realty.reduce((acc, realty) => {
+                        acc.push(realty.id as number)
+
+                        return acc
+                    }, [] as Array<number>)
+                })
             }
         });
     }
@@ -117,7 +144,7 @@ export default class Map extends Vue {
             $("html, body").stop().animate({ scrollTop: $(this.refMapContainer).offset()?.top as number - 110 }, 500, 'swing');
         }
     }
-    getRealty (options: {  latitudeMin: number, latitudeMax?: number, longitudeMin?: number, longitudeMax?: number }): Promise<AxiosResponse<Array<RealtyModel>>> {
+    getRealty (options: {  latitudeMin?: number, latitudeMax?: number, longitudeMin?: number, longitudeMax?: number, exceptedId: Array <number>}): Promise<AxiosResponse<Array<RealtyModel>>> {
         let add = this.$queryParams.equipments ? (this.$queryParams.equipments as unknown as Array<string>).reduce((acc: { [name: string]: boolean }, val: string) => {
             acc[val] = true
 
@@ -126,13 +153,13 @@ export default class Map extends Vue {
 
         delete this.$queryParams.equipments
 
-        return RealtyModel.getListMap({ ...this.$queryParams, ...add, ...options, count: 12}).then((response) => {
+        return RealtyModel.getListMap({ ...this.$queryParams, ...add, ...options}).then((response) => {
             const realties = response.data
             const filters = JSON.stringify(this.$queryParams)
 
             /*this.$router.replace({query: {filters: JSON.stringify(filters)}}).catch()*/
 
-            getModule(CatalogModule, this.$store).setRealty(realties)
+            getModule(CatalogModule, this.$store).setRealty([ ...realties, ...this.$realty ])
             return response
         })
     }
