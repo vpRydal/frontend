@@ -42,7 +42,7 @@
                             :key="index + object.id"
                             :area="object.area"
                             :title="object.name"
-                            :price="object.price"
+                            :price="object.price_per_metr"
                             :img-path="object.img_path"
                             :data-index="index"
                             :id="object.id"
@@ -184,7 +184,7 @@ export default class Catalog extends ScrollTo {
     }
 
     onFilter(): void {
-        this.paginator.currentPage = 0
+        this.paginator.currentPage = 1
         this.catalogModule._setRealty([])
     }
 
@@ -221,11 +221,7 @@ export default class Catalog extends ScrollTo {
             this.$store.commit('queryParams/setQueryParams', JSON.parse(this.$route.query.filters as string))
         }
 
-        if (this.$onlyMap) {
-            this.getRealtyForMap()
-        } else {
-            this.getRealty()
-        }
+        this.getRealty()
     }
 }
 </script>

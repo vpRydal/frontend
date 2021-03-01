@@ -31,11 +31,29 @@
         <h4 class="filters__section-title">Площадь, кв. м.</h4>
         <div class="filters__range-container">
           <Range
+              v-if="realtyMinMaxInfo"
               class="filters__range"
-              :min="17"
-              :max="315"
+              :min="realtyMinMaxInfo.areaMin"
+              :max="realtyMinMaxInfo.areaMax"
               ref="rangeArea"
               v-model="areaModel"
+          >
+            <template v-slot:info="{currentMin, currentMax}">
+              {{ currentMin }}кв. м. | {{ currentMax }}кв. м.
+            </template>
+          </Range>
+        </div>
+      </div>
+      <div class="filters__section">
+        <h4 class="filters__section-title">Цена руб. / кв. м.</h4>
+        <div class="filters__range-container">
+          <Range
+              v-if="realtyMinMaxInfo"
+              class="filters__range"
+              :min="realtyMinMaxInfo.pricePerMetrMin"
+              :max="realtyMinMaxInfo.pricePerMetrMax"
+              ref="rangeArea"
+              v-model="perPriceModel"
           >
             <template v-slot:info="{currentMin, currentMax}">
               {{ currentMin }}кв. м. | {{ currentMax }}кв. м.
@@ -47,9 +65,11 @@
         <h4 class="filters__section-title">Цена, руб.</h4>
         <div class="filters__range-container">
           <Range
+              v-if="realtyMinMaxInfo"
               class="filters__range"
               ref="rangePrice"
-              :min="380" :max="950"
+              :min="realtyMinMaxInfo.priceMin"
+              :max="realtyMinMaxInfo.priceMax"
               v-model="priceModel"
           >
             <template v-slot:info="{currentMin, currentMax}">
@@ -66,14 +86,15 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Ref, Vue, Watch} from "vue-property-decorator";
+import { Component, Prop, Ref, Vue, Watch } from "vue-property-decorator";
 import Range from "@/js/components/ui/Range.vue";
 import Select from "@/js/components/ui/Select.vue";
 import RealtyType from "@/js/models/RealtyType";
+import Realty from "@/js/models/Realty";
 import $ from "jquery";
-import {mapGetters, mapMutations} from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import bus from "@/js/common/bus";
-import {equipment, minMax, objectWIthAnyProperties} from "@/js/common/types";
+import { minMax, objectWIthAnyProperties, realtyMinMaxInfo } from "@/js/common/types";
 
 
 @Component({
@@ -94,7 +115,8 @@ import {equipment, minMax, objectWIthAnyProperties} from "@/js/common/types";
 })
 export default class Filters extends Vue {
   realtyTypes: Array<RealtyType> = []
-  equipment: Array<{ value: string; label: string  }> = [
+    realtyMinMaxInfo?: realtyMinMaxInfo = { pricePerMetrMax: 0, priceMin: 0, priceMax: 0, areaMin: 0, areaMax: 0, pricePerMetrMin: 0 }
+  equipment: Array<{ value: string; label: string }> = [
     {
       value: 'heating',
       label: 'Отопление'
@@ -123,6 +145,7 @@ export default class Filters extends Vue {
   $queryParams!: objectWIthAnyProperties
   priceModel = {min: 0, max: 0}
   areaModel = {min: 0, max: 0}
+    perPriceModel = {min: 0, max: 0}
   $addParam!: (payload: { name: string, value: string | Array<number> | minMax | number }) => void
 
   @Ref('container')
@@ -147,14 +170,14 @@ export default class Filters extends Vue {
 
   @Watch('priceModel')
   watchPriceModel(payload: minMax): void {
-/*    this.$addParam({ name: 'priceMax', value: payload.max })
-    this.$addParam({ name: 'priceMin', value: payload.min })*/
+    this.$addParam({ name: 'priceMax', value: payload.max })
+    this.$addParam({ name: 'priceMin', value: payload.min })
   }
 
   @Watch('areaModel')
   watchAreaModel(payload: minMax): void {
-/*      this.$addParam({ name: 'areaMax', value: payload.max })
-      this.$addParam({ name: 'areaMin', value: payload.min })*/
+      this.$addParam({ name: 'areaMax', value: payload.max })
+      this.$addParam({ name: 'areaMin', value: payload.min })
   }
 
   @Watch('open')
@@ -197,6 +220,18 @@ export default class Filters extends Vue {
       this.priceModel = this.$queryParams.price as minMax || {min: 0, max: 0}
       this.areaModel = this.$queryParams.area as minMax || {min: 0, max: 0}
     })
+
+      Realty.getMinMax().then(res => {
+          this.realtyMinMaxInfo = res.data
+
+          this.$nextTick(() => {
+              if (this.realtyMinMaxInfo) {
+                  this.priceModel = { max: this.realtyMinMaxInfo.priceMax, min: this.realtyMinMaxInfo.priceMin }
+                  this.areaModel = { max: this.realtyMinMaxInfo.areaMax, min: this.realtyMinMaxInfo.areaMin }
+                  this.perPriceModel = { max: this.realtyMinMaxInfo.pricePerMetrMax, min: this.realtyMinMaxInfo.pricePerMetrMin }
+              }
+          })
+      })
 
     addEventListener('click', this.onClick)
     addEventListener('resize', this.onResize)

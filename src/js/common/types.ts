@@ -31,6 +31,15 @@ export type paginatorData = {
     totalPages: number;
 }
 
+export type realtyMinMaxInfo = {
+    pricePerMetrMin: number;
+    pricePerMetrMax: number;
+    priceMin: number;
+    priceMax: number;
+    areaMin: number;
+    areaMax: number;
+}
+
 export type equipment = {
     id: number;
     title: string
