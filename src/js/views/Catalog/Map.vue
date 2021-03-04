@@ -87,48 +87,43 @@ export default class Map extends Vue {
     $queryParams!: objectWIthAnyProperties
     @Ref('map-container') refMapContainer!: HTMLElement
     center = [44.583460, 33.482296]
-    maxBounds = [[0, 0], [0, 0]]
+    maxBounds = {
+        latitudeMin: 0,
+        longitudeMin: 0,
+        latitudeMax: 0,
+        longitudeMax: 0
+    }
+
+    get exceptedId (): Array <number> {
+        return this.$realty.reduce((acc, realty) => {
+            acc.push(realty.id as number)
+
+            return acc
+        }, [] as Array<number>)
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     onMapInit(map: any): void {
-/*        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-        map.events.add('boundschange', (e: any) => {
-            let newZoom = e.get('newZoom')
-            let oldZoom = e.get('oldZoom')
-
-            if (newZoom != oldZoom) {
-                const bounds = e.get('newBounds')
-
-                this.center = map.getCenter()
-
-                this.getRealty({ longitudeMin: bounds[0][1] , longitudeMax: bounds[1][0], latitudeMin: bounds[0][0], latitudeMax: bounds[1][1]/!*, latitudeMax: bounds[1][1], longitudeMin: bounds[0][0], longitudeMax: bounds[1][0]*!/ })
-            }
-        });*/
         // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-        map.events.add('actionend', (e: any) => {
+        map.events.add('actionend', () => {
             const bounds = map.getBounds()
 
-            if (this.maxBounds[0][0] < bounds[0][0]  || this.maxBounds[0][1] < bounds[0][1] || this.maxBounds[1][0] < bounds[1][0] || this.maxBounds[1][1] < bounds[1][1]) {
-                if (this.maxBounds[0][0] < bounds[0][0]) {
-                    this.maxBounds[0][0] = bounds[0][0]
+
+            if (this.maxBounds.latitudeMin < bounds[0][0]  || this.maxBounds.longitudeMin < bounds[0][1] || this.maxBounds.latitudeMax < bounds[1][0] || this.maxBounds.longitudeMax < bounds[1][1]) {
+                if (this.maxBounds.latitudeMin < bounds[0][0]) {
+                    this.maxBounds.latitudeMin = bounds[0][0]
                 }
-                if (this.maxBounds[0][1] < bounds[0][1]) {
-                    this.maxBounds[0][1] = bounds[0][1]
+                if (this.maxBounds.longitudeMin < bounds[0][1]) {
+                    this.maxBounds.longitudeMin = bounds[0][1]
                 }
-                if (this.maxBounds[1][0] < bounds[1][0]) {
-                    this.maxBounds[1][0] = bounds[1][0]
+                if (this.maxBounds.latitudeMax < bounds[1][0]) {
+                    this.maxBounds.latitudeMax = bounds[1][0]
                 }
-                if (this.maxBounds[1][1] < bounds[1][1]) {
-                    this.maxBounds[1][1] = bounds[1][1]
+                if (this.maxBounds.longitudeMax < bounds[1][1]) {
+                    this.maxBounds.longitudeMax = bounds[1][1]
                 }
 
-                this.getRealty({ latitudeMin: bounds[0][0] , latitudeMax: bounds[1][0], longitudeMin: bounds[0][1], longitudeMax: bounds[1][1],
-                    exceptedId: this.$realty.reduce((acc, realty) => {
-                        acc.push(realty.id as number)
-
-                        return acc
-                    }, [] as Array<number>)
-                })
+                this.getRealty({ exceptedId: this.exceptedId })
             }
         });
     }
@@ -144,7 +139,11 @@ export default class Map extends Vue {
             $("html, body").stop().animate({ scrollTop: $(this.refMapContainer).offset()?.top as number - 110 }, 500, 'swing');
         }
     }
-    getRealty (options: {  latitudeMin?: number, latitudeMax?: number, longitudeMin?: number, longitudeMax?: number, exceptedId: Array <number>}): Promise<AxiosResponse<Array<RealtyModel>>> {
+    onFilter (): void {
+        getModule(CatalogModule, this.$store)._setRealty([])
+        this.getRealty({ exceptedId: [] })
+    }
+    getRealty (options: { exceptedId: Array <number> }): Promise<AxiosResponse<Array<RealtyModel>>> {
         let add = this.$queryParams.equipments ? (this.$queryParams.equipments as unknown as Array<string>).reduce((acc: { [name: string]: boolean }, val: string) => {
             acc[val] = true
 
@@ -153,7 +152,7 @@ export default class Map extends Vue {
 
         delete this.$queryParams.equipments
 
-        return RealtyModel.getListMap({ ...this.$queryParams, ...add, ...options}).then((response) => {
+        return RealtyModel.getListMap({ ...this.$queryParams, ...add, ...this.maxBounds, ...options}).then((response) => {
             const realties = response.data
             const filters = JSON.stringify(this.$queryParams)
 
@@ -164,6 +163,13 @@ export default class Map extends Vue {
         })
     }
 
+    created (): void {
+        bus.$on('filter', this.onFilter)
+    }
+
+    beforeDestroy (): void {
+        bus.$off('filter', this.onFilter)
+    }
 }
 </script>
 

@@ -37,50 +37,18 @@ import {minMax} from "@/js/common/types";
     }
 })
 export default class Range extends Vue {
-    @Prop({
-        required: true,
-        type: Number
-    })
-    min!: number
-
-    @Prop({
-        required: true,
-        type: Number
-    })
-    max!: number
-    @Prop({
-        required: false,
-        type: Object
-    })
-    value!: {min: number, max: number}
-
-
-    @Ref('range-btn-left')
-    btnLeft!: HTMLElement
-
-    @Ref('range-btn-right')
-    btnRight!: HTMLElement
-
-    @Ref('range')
-    range!: HTMLElement
-
-    @Ref('range-track-right')
-    trackRight!: HTMLElement
-
-    @Ref('range-track-middle')
-    trackMiddle!: HTMLElement
-
-    @Ref('range-track-left')
-    trackLeft!: HTMLElement
-
-    @Ref('range-track')
-    trackMain!: HTMLElement
-
-    @Ref('range-info')
-    rangeInfo!: HTMLElement
-    @Ref('range-info-arrow')
-    rangeInfoArrow!: HTMLElement
-
+    @Prop({ required: true, type: Number }) min!: number
+    @Prop({ required: true, type: Number }) max!: number
+    @Prop({ required: false, type: Object }) value!: {min: number, max: number}
+    @Ref('range-btn-left') btnLeft!: HTMLElement
+    @Ref('range-btn-right') btnRight!: HTMLElement
+    @Ref('range') range!: HTMLElement
+    @Ref('range-track-right') trackRight!: HTMLElement
+    @Ref('range-track-middle') trackMiddle!: HTMLElement
+    @Ref('range-track-left') trackLeft!: HTMLElement
+    @Ref('range-track') trackMain!: HTMLElement
+    @Ref('range-info') rangeInfo!: HTMLElement
+    @Ref('range-info-arrow') rangeInfoArrow!: HTMLElement
     $btnLeft!: JQuery<HTMLElement>
     $btnRight!: JQuery<HTMLElement>
     $range!: JQuery<HTMLElement>
@@ -90,7 +58,6 @@ export default class Range extends Vue {
     $trackMain!: JQuery<HTMLElement>
     $rangeInfo!: JQuery<HTMLElement>
     $rangeInfoArrow!: JQuery<HTMLElement>
-
     $windowWidth!: number
     maxLeftPos = 0
     maxRightPos = 0
@@ -101,60 +68,23 @@ export default class Range extends Vue {
     rangeInfoWidth = 0
     btnLeftWidth = 0
     btnRightWidth = 0
+    disableChangeByValue = false
 
     @Emit('input')
     changed(min: number, max: number): minMax {
+        this.disableChangeByValue = true
+
         return {min, max}
     }
-
-    @Watch('$windowWidth')
-    watchWindowWidth(): void {
-        this.updateInfoPosition()
-    }
-
-    @Watch('value')
-    watchValue(): void {
-        this.moveBtnRight(((this.max - this.value.max) / (this.max - this.min)) * this.width)
-        this.moveBtnLeft(((this.value.min - this.min) / (this.max - this.min)) * this.width)
-    }
-
-    @Watch('currentPosRight')
-    watchCurrentPosRight(): void {
-        this.$trackRight.css('width', `${Math.floor((this.currentPosRight * 100) / this.width)}%`)
-        this.setWidthMiddleTrack()
-        this.updateInfoPosition()
-    }
-
-    @Watch('currentPosLeft')
-    watchCurrentPosLeft(): void {
-        this.$trackLeft.css('width', `${Math.floor((this.currentPosLeft * 100) / this.width)}%`)
-        this.setWidthMiddleTrack()
-        this.updateInfoPosition()
-    }
-
-    @Watch('middleTrackWidth')
-    watchMiddleTrackWidth(): void {
-        let leftP = (this.$trackLeft.width() as number) / this.width
-        let rightP = (this.$trackRight.width() as number) / this.width
-        let min = Math.ceil(leftP * (this.max - this.min)) + this.min
-        let max = (this.max) - Math.ceil(rightP * (this.max - this.min) )
-
-        this.changed(min, max)
-    }
-
-
     setWidthMiddleTrack(): void {
         let width = (this.width / 2) - this.currentPosLeft + (this.width / 2) - this.currentPosRight
         this.$trackMiddle.css('width', `${Math.ceil((width * 100) / this.width)}%`)
         this.middleTrackWidth = this.$trackMiddle.width() as number
     }
-
     updateInfoPosition(): void {
         this.middleTrackWidth = this.$trackMiddle.width() as number;
         let pos = ((this.width - this.currentPosRight) - this.middleTrackWidth / 2) - (this.$rangeInfo.width() as number / 2)
-
         const rangeInfoWidth = this.$rangeInfo.width() as number
-
 
         if (0 >= pos) {
             this.$rangeInfo.css('left', 0)
@@ -163,12 +93,10 @@ export default class Range extends Vue {
         } else if (this.width + this.btnRightWidth <= pos + rangeInfoWidth) {
             this.$rangeInfo.css('right', 0)
             this.$rangeInfo.css('left', '')
-
             this.$rangeInfoArrow.css('left', pos + (rangeInfoWidth / 2) - 5)
         } else {
             this.$rangeInfo.css('right', '')
             this.$rangeInfo.css('left', '')
-
             this.$rangeInfo.css('left', pos)
             this.$rangeInfoArrow.css('left', pos + (rangeInfoWidth / 2) - 5)
         }
@@ -186,7 +114,6 @@ export default class Range extends Vue {
             this.moveBtnRight(this.width - pos)
         }
     }
-
     onMouseMoveBtnRight(event: TouchEvent | MouseEvent): void {
         let pos;
 
@@ -225,12 +152,40 @@ export default class Range extends Vue {
         this.moveBtnLeft(-pos)
     }
     moveBtnLeft(pos: number): void {
-
         if (0 < pos && pos < this.width && pos < (this.width - this.currentPosRight)) {
             this.currentPosLeft = pos
 
             this.$btnLeft.css('left', pos - (this.btnLeftWidth / 2))
         }
+    }
+    onResize(): void {
+        this.maxRightPos = ($(this.range).offset()?.left as number) + ($(this.range).innerWidth() as number)
+        this.maxLeftPos = ($(this.range).offset()?.left as number)
+    }
+
+    onMouseUp(): void {
+        // @ts-ignore
+        $(document).off('mousemove', this.onMouseMoveBtnLeft)
+        // @ts-ignore
+        $(document).off('touchmove', this.onMouseMoveBtnLeft)
+        // @ts-ignore
+        $(document).off('mousemove', this.onMouseMoveBtnRight)
+        // @ts-ignore
+        $(document).off('touchmove', this.onMouseMoveBtnRight)
+    }
+
+    onMouseMoveStartedLeftBtn(): void {
+        // @ts-ignore
+        $(document).on('mousemove', this.onMouseMoveBtnLeft)
+        // @ts-ignore
+        $(document).on('touchmove', this.onMouseMoveBtnLeft)
+    }
+
+    onMouseMoveStartedRightBtn(): void {
+        // @ts-ignore
+        $(document).on('mousemove', this.onMouseMoveBtnRight)
+        // @ts-ignore
+        $(document).on('touchmove', this.onMouseMoveBtnRight)
     }
 
     mounted(): void {
@@ -262,48 +217,52 @@ export default class Range extends Vue {
             bus.$on('update-range', this.onResize)
 
             this.middleTrackWidth = this.width
-            this.$nextTick(() => {
+
+            setTimeout(() => {
                 this.watchCurrentPosLeft()
-            })
+
+                this.onResize()
+            }, 100)
         })
     }
-
-    onResize(): void {
-        this.maxRightPos = ($(this.range).offset()?.left as number) + ($(this.range).innerWidth() as number)
-        this.maxLeftPos = ($(this.range).offset()?.left as number)
-    }
-
-    onMouseUp(): void {
-        // @ts-ignore
-        $(document).off('mousemove', this.onMouseMoveBtnLeft)
-        // @ts-ignore
-        $(document).off('touchmove', this.onMouseMoveBtnLeft)
-        // @ts-ignore
-        $(document).off('mousemove', this.onMouseMoveBtnRight)
-        // @ts-ignore
-        $(document).off('touchmove', this.onMouseMoveBtnRight)
-    }
-
-    onMouseMoveStartedLeftBtn(): void {
-        // @ts-ignore
-        $(document).on('mousemove', this.onMouseMoveBtnLeft)
-        // @ts-ignore
-        $(document).on('touchmove', this.onMouseMoveBtnLeft)
-    }
-
-    onMouseMoveStartedRightBtn(): void {
-        // @ts-ignore
-        $(document).on('mousemove', this.onMouseMoveBtnRight)
-        // @ts-ignore
-        $(document).on('touchmove', this.onMouseMoveBtnRight)
-    }
-
     beforeDestroy(): void {
         $(document).off('mouseup', this.onMouseUp)
         // @ts-ignore
         $(document).off('touchend', this.onMouseUp)
         removeEventListener('resize', this.onResize)
         bus.$off('update-range', this.onResize)
+    }
+
+    @Watch('$windowWidth')
+    watchWindowWidth(): void {
+        this.updateInfoPosition()
+    }
+    @Watch('value')
+    watchValue(): void {
+            this.moveBtnRight(((this.max - this.value.max) / (this.max - this.min)) * this.width)
+            this.moveBtnLeft(((this.value.min - this.min) / (this.max - this.min)) * this.width)
+            this.disableChangeByValue = false
+    }
+    @Watch('currentPosRight')
+    watchCurrentPosRight(): void {
+        this.$trackRight.css('width', `${Math.floor((this.currentPosRight * 100) / this.width)}%`)
+        this.setWidthMiddleTrack()
+        this.updateInfoPosition()
+    }
+    @Watch('currentPosLeft')
+    watchCurrentPosLeft(): void {
+        this.$trackLeft.css('width', `${Math.floor((this.currentPosLeft * 100) / this.width)}%`)
+        this.setWidthMiddleTrack()
+        this.updateInfoPosition()
+    }
+    @Watch('middleTrackWidth')
+    watchMiddleTrackWidth(): void {
+        let leftP = (this.$trackLeft.width() as number) / this.width
+        let rightP = (this.$trackRight.width() as number) / this.width
+        let min = Math.ceil(leftP * (this.max - this.min)) + this.min
+        let max = (this.max) - Math.ceil(rightP * (this.max - this.min) )
+
+        this.changed(min, max)
     }
 }
 

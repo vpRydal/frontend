@@ -5,7 +5,7 @@
                 <div v-if="$onlyMap" class="sidebar__nav">
                     <button class="btn btn_sm btn_secondary btn_bordered" @click="showRealty = !showRealty">{{ showRealty ? 'Фильтры' : 'Недвижимость' }}</button>
                 </div>
-                <transition name="type" mode="out-in">
+                <transition name="type" mode="out-in" @after-enter="onAfterEnter">
                     <SidebarRealty v-if="showRealty"/>
                     <Filters v-else :open="false" class="filters" ref="filters" @filter="$emit('filter')"/>
                 </transition>
@@ -22,7 +22,6 @@ import {mapGetters} from "vuex";
 import $ from "jquery";
 
 @Component({
-    components: {SidebarRealty, Filters},
     computed: {
         ...mapGetters('catalog', {
             $onlyMap: 'onlyMap',
@@ -30,7 +29,8 @@ import $ from "jquery";
         ...mapGetters('common', {
             $windowWidth: 'windowWidth'
         }),
-    }
+    },
+    components: {SidebarRealty, Filters},
 })
 export default class LeftSideBar extends Vue {
     showRealty = false
@@ -43,10 +43,17 @@ export default class LeftSideBar extends Vue {
         return
     }
 
+    onAfterEnter(): void {
+        if (!this.showRealty) {
+            this.$nextTick(() => {
+                this.refFilters.resize(true)
+            })
+        }
+    }
+
     created (): void {
         addEventListener('click', this.emitClose)
     }
-
     beforeDestroy (): void {
         removeEventListener('click', this.emitClose)
     }

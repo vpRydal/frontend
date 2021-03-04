@@ -24,13 +24,6 @@ export type paginatorMeta = {
     total: number;
 }
 
-export type paginatorData = {
-    currentPage: number;
-    itemsOnPage: number;
-    totalItems: number;
-    totalPages: number;
-}
-
 export type realtyMinMaxInfo = {
     pricePerMetrMin: number;
     pricePerMetrMax: number;
@@ -40,9 +33,4 @@ export type realtyMinMaxInfo = {
     areaMax: number;
 }
 
-export type equipment = {
-    id: number;
-    title: string
-}
-
-export type objectWIthAnyProperties = { [key: string]: string | Array<number> | minMax}
+export type objectWIthAnyProperties = { [key: string]: string | Array<number | string> | minMax | number }

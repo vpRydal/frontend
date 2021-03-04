@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Emit, Prop, Vue} from "vue-property-decorator";
+import {Component, Emit, Prop, Vue, Watch} from "vue-property-decorator";
 import {option} from "@/js/common/types";
 
 
@@ -47,14 +47,21 @@ export default class Select extends Vue {
     })
     options!: Array<option>
     @Prop({
-        required: true
+        type: Array,
     })
-    value?: Array <number | string> | number | string
+    selected?: option
+
     selectedOptions: Array<option> = []
     showBody = false
 
-    @Emit('input')
-    onSelectOption(option: option): Array <number | string> | number | string {
+    @Emit('changedOption')
+    @Watch('selectedOptions')
+    watchSelectedOptions(val: Array<option>): option | Array<option> {
+        return this.multiple ? val : val[0]
+    }
+
+    @Emit('selectedOption')
+    onSelectOption(option: option): option | Array<option> {
         if (!this.multiple) {
             this.selectedOptions = []
             this.selectedOptions.push(option)
@@ -64,21 +71,7 @@ export default class Select extends Vue {
             }
         }
 
-        this.showBody = false
-
-        return this.selectedOption
-    }
-
-    get selectedOption (): Array <number | string> | number | string {
-        if (this.multiple) {
-            return this.selectedOptions.reduce((acc, value) => {
-                acc.push(value.value)
-
-                return acc
-            }, [] as Array <number | string>)
-        } else {
-            return this.selectedOptions[0].value
-        }
+        return this.multiple ? this.selectedOptions : this.selectedOptions[0]
     }
 
     onPopOption(option: option): void {
@@ -95,18 +88,18 @@ export default class Select extends Vue {
 
     created(): void {
         addEventListener('click', this.onClickOutside)
-
-        if (!this.value) return
-
-        if (this.multiple) {
-            this.selectedOptions = this.value
-        } else {
-            this.selectedOptions = [this.value]
-        }
     }
 
     beforeDestroy(): void {
         removeEventListener('click', this.onClickOutside)
+    }
+
+    @Watch('selected', {immediate: true})
+    watchSelected(option: option | undefined): void {
+        if (option) {
+            this.selectedOptions = []
+            this.selectedOptions.push(option)
+        }
     }
 }
 </script>

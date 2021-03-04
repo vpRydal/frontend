@@ -52,7 +52,7 @@
               class="filters__range"
               :min="realtyMinMaxInfo.pricePerMetrMin"
               :max="realtyMinMaxInfo.pricePerMetrMax"
-              ref="rangeArea"
+              ref="rangePricePerMetr"
               v-model="perPriceModel"
           >
             <template v-slot:info="{currentMin, currentMax}">
@@ -79,14 +79,14 @@
         </div>
       </div>
       <div class="flex-wrapper flex-wrapper_J-C">
-        <button class="btn btn_primary btn_sm" @click="$emit('filter')">Найти</button>
+        <button class="btn btn_primary btn_sm" @click="onFilter">Найти</button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Ref, Vue, Watch } from "vue-property-decorator";
+import {Component, Emit, Prop, Ref, Vue, Watch} from "vue-property-decorator";
 import Range from "@/js/components/ui/Range.vue";
 import Select from "@/js/components/ui/Select.vue";
 import RealtyType from "@/js/models/RealtyType";
@@ -139,72 +139,32 @@ export default class Filters extends Vue {
     }
   ]
   realtyTypesModel: Array<number> = []
-  realtyEquipmentModel: Array<number> = []
+  realtyEquipmentModel: Array<string> = []
   sticky = false
   $windowWidth!: number
   $queryParams!: objectWIthAnyProperties
   priceModel = {min: 0, max: 0}
   areaModel = {min: 0, max: 0}
     perPriceModel = {min: 0, max: 0}
-  $addParam!: (payload: { name: string, value: string | Array<number> | minMax | number }) => void
-
-  @Ref('container')
-  refContainer!: HTMLElement
-
-  @Prop({
-    required: true,
-    type: Boolean
-  })
-  open!: boolean
-
-
-  @Watch('realtyTypesModel')
-  watchRealtyTypesModel(model: Array<number>): void {
-    this.$addParam({name: 'types', value: model})
-  }
-
-  @Watch('realtyEquipmentModel')
-  watchRealtyEquipmentModel(model: Array<number>): void {
-    this.$addParam({name: 'equipments', value: model})
-  }
-
-  @Watch('priceModel')
-  watchPriceModel(payload: minMax): void {
-    this.$addParam({ name: 'priceMax', value: payload.max })
-    this.$addParam({ name: 'priceMin', value: payload.min })
-  }
-
-  @Watch('areaModel')
-  watchAreaModel(payload: minMax): void {
-      this.$addParam({ name: 'areaMax', value: payload.max })
-      this.$addParam({ name: 'areaMin', value: payload.min })
-  }
-
-  @Watch('open')
-  watchOpen(val: boolean): void {
-    if (val) {
-      $('body').css('overflow', 'hidden')
-      setTimeout(() => {
-        this.$nextTick(() => {
-          bus.$emit('update-range')
-          this.onResize()
-        })
-      }, 500)
-    } else {
-      $('body').css('overflow', '')
-    }
-  }
+  $addParam!: (payload: { name: string, value: string | Array<number | string> | minMax | number }) => void
+    @Ref('rangePricePerMetr') refRangePricePerMetr!: Range
+    @Ref('rangePrice') refRangePrice!: Range
+    @Ref('rangeArea') refRangeArea!: Range
+  @Ref('container') refContainer!: HTMLElement
+  @Prop({ required: true, type: Boolean }) open!: boolean
 
   onClick(): void {
     if (this.open) {
       this.$emit('close')
     }
   }
-
+  @Emit('filter')
+  onFilter(): void {
+      bus.$emit('filter')
+  }
   onResize(): void {
     this.resize()
   }
-
   resize (force=false): void {
     if (this.open || force) {
       $(this.refContainer).height(`${window.innerHeight - 120}`)
@@ -214,21 +174,34 @@ export default class Filters extends Vue {
   created(): void {
     RealtyType.getList().then(({data}) => {
       this.realtyTypes = data
-
-      this.realtyEquipmentModel = this.$queryParams.equipments as Array<number> || []
-      this.realtyTypesModel = this.$queryParams.types as Array<number> || []
-      this.priceModel = this.$queryParams.price as minMax || {min: 0, max: 0}
-      this.areaModel = this.$queryParams.area as minMax || {min: 0, max: 0}
+      this.realtyEquipmentModel = this.$queryParams.equipments as Array <string> || []
+      this.realtyTypesModel = this.$queryParams.types as Array <number> || []
     })
 
       Realty.getMinMax().then(res => {
+          const filtersFromUrl = JSON.parse(this.$route.query.filters as string)
           this.realtyMinMaxInfo = res.data
 
           this.$nextTick(() => {
               if (this.realtyMinMaxInfo) {
-                  this.priceModel = { max: this.realtyMinMaxInfo.priceMax, min: this.realtyMinMaxInfo.priceMin }
-                  this.areaModel = { max: this.realtyMinMaxInfo.areaMax, min: this.realtyMinMaxInfo.areaMin }
-                  this.perPriceModel = { max: this.realtyMinMaxInfo.pricePerMetrMax, min: this.realtyMinMaxInfo.pricePerMetrMin }
+
+                  if (filtersFromUrl.pricePerMetrMax && filtersFromUrl.pricePerMetrMin) {
+                      this.perPriceModel = { max: filtersFromUrl.pricePerMetrMax as number, min: filtersFromUrl.pricePerMetrMin as number }
+                  } else {
+                      this.perPriceModel = { max: this.realtyMinMaxInfo.pricePerMetrMax, min: this.realtyMinMaxInfo.pricePerMetrMin }
+                  }
+
+                  if (filtersFromUrl.areaMax && filtersFromUrl.areaMin) {
+                      this.areaModel = { max: filtersFromUrl.areaMax as number, min: filtersFromUrl.areaMin as number }
+                  } else {
+                      this.areaModel = { max: this.realtyMinMaxInfo.areaMax, min: this.realtyMinMaxInfo.areaMin }
+                  }
+
+                  if (filtersFromUrl.priceMax && filtersFromUrl.priceMin) {
+                      this.priceModel = { max: filtersFromUrl.priceMax as number, min: filtersFromUrl.priceMin as number }
+                  } else {
+                      this.priceModel = { max: this.realtyMinMaxInfo.priceMax, min: this.realtyMinMaxInfo.priceMin }
+                  }
               }
           })
       })
@@ -241,6 +214,44 @@ export default class Filters extends Vue {
     removeEventListener('click', this.onClick)
     removeEventListener('resize', this.onResize)
   }
+
+    @Watch('realtyTypesModel')
+    watchRealtyTypesModel(model: Array <number>): void {
+        this.$addParam({ name: 'types', value: model })
+    }
+    @Watch('realtyEquipmentModel')
+    watchRealtyEquipmentModel(model: Array <string>): void {
+        this.$addParam({ name: 'equipments', value: model })
+    }
+    @Watch('priceModel')
+    watchPriceModel(payload: minMax): void {
+        this.$addParam({ name: 'priceMax', value: payload.max })
+        this.$addParam({ name: 'priceMin', value: payload.min })
+    }
+    @Watch('areaModel')
+    watchAreaModel(payload: minMax): void {
+        this.$addParam({ name: 'areaMax', value: payload.max })
+        this.$addParam({ name: 'areaMin', value: payload.min })
+    }
+    @Watch('perPriceModel')
+    watchPerPriceModel(payload: minMax): void {
+        this.$addParam({ name: 'pricePerMetrMax', value: payload.max })
+        this.$addParam({ name: 'pricePerMetrMin', value: payload.min })
+    }
+    @Watch('open')
+    watchOpen(val: boolean): void {
+        if (val) {
+            $('body').css('overflow', 'hidden')
+            setTimeout(() => {
+                this.$nextTick(() => {
+                    bus.$emit('update-range')
+                    this.onResize()
+                })
+            }, 500)
+        } else {
+            $('body').css('overflow', '')
+        }
+    }
 }
 </script>
 
