@@ -34,7 +34,7 @@
             margin-left 65%
         &__link
             display block
-            font-family Raleway-Bold
+            font-family Inter-Bold
             margin-bottom 5px
         &__line
             display block

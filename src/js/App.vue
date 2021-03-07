@@ -15,6 +15,7 @@ import {Component, Vue} from 'vue-property-decorator';
 import $ from "jquery";
 import {getModule} from "vuex-module-decorators";
 import CatalogModule from "@/js/store/modules/catalog";
+import {Route} from "vue-router";
 
 @Component({
     components: {NavBar, Footer, Header},
@@ -30,9 +31,11 @@ import CatalogModule from "@/js/store/modules/catalog";
         ]
     },
     watch: {
-        $route (): void {
-            $('body').css('overflow', '')
-            getModule(CatalogModule, this.$store).setOnlyMap(false)
+        $route (val: Route, oldVal: Route): void {
+            if (val.name !== oldVal.name) {
+                $('body').css('overflow', '')
+                getModule(CatalogModule, this.$store).setOnlyMap(false)
+            }
         }
     }
 })

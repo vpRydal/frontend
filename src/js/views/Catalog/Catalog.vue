@@ -120,9 +120,7 @@ export default class Catalog extends ScrollTo {
     catalogModule: CatalogModule
     paginator = new Paginator
     @Ref('realty') refRealty!: HTMLElement
-    get mapHeight(): number {
-        return window.innerHeight - 120
-    }
+    get mapHeight(): number { return window.innerHeight - 120 }
 
     constructor() {
         super();
@@ -179,15 +177,19 @@ export default class Catalog extends ScrollTo {
 
     }
     onFilter(): void {
+        this.isOpenedSidebar = false
+
         if (!this.$onlyMap) {
             this.paginator.currentPage = 1
             this.catalogModule._setRealty([])
         }
     }
+    onFilterClear(): void {
+        this.isOpenedSidebar = false
+    }
 
     getRealty(options: { page?: number } = {}): Promise<AxiosResponse<Paginator<RealtyModel>>> {
         this.inRequestState = true
-        console.log(this.$queryParams)
         const filters = JSON.stringify(this.$queryParams)
         let add = this.$queryParams.equipments ? (this.$queryParams.equipments as Array<string>).reduce((acc: { [name: string]: boolean }, val: string) => {
             acc[val] = true
@@ -203,7 +205,9 @@ export default class Catalog extends ScrollTo {
 
             this.realtyLength = paginator.data.length
             this.paginator = paginator
-            this.$router.replace({ name: this.$route.name as string, query: { filters } }).catch()
+            this.$router.push({ name: this.$route.name as string, query: { filters } }).catch(() => {
+                return
+            })
 
             getModule(CatalogModule, this.$store).setRealty(paginator.data)
             this.inRequestState = false
@@ -217,6 +221,9 @@ export default class Catalog extends ScrollTo {
             this.$store.commit('queryParams/setQueryParams', JSON.parse(this.$route.query.filters as string))
         }
 
+        bus.$on('filters::clear', this.onFilterClear)
+
+
         this.getRealty()
     }
 
@@ -225,6 +232,9 @@ export default class Catalog extends ScrollTo {
         if (!val) {
             this.paginator.currentPage = 1
             this.catalogModule._setRealty([])
+            delete this.$queryParams.bounds
+            delete this.$queryParams.zoom
+            delete this.$queryParams.center
 
             this.getRealty().finally(() => {
                 this.scrollTo(this.refRealty, -200)

@@ -1,88 +1,89 @@
 <template>
-  <div class="filters" ref="wrapper">
-    <div class="filters__container" ref="container">
-      <form action="" class="filters__form form">
-        <h3 class="filters__title">Что вы ищете?</h3>
-        <div class="filters__section">
-          <h4 class="filters__section-title">Хозяйственное назначение</h4>
-          <div v-for="(type, index ) in realtyTypes"
-               class="form__group"
-               :key="`realty-type-${index}`">
-            <input type="checkbox" class="form__control" :id="`realty-type-${index}`" :value="type.id"
-                   v-model="realtyTypesModel"/>
-            <label :for="`realty-type-${index}`" class="filters__form-label form__label flex-wrapper">{{
-                type.name
-              }}</label>
-          </div>
+    <div class="filters" ref="wrapper">
+        <div class="filters__container" ref="container">
+            <form action="" class="filters__form form">
+                <h3 class="filters__title">Что вы ищете?</h3>
+                <div class="filters__section">
+                    <h4 class="filters__section-title">Хозяйственное назначение</h4>
+                    <div v-for="(type, index ) in realtyTypes"
+                         class="form__group"
+                         :key="`realty-type-${index}`">
+                        <input type="checkbox" class="form__control" :id="`realty-type-${index}`" :value="type.id"
+                               v-model="realtyTypesModel"/>
+                        <label :for="`realty-type-${index}`" class="filters__form-label form__label flex-wrapper">{{
+                                type.name
+                            }}</label>
+                    </div>
+                </div>
+                <div class="filters__section">
+                    <h4 class="filters__section-title">Оснащение</h4>
+                    <div v-for="(eq, index ) in equipment"
+                         class="form__group"
+                         :key="`equipment-type-${index}`">
+                        <input type="checkbox" class="form__control" :id="`equipment-type-${index}`" :value="eq.value"
+                               v-model="realtyEquipmentModel"/>
+                        <label :for="`equipment-type-${index}`"
+                               class="filters__form-label form__label flex-wrapper">{{ eq.label }}</label>
+                    </div>
+                </div>
+            </form>
+            <div class="filters__section">
+                <h4 class="filters__section-title">Площадь, кв. м.</h4>
+                <div class="filters__range-container">
+                    <Range
+                        v-if="realtyMinMaxInfo"
+                        class="filters__range"
+                        :min="realtyMinMaxInfo.areaMin"
+                        :max="realtyMinMaxInfo.areaMax"
+                        ref="rangeArea"
+                        v-model="areaModel"
+                    >
+                        <template v-slot:info="{currentMin, currentMax}">
+                            {{ currentMin }}кв. м. | {{ currentMax }}кв. м.
+                        </template>
+                    </Range>
+                </div>
+            </div>
+            <div class="filters__section">
+                <h4 class="filters__section-title">Цена руб. / кв. м.</h4>
+                <div class="filters__range-container">
+                    <Range
+                        v-if="realtyMinMaxInfo"
+                        class="filters__range"
+                        :min="realtyMinMaxInfo.pricePerMetrMin"
+                        :max="realtyMinMaxInfo.pricePerMetrMax"
+                        ref="rangePricePerMetr"
+                        v-model="perPriceModel"
+                    >
+                        <template v-slot:info="{currentMin, currentMax}">
+                            {{ currentMin }}кв. м. | {{ currentMax }}кв. м.
+                        </template>
+                    </Range>
+                </div>
+            </div>
+            <div class="filters__section">
+                <h4 class="filters__section-title">Цена, руб.</h4>
+                <div class="filters__range-container">
+                    <Range
+                        v-if="realtyMinMaxInfo"
+                        class="filters__range"
+                        ref="rangePrice"
+                        :min="realtyMinMaxInfo.priceMin"
+                        :max="realtyMinMaxInfo.priceMax"
+                        v-model="priceModel"
+                    >
+                        <template v-slot:info="{currentMin, currentMax}">
+                            {{ currentMin }}Р | {{ currentMax }}Р
+                        </template>
+                    </Range>
+                </div>
+            </div>
+            <div class="flex-wrapper flex-wrapper_J-C">
+                <button class="btn btn_primary btn_sm" @click="onFilter">Найти</button>
+                <button class="btn btn_secondary btn_sm" @click="onClear">Сбросить</button>
+            </div>
         </div>
-        <div class="filters__section">
-          <h4 class="filters__section-title">Оснащение</h4>
-          <div v-for="(eq, index ) in equipment"
-               class="form__group"
-               :key="`equipment-type-${index}`">
-            <input type="checkbox" class="form__control" :id="`equipment-type-${index}`" :value="eq.value"
-                   v-model="realtyEquipmentModel"/>
-            <label :for="`equipment-type-${index}`"
-                   class="filters__form-label form__label flex-wrapper">{{ eq.label }}</label>
-          </div>
-        </div>
-      </form>
-      <div class="filters__section">
-        <h4 class="filters__section-title">Площадь, кв. м.</h4>
-        <div class="filters__range-container">
-          <Range
-              v-if="realtyMinMaxInfo"
-              class="filters__range"
-              :min="realtyMinMaxInfo.areaMin"
-              :max="realtyMinMaxInfo.areaMax"
-              ref="rangeArea"
-              v-model="areaModel"
-          >
-            <template v-slot:info="{currentMin, currentMax}">
-              {{ currentMin }}кв. м. | {{ currentMax }}кв. м.
-            </template>
-          </Range>
-        </div>
-      </div>
-      <div class="filters__section">
-        <h4 class="filters__section-title">Цена руб. / кв. м.</h4>
-        <div class="filters__range-container">
-          <Range
-              v-if="realtyMinMaxInfo"
-              class="filters__range"
-              :min="realtyMinMaxInfo.pricePerMetrMin"
-              :max="realtyMinMaxInfo.pricePerMetrMax"
-              ref="rangePricePerMetr"
-              v-model="perPriceModel"
-          >
-            <template v-slot:info="{currentMin, currentMax}">
-              {{ currentMin }}кв. м. | {{ currentMax }}кв. м.
-            </template>
-          </Range>
-        </div>
-      </div>
-      <div class="filters__section">
-        <h4 class="filters__section-title">Цена, руб.</h4>
-        <div class="filters__range-container">
-          <Range
-              v-if="realtyMinMaxInfo"
-              class="filters__range"
-              ref="rangePrice"
-              :min="realtyMinMaxInfo.priceMin"
-              :max="realtyMinMaxInfo.priceMax"
-              v-model="priceModel"
-          >
-            <template v-slot:info="{currentMin, currentMax}">
-              {{ currentMin }}Р | {{ currentMax }}Р
-            </template>
-          </Range>
-        </div>
-      </div>
-      <div class="flex-wrapper flex-wrapper_J-C">
-        <button class="btn btn_primary btn_sm" @click="onFilter">Найти</button>
-      </div>
     </div>
-  </div>
 </template>
 
 <script lang="ts">
@@ -92,205 +93,241 @@ import Select from "@/js/components/ui/Select.vue";
 import RealtyType from "@/js/models/RealtyType";
 import Realty from "@/js/models/Realty";
 import $ from "jquery";
-import { mapGetters, mapMutations } from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import bus from "@/js/common/bus";
-import { minMax, objectWIthAnyProperties, realtyMinMaxInfo } from "@/js/common/types";
+import {minMax, objectWIthAnyProperties, realtyMinMaxInfo} from "@/js/common/types";
 
 
 @Component({
-  components: {Select, Range},
-  computed: {
-    ...mapGetters('common', {
-      $windowWidth: 'windowWidth'
-    }),
-    ...mapGetters('queryParams', {
-      $queryParams: 'params'
-    })
-  },
-  methods: {
-    ...mapMutations('queryParams', {
-      $addParam: '_addParam'
-    })
-  }
+    components: {Select, Range},
+    computed: {
+        ...mapGetters('common', {
+            $windowWidth: 'windowWidth'
+        }),
+        ...mapGetters('queryParams', {
+            $queryParams: 'params'
+        })
+    },
+    methods: {
+        ...mapMutations('queryParams', {
+            $addParam: '_addParam',
+            $setQueryParams: 'setQueryParams',
+        })
+    }
 })
 export default class Filters extends Vue {
-  realtyTypes: Array<RealtyType> = []
-    realtyMinMaxInfo?: realtyMinMaxInfo = { pricePerMetrMax: 0, priceMin: 0, priceMax: 0, areaMin: 0, areaMax: 0, pricePerMetrMin: 0 }
-  equipment: Array<{ value: string; label: string }> = [
-    {
-      value: 'heating',
-      label: 'Отопление'
-    },
-    {
-      value: 'restroom',
-      label: 'Отдельный санузел'
-    },
-    {
-      value: 'energy',
-      label: 'Индивидуальный узел учёта электроэнергии'
-    },
-    {
-      value: 'access',
-      label: 'Круглосуточный доступ'
-    },
-    {
-      value: 'furniture',
-      label: 'Мебелью укомплектован'
+    realtyTypes: Array<RealtyType> = []
+    realtyMinMaxInfo?: realtyMinMaxInfo = {
+        pricePerMetrMax: 0,
+        priceMin: 0,
+        priceMax: 0,
+        areaMin: 0,
+        areaMax: 0,
+        pricePerMetrMin: 0
     }
-  ]
-  realtyTypesModel: Array<number> = []
-  realtyEquipmentModel: Array<string> = []
-  sticky = false
-  $windowWidth!: number
-  $queryParams!: objectWIthAnyProperties
-  priceModel = {min: 0, max: 0}
-  areaModel = {min: 0, max: 0}
+    equipment: Array<{ value: string; label: string }> = [
+        {
+            value: 'heating',
+            label: 'Отопление'
+        },
+        {
+            value: 'restroom',
+            label: 'Отдельный санузел'
+        },
+        {
+            value: 'energy',
+            label: 'Индивидуальный узел учёта электроэнергии'
+        },
+        {
+            value: 'access',
+            label: 'Круглосуточный доступ'
+        },
+        {
+            value: 'furniture',
+            label: 'Мебелью укомплектован'
+        }
+    ]
+    realtyTypesModel: Array<number> = []
+    realtyEquipmentModel: Array<string> = []
+    sticky = false
+    $windowWidth!: number
+    $queryParams!: objectWIthAnyProperties
+    priceModel = {min: 0, max: 0}
+    areaModel = {min: 0, max: 0}
     perPriceModel = {min: 0, max: 0}
-  $addParam!: (payload: { name: string, value: string | Array<number | string> | minMax | number }) => void
+    $addParam!: (payload: { name: string, value: string | Array<number | string> | minMax | number | objectWIthAnyProperties }) => void
+    $setQueryParams!: (params: objectWIthAnyProperties) => void
     @Ref('rangePricePerMetr') refRangePricePerMetr!: Range
     @Ref('rangePrice') refRangePrice!: Range
     @Ref('rangeArea') refRangeArea!: Range
-  @Ref('container') refContainer!: HTMLElement
-  @Prop({ required: true, type: Boolean }) open!: boolean
+    @Ref('container') refContainer!: HTMLElement
 
-  onClick(): void {
-    if (this.open) {
-      this.$emit('close')
+    @Emit('filter')
+    onFilter(): void {
+        bus.$emit('filters::filter')
+        this.$emit('close')
     }
-  }
-  @Emit('filter')
-  onFilter(): void {
-      bus.$emit('filter')
-  }
-  onResize(): void {
-    this.resize()
-  }
-  resize (force=false): void {
-    if (this.open || force) {
-      $(this.refContainer).height(`${window.innerHeight - 120}`)
+
+    @Emit('clear')
+    onClear(): void {
+        this.$setQueryParams({})
+        this.$router.push({name: this.$route.name as string, query: {}}).catch(() => {
+            return
+        })
+        if (this.realtyMinMaxInfo) {
+            this.perPriceModel = {
+                max: this.realtyMinMaxInfo.pricePerMetrMax,
+                min: this.realtyMinMaxInfo.pricePerMetrMin
+            }
+            this.areaModel = {max: this.realtyMinMaxInfo.areaMax, min: this.realtyMinMaxInfo.areaMin}
+            this.priceModel = {max: this.realtyMinMaxInfo.priceMax, min: this.realtyMinMaxInfo.priceMin}
+
+            this.refRangePricePerMetr.setValue(this.perPriceModel, true);
+            this.refRangePrice.setValue(this.priceModel, true);
+            this.refRangeArea.setValue(this.areaModel, true);
+        }
+        this.onFilter()
+        bus.$emit('filters::clear')
+        this.$emit('close')
     }
-  }
 
-  created(): void {
-    RealtyType.getList().then(({data}) => {
-      this.realtyTypes = data
-      this.realtyEquipmentModel = this.$queryParams.equipments as Array <string> || []
-      this.realtyTypesModel = this.$queryParams.types as Array <number> || []
-    })
+    onResize(): void {
+        this.resize()
+    }
 
-      Realty.getMinMax().then(res => {
-          const filtersFromUrl = JSON.parse(this.$route.query.filters as string)
-          this.realtyMinMaxInfo = res.data
+    resize(): void {
+        $(this.refContainer).height(`${window.innerHeight - 120}`)
+        this.refRangePricePerMetr.onResize()
+        this.refRangePrice.onResize()
+        this.refRangeArea.onResize()
+    }
 
-          this.$nextTick(() => {
-              if (this.realtyMinMaxInfo) {
+    created(): void {
+        RealtyType.getList().then(({data}) => {
+            const filtersFromUrl = JSON.parse(this.$route.query.filters as string)
 
-                  if (filtersFromUrl.pricePerMetrMax && filtersFromUrl.pricePerMetrMin) {
-                      this.perPriceModel = { max: filtersFromUrl.pricePerMetrMax as number, min: filtersFromUrl.pricePerMetrMin as number }
-                  } else {
-                      this.perPriceModel = { max: this.realtyMinMaxInfo.pricePerMetrMax, min: this.realtyMinMaxInfo.pricePerMetrMin }
-                  }
+            this.realtyTypes = data
+            this.realtyEquipmentModel = filtersFromUrl.equipments as Array<string> || []
+            this.realtyTypesModel = filtersFromUrl.types as Array<number> || []
+        })
 
-                  if (filtersFromUrl.areaMax && filtersFromUrl.areaMin) {
-                      this.areaModel = { max: filtersFromUrl.areaMax as number, min: filtersFromUrl.areaMin as number }
-                  } else {
-                      this.areaModel = { max: this.realtyMinMaxInfo.areaMax, min: this.realtyMinMaxInfo.areaMin }
-                  }
+        Realty.getMinMax().then(res => {
+            const filtersFromUrl = JSON.parse(this.$route.query.filters as string)
+            this.realtyMinMaxInfo = res.data
 
-                  if (filtersFromUrl.priceMax && filtersFromUrl.priceMin) {
-                      this.priceModel = { max: filtersFromUrl.priceMax as number, min: filtersFromUrl.priceMin as number }
-                  } else {
-                      this.priceModel = { max: this.realtyMinMaxInfo.priceMax, min: this.realtyMinMaxInfo.priceMin }
-                  }
-              }
-          })
-      })
+            this.$nextTick(() => {
+                if (this.realtyMinMaxInfo) {
 
-    addEventListener('click', this.onClick)
-    addEventListener('resize', this.onResize)
-  }
+                    if (filtersFromUrl.pricePerMetrMax && filtersFromUrl.pricePerMetrMin) {
+                        this.perPriceModel = {
+                            max: filtersFromUrl.pricePerMetrMax as number,
+                            min: filtersFromUrl.pricePerMetrMin as number
+                        }
+                    } else {
+                        this.perPriceModel = {
+                            max: this.realtyMinMaxInfo.pricePerMetrMax,
+                            min: this.realtyMinMaxInfo.pricePerMetrMin
+                        }
+                    }
 
-  beforeDestroy(): void {
-    removeEventListener('click', this.onClick)
-    removeEventListener('resize', this.onResize)
-  }
+                    if (filtersFromUrl.areaMax && filtersFromUrl.areaMin) {
+                        this.areaModel = {max: filtersFromUrl.areaMax as number, min: filtersFromUrl.areaMin as number}
+                    } else {
+                        this.areaModel = {max: this.realtyMinMaxInfo.areaMax, min: this.realtyMinMaxInfo.areaMin}
+                    }
+
+                    if (filtersFromUrl.priceMax && filtersFromUrl.priceMin) {
+                        this.priceModel = {
+                            max: filtersFromUrl.priceMax as number,
+                            min: filtersFromUrl.priceMin as number
+                        }
+                    } else {
+                        this.priceModel = {max: this.realtyMinMaxInfo.priceMax, min: this.realtyMinMaxInfo.priceMin}
+                    }
+
+                    this.refRangePricePerMetr.setValue(this.perPriceModel, true);
+                    this.refRangePrice.setValue(this.priceModel, true);
+                    this.refRangeArea.setValue(this.areaModel, true);
+                }
+            })
+        })
+
+        addEventListener('resize', this.onResize)
+    }
+
+    beforeDestroy(): void {
+        removeEventListener('resize', this.onResize)
+    }
 
     @Watch('realtyTypesModel')
-    watchRealtyTypesModel(model: Array <number>): void {
-        this.$addParam({ name: 'types', value: model })
+    watchRealtyTypesModel(model: Array<number>): void {
+        this.$addParam({name: 'types', value: model})
     }
+
     @Watch('realtyEquipmentModel')
-    watchRealtyEquipmentModel(model: Array <string>): void {
-        this.$addParam({ name: 'equipments', value: model })
+    watchRealtyEquipmentModel(model: Array<string>): void {
+        this.$addParam({name: 'equipments', value: model})
     }
+
     @Watch('priceModel')
     watchPriceModel(payload: minMax): void {
-        this.$addParam({ name: 'priceMax', value: payload.max })
-        this.$addParam({ name: 'priceMin', value: payload.min })
+        this.$addParam({name: 'priceMax', value: payload.max})
+        this.$addParam({name: 'priceMin', value: payload.min})
     }
+
     @Watch('areaModel')
     watchAreaModel(payload: minMax): void {
-        this.$addParam({ name: 'areaMax', value: payload.max })
-        this.$addParam({ name: 'areaMin', value: payload.min })
+        this.$addParam({name: 'areaMax', value: payload.max})
+        this.$addParam({name: 'areaMin', value: payload.min})
     }
+
     @Watch('perPriceModel')
     watchPerPriceModel(payload: minMax): void {
-        this.$addParam({ name: 'pricePerMetrMax', value: payload.max })
-        this.$addParam({ name: 'pricePerMetrMin', value: payload.min })
-    }
-    @Watch('open')
-    watchOpen(val: boolean): void {
-        if (val) {
-            $('body').css('overflow', 'hidden')
-            setTimeout(() => {
-                this.$nextTick(() => {
-                    bus.$emit('update-range')
-                    this.onResize()
-                })
-            }, 500)
-        } else {
-            $('body').css('overflow', '')
-        }
+        this.$addParam({name: 'pricePerMetrMax', value: payload.max})
+        this.$addParam({name: 'pricePerMetrMin', value: payload.min})
     }
 }
 </script>
 
 <style scoped lang="stylus">
 @import "~@/stylus/colors.styl"
+.btn
+    &:first-child
+        margin-right 5px
 
 .filters
-  &__section
-    margin-bottom 25px
+    &__section
+        margin-bottom 25px
 
-    &:last-child
-      margin-bottom 0
+        &:last-child
+            margin-bottom 0
 
-  &__container
-    position relative
-    width 100%
+    &__container
+        position relative
+        width 100%
 
-  &__title
-    font-size 1.2rem
-    margin-bottom 30px
-    text-align center
+    &__title
+        font-size 1.2rem
+        margin-bottom 30px
+        text-align center
 
-  &__section-title
-    font-size .8rem
-    margin-bottom 15px
+    &__section-title
+        font-size .8rem
+        margin-bottom 15px
 
-  &__range
-    max-width 92%
+    &__range
+        max-width 92%
 
-    &-container
-      padding-top 40px
-      margin-bottom 30px
+        &-container
+            padding-top 40px
+            margin-bottom 30px
 
-  &__form
-    font-size .7rem
-    margin-bottom 30px
+    &__form
+        font-size .7rem
+        margin-bottom 30px
 
-    &-label
-      padding-top 3px
+        &-label
+            padding-top 3px
 
 </style>
 

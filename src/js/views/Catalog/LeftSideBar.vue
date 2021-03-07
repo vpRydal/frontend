@@ -7,7 +7,7 @@
                 </div>
                 <transition name="type" mode="out-in" @after-enter="onAfterEnter">
                     <SidebarRealty v-if="showRealty"/>
-                    <Filters v-else :open="false" class="filters" ref="filters" @filter="$emit('filter')"/>
+                    <Filters v-else class="filters" ref="filters" @filter="$emit('filter')"/>
                 </transition>
             </div>
         </div>
@@ -46,7 +46,7 @@ export default class LeftSideBar extends Vue {
     onAfterEnter(): void {
         if (!this.showRealty) {
             this.$nextTick(() => {
-                this.refFilters.resize(true)
+                this.refFilters.resize()
             })
         }
     }

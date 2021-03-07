@@ -33,4 +33,4 @@ export type realtyMinMaxInfo = {
     areaMax: number;
 }
 
-export type objectWIthAnyProperties = { [key: string]: string | Array<number | string> | minMax | number }
+export type objectWIthAnyProperties = { [key: string]: string | Array<number | string> | minMax | number | objectWIthAnyProperties }

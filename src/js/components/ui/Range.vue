@@ -188,6 +188,14 @@ export default class Range extends Vue {
         $(document).on('touchmove', this.onMouseMoveBtnRight)
     }
 
+    setValue (value: minMax, force=false): void {
+        if (!this.disableChangeByValue || force) {
+            this.moveBtnRight(((this.max - value.max) / (this.max - this.min)) * this.width)
+            this.moveBtnLeft(((value.min - this.min) / (this.max - this.min)) * this.width)
+            this.disableChangeByValue = false
+        }
+    }
+
     mounted(): void {
         this.$nextTick(() => {
             this.$btnRight = $(this.btnRight)
@@ -238,10 +246,8 @@ export default class Range extends Vue {
         this.updateInfoPosition()
     }
     @Watch('value')
-    watchValue(): void {
-            this.moveBtnRight(((this.max - this.value.max) / (this.max - this.min)) * this.width)
-            this.moveBtnLeft(((this.value.min - this.min) / (this.max - this.min)) * this.width)
-            this.disableChangeByValue = false
+    watchValue(value: minMax): void {
+        this.setValue(value)
     }
     @Watch('currentPosRight')
     watchCurrentPosRight(): void {

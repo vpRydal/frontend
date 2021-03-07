@@ -4,7 +4,7 @@
             v-if="$onlyMap"
             class="catalog__map"
             :coords="center"
-            zoom="19"
+            :zoom="zoom"
             style="width: 100%"
             :style="{height: `${mapHeight}px`}"
             :behaviors="['drag', 'scrollZoom', 'multiTouch']"
@@ -54,7 +54,7 @@
 // @ts-ignore
 import {yandexMap, ymapMarker} from "vue-yandex-maps";
 import {Component, Ref, Vue} from "vue-property-decorator";
-import {mapGetters} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import Balloon from "@/js/components/widgets/Balloon.vue";
 import RealtyModel from "@/js/models/Realty";
 import {getModule} from "vuex-module-decorators";
@@ -62,7 +62,7 @@ import CatalogModule from "@/js/store/modules/catalog";
 import $ from 'jquery'
 import bus from '@/js/common/bus'
 import {AxiosResponse} from "axios";
-import {objectWIthAnyProperties} from "@/js/common/types";
+import {minMax, objectWIthAnyProperties} from "@/js/common/types";
 
 
 @Component({
@@ -76,8 +76,13 @@ import {objectWIthAnyProperties} from "@/js/common/types";
             $onlyMap: 'onlyMap',
         }),
         ...mapGetters('queryParams', {
-            $queryParams: 'params'
+            $queryParams: 'params',
         }),
+    },
+    methods: {
+        ...mapMutations('queryParams', {
+            $addParam: '_addParam',
+        })
     }
 })
 export default class Map extends Vue {
@@ -85,8 +90,10 @@ export default class Map extends Vue {
     $realty!: Array <RealtyModel>
     $onlyMap!: boolean
     $queryParams!: objectWIthAnyProperties
+    $addParam!: (payload: { name: string, value: string | Array<number | string> | minMax | number | objectWIthAnyProperties }) => void
     @Ref('map-container') refMapContainer!: HTMLElement
     center = [44.583460, 33.482296]
+    zoom = 19
     maxBounds = {
         latitudeMin: 0,
         longitudeMin: 0,
@@ -107,7 +114,8 @@ export default class Map extends Vue {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
         map.events.add('actionend', () => {
             const bounds = map.getBounds()
-
+            this.$addParam({ name: 'center', value: map.getCenter() })
+            this.$addParam({ name: 'zoom', value: map.getZoom() })
 
             if (this.maxBounds.latitudeMin < bounds[0][0]  || this.maxBounds.longitudeMin < bounds[0][1] || this.maxBounds.latitudeMax < bounds[1][0] || this.maxBounds.longitudeMax < bounds[1][1]) {
                 if (this.maxBounds.latitudeMin < bounds[0][0]) {
@@ -123,8 +131,14 @@ export default class Map extends Vue {
                     this.maxBounds.longitudeMax = bounds[1][1]
                 }
 
+                this.$addParam({ name: 'bounds', value: this.maxBounds })
+
                 this.getRealty({ exceptedId: this.exceptedId })
             }
+
+            this.$router.push({ name: this.$route.name as string, query: { filters: JSON.stringify(this.$queryParams) } }).catch(() => {
+                return
+            })
         });
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
@@ -140,10 +154,15 @@ export default class Map extends Vue {
         }
     }
     onFilter (): void {
+        if (!this.$onlyMap) return
+
         getModule(CatalogModule, this.$store)._setRealty([])
         this.getRealty({ exceptedId: [] })
     }
     getRealty (options: { exceptedId: Array <number> }): Promise<AxiosResponse<Array<RealtyModel>>> {
+        this.$router.push({ name: this.$route.name as string, query: { filters: JSON.stringify(this.$queryParams) } }).catch(() => {
+            return
+        })
         let add = this.$queryParams.equipments ? (this.$queryParams.equipments as unknown as Array<string>).reduce((acc: { [name: string]: boolean }, val: string) => {
             acc[val] = true
 
@@ -154,9 +173,6 @@ export default class Map extends Vue {
 
         return RealtyModel.getListMap({ ...this.$queryParams, ...add, ...this.maxBounds, ...options}).then((response) => {
             const realties = response.data
-            const filters = JSON.stringify(this.$queryParams)
-
-            /*this.$router.replace({query: {filters: JSON.stringify(filters)}}).catch()*/
 
             getModule(CatalogModule, this.$store).setRealty([ ...realties, ...this.$realty ])
             return response
@@ -164,11 +180,33 @@ export default class Map extends Vue {
     }
 
     created (): void {
-        bus.$on('filter', this.onFilter)
+        bus.$on('filters::filter', this.onFilter)
+
+        if (this.$route.query.filters) {
+            const filtersFromUrl = JSON.parse(this.$route.query.filters as string)
+
+            if (filtersFromUrl.bounds && filtersFromUrl.bounds.latitudeMin && filtersFromUrl.bounds.longitudeMax && filtersFromUrl.bounds.longitudeMin && filtersFromUrl.bounds.latitudeMax) {
+                this.maxBounds = filtersFromUrl.bounds
+            }
+            if (filtersFromUrl.center && filtersFromUrl.center[0] && filtersFromUrl.center[1]) {
+                this.center = filtersFromUrl.center
+            }
+            if (filtersFromUrl.zoom) {
+                this.zoom = filtersFromUrl.zoom
+            }
+
+            if (filtersFromUrl.zoom) {
+                this.$nextTick(() => {
+                    this.onChangeCatalogState()
+
+                    this.onFilter()
+                })
+            }
+        }
     }
 
     beforeDestroy (): void {
-        bus.$off('filter', this.onFilter)
+        bus.$off('filters::filter', this.onFilter)
     }
 }
 </script>
