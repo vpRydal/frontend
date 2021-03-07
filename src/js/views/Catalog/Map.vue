@@ -28,7 +28,7 @@
                 <Balloon slot="balloon"
                          :area="realtyItem.area"
                          :description="realtyItem.description"
-                         :img-path="realtyItem.img_path"
+                         :img-path="baseApiPath + realtyItem.img_path"
                          :name="realtyItem.name"
                          :price="realtyItem.price"
                          :id="realtyItem.id"
@@ -68,7 +68,8 @@ import {minMax, objectWIthAnyProperties} from "@/js/common/types";
 @Component({
     components: {Balloon, yandexMap, ymapMarker},
     data: () => ({
-        bus
+        bus,
+        baseApiPath: process.env.VUE_APP_URL
     }),
     computed: {
         ...mapGetters('catalog', {
@@ -77,11 +78,15 @@ import {minMax, objectWIthAnyProperties} from "@/js/common/types";
         }),
         ...mapGetters('queryParams', {
             $queryParams: 'params',
+            $filtersForMap: 'filtersForMap',
+            $startedQueryParams: 'startedParams'
         }),
     },
     methods: {
         ...mapMutations('queryParams', {
             $addParam: '_addParam',
+            $saveFiltersInUrl: 'saveInUrl',
+
         })
     }
 })
@@ -90,6 +95,8 @@ export default class Map extends Vue {
     $realty!: Array <RealtyModel>
     $onlyMap!: boolean
     $queryParams!: objectWIthAnyProperties
+    $filtersForMap!: objectWIthAnyProperties
+    $startedQueryParams!: objectWIthAnyProperties
     $addParam!: (payload: { name: string, value: string | Array<number | string> | minMax | number | objectWIthAnyProperties }) => void
     @Ref('map-container') refMapContainer!: HTMLElement
     center = [44.583460, 33.482296]
@@ -100,6 +107,8 @@ export default class Map extends Vue {
         latitudeMax: 0,
         longitudeMax: 0
     }
+
+    $saveFiltersInUrl!: () => void
 
     get exceptedId (): Array <number> {
         return this.$realty.reduce((acc, realty) => {
@@ -117,7 +126,7 @@ export default class Map extends Vue {
             this.$addParam({ name: 'center', value: map.getCenter() })
             this.$addParam({ name: 'zoom', value: map.getZoom() })
 
-            if (this.maxBounds.latitudeMin < bounds[0][0]  || this.maxBounds.longitudeMin < bounds[0][1] || this.maxBounds.latitudeMax < bounds[1][0] || this.maxBounds.longitudeMax < bounds[1][1]) {
+            if (this.maxBounds.latitudeMin < bounds[0][0] || this.maxBounds.longitudeMin < bounds[0][1] || this.maxBounds.latitudeMax < bounds[1][0] || this.maxBounds.longitudeMax < bounds[1][1]) {
                 if (this.maxBounds.latitudeMin < bounds[0][0]) {
                     this.maxBounds.latitudeMin = bounds[0][0]
                 }
@@ -136,9 +145,7 @@ export default class Map extends Vue {
                 this.getRealty({ exceptedId: this.exceptedId })
             }
 
-            this.$router.push({ name: this.$route.name as string, query: { filters: JSON.stringify(this.$queryParams) } }).catch(() => {
-                return
-            })
+            this.$saveFiltersInUrl()
         });
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
@@ -160,18 +167,7 @@ export default class Map extends Vue {
         this.getRealty({ exceptedId: [] })
     }
     getRealty (options: { exceptedId: Array <number> }): Promise<AxiosResponse<Array<RealtyModel>>> {
-        this.$router.push({ name: this.$route.name as string, query: { filters: JSON.stringify(this.$queryParams) } }).catch(() => {
-            return
-        })
-        let add = this.$queryParams.equipments ? (this.$queryParams.equipments as unknown as Array<string>).reduce((acc: { [name: string]: boolean }, val: string) => {
-            acc[val] = true
-
-            return acc
-        }, {}) : {}
-
-        delete this.$queryParams.equipments
-
-        return RealtyModel.getListMap({ ...this.$queryParams, ...add, ...this.maxBounds, ...options}).then((response) => {
+        return RealtyModel.getListMap({ ...this.$filtersForMap, ...this.maxBounds, ...options}).then((response) => {
             const realties = response.data
 
             getModule(CatalogModule, this.$store).setRealty([ ...realties, ...this.$realty ])
@@ -182,20 +178,18 @@ export default class Map extends Vue {
     created (): void {
         bus.$on('filters::filter', this.onFilter)
 
-        if (this.$route.query.filters) {
-            const filtersFromUrl = JSON.parse(this.$route.query.filters as string)
+        if (this.$startedQueryParams) {
+            // @ts-ignore
+            if (this.$startedQueryParams.bounds && this.$startedQueryParams.bounds.latitudeMin as number && this.$startedQueryParams.bounds.longitudeMax && this.$startedQueryParams.bounds.longitudeMin && this.$startedQueryParams.bounds.latitudeMax) {
+                // @ts-ignore
+                this.maxBounds = this.$startedQueryParams.bounds as objectWIthAnyProperties
+            }
+            if (this.$startedQueryParams.center && this.$startedQueryParams.center && (this.$startedQueryParams.center as Array<number>)[0] && (this.$startedQueryParams.center as Array<number>)[1]) {
+                this.center = this.$startedQueryParams.center as Array <number>
+            }
+            if (this.$startedQueryParams.zoom) {
+                this.zoom = this.$startedQueryParams.zoom as number
 
-            if (filtersFromUrl.bounds && filtersFromUrl.bounds.latitudeMin && filtersFromUrl.bounds.longitudeMax && filtersFromUrl.bounds.longitudeMin && filtersFromUrl.bounds.latitudeMax) {
-                this.maxBounds = filtersFromUrl.bounds
-            }
-            if (filtersFromUrl.center && filtersFromUrl.center[0] && filtersFromUrl.center[1]) {
-                this.center = filtersFromUrl.center
-            }
-            if (filtersFromUrl.zoom) {
-                this.zoom = filtersFromUrl.zoom
-            }
-
-            if (filtersFromUrl.zoom) {
                 this.$nextTick(() => {
                     this.onChangeCatalogState()
 

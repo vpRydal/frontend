@@ -105,13 +105,15 @@ import {minMax, objectWIthAnyProperties, realtyMinMaxInfo} from "@/js/common/typ
             $windowWidth: 'windowWidth'
         }),
         ...mapGetters('queryParams', {
-            $queryParams: 'params'
+            $queryParams: 'params',
+            $startedQueryParams: 'startedParams'
         })
     },
     methods: {
         ...mapMutations('queryParams', {
             $addParam: '_addParam',
             $setQueryParams: 'setQueryParams',
+            $saveFiltersInUrl: 'saveInUrl',
         })
     }
 })
@@ -152,6 +154,7 @@ export default class Filters extends Vue {
     sticky = false
     $windowWidth!: number
     $queryParams!: objectWIthAnyProperties
+    $startedQueryParams!: objectWIthAnyProperties
     priceModel = {min: 0, max: 0}
     areaModel = {min: 0, max: 0}
     perPriceModel = {min: 0, max: 0}
@@ -162,6 +165,8 @@ export default class Filters extends Vue {
     @Ref('rangeArea') refRangeArea!: Range
     @Ref('container') refContainer!: HTMLElement
 
+    $saveFiltersInUrl!: () => void
+
     @Emit('filter')
     onFilter(): void {
         bus.$emit('filters::filter')
@@ -171,9 +176,8 @@ export default class Filters extends Vue {
     @Emit('clear')
     onClear(): void {
         this.$setQueryParams({})
-        this.$router.push({name: this.$route.name as string, query: {}}).catch(() => {
-            return
-        })
+        this.$saveFiltersInUrl()
+
         if (this.realtyMinMaxInfo) {
             this.perPriceModel = {
                 max: this.realtyMinMaxInfo.pricePerMetrMax,
@@ -186,7 +190,9 @@ export default class Filters extends Vue {
             this.refRangePrice.setValue(this.priceModel, true);
             this.refRangeArea.setValue(this.areaModel, true);
         }
-        this.onFilter()
+        this.realtyTypesModel = []
+        this.realtyEquipmentModel = []
+
         bus.$emit('filters::clear')
         this.$emit('close')
     }
@@ -207,21 +213,20 @@ export default class Filters extends Vue {
             const filtersFromUrl = JSON.parse(this.$route.query.filters as string)
 
             this.realtyTypes = data
-            this.realtyEquipmentModel = filtersFromUrl.equipments as Array<string> || []
-            this.realtyTypesModel = filtersFromUrl.types as Array<number> || []
+            this.realtyEquipmentModel = filtersFromUrl.equipments as Array <string> || []
+            this.realtyTypesModel = filtersFromUrl.types as Array <number> || []
         })
 
         Realty.getMinMax().then(res => {
-            const filtersFromUrl = JSON.parse(this.$route.query.filters as string)
             this.realtyMinMaxInfo = res.data
 
             this.$nextTick(() => {
                 if (this.realtyMinMaxInfo) {
 
-                    if (filtersFromUrl.pricePerMetrMax && filtersFromUrl.pricePerMetrMin) {
+                    if (this.$startedQueryParams.pricePerMetrMax && this.$startedQueryParams.pricePerMetrMin) {
                         this.perPriceModel = {
-                            max: filtersFromUrl.pricePerMetrMax as number,
-                            min: filtersFromUrl.pricePerMetrMin as number
+                            max: this.$startedQueryParams.pricePerMetrMax as number,
+                            min: this.$startedQueryParams.pricePerMetrMin as number
                         }
                     } else {
                         this.perPriceModel = {
@@ -230,16 +235,16 @@ export default class Filters extends Vue {
                         }
                     }
 
-                    if (filtersFromUrl.areaMax && filtersFromUrl.areaMin) {
-                        this.areaModel = {max: filtersFromUrl.areaMax as number, min: filtersFromUrl.areaMin as number}
+                    if (this.$startedQueryParams.areaMax && this.$startedQueryParams.areaMin) {
+                        this.areaModel = {max: this.$startedQueryParams.areaMax as number, min: this.$startedQueryParams.areaMin as number}
                     } else {
                         this.areaModel = {max: this.realtyMinMaxInfo.areaMax, min: this.realtyMinMaxInfo.areaMin}
                     }
 
-                    if (filtersFromUrl.priceMax && filtersFromUrl.priceMin) {
+                    if (this.$startedQueryParams.priceMax && this.$startedQueryParams.priceMin) {
                         this.priceModel = {
-                            max: filtersFromUrl.priceMax as number,
-                            min: filtersFromUrl.priceMin as number
+                            max: this.$startedQueryParams.priceMax as number,
+                            min: this.$startedQueryParams.priceMin as number
                         }
                     } else {
                         this.priceModel = {max: this.realtyMinMaxInfo.priceMax, min: this.realtyMinMaxInfo.priceMin}

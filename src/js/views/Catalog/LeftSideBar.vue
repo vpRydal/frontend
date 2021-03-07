@@ -1,9 +1,11 @@
 <template>
-    <transition name="sidebar" >
+    <transition name="sidebar" @after-enter="onAfterEnter">
         <div class="sidebar" v-if="open || $windowWidth >= 800">
             <div class="sidebar__wrapper" :style="{ height: (height === false ? 'auto' : `${height}px`) }" @click.stop>
                 <div v-if="$onlyMap" class="sidebar__nav">
-                    <button class="btn btn_sm btn_secondary btn_bordered" @click="showRealty = !showRealty">{{ showRealty ? 'Фильтры' : 'Недвижимость' }}</button>
+                    <button class="btn btn_sm btn_secondary btn_bordered" @click="showRealty = !showRealty">
+                        {{ showRealty ? 'Фильтры' : 'Недвижимость' }}
+                    </button>
                 </div>
                 <transition name="type" mode="out-in" @after-enter="onAfterEnter">
                     <SidebarRealty v-if="showRealty"/>
@@ -39,22 +41,22 @@ export default class LeftSideBar extends Vue {
     @Ref('filters') refFilters!: Filters
 
     @Emit('close')
-    emitClose (): void {
+    emitClose(): void {
         return
     }
 
+
     onAfterEnter(): void {
         if (!this.showRealty) {
-            this.$nextTick(() => {
-                this.refFilters.resize()
-            })
+            this.refFilters.resize()
         }
     }
 
-    created (): void {
+    created(): void {
         addEventListener('click', this.emitClose)
     }
-    beforeDestroy (): void {
+
+    beforeDestroy(): void {
         removeEventListener('click', this.emitClose)
     }
 
@@ -62,6 +64,7 @@ export default class LeftSideBar extends Vue {
     watchOpen(val: boolean): void {
         $('body').css('overflow', val ? 'hidden' : '')
     }
+
     @Watch('$onlyMap')
     watchOnlyMap(val: boolean): void {
         if (!val && this.showRealty) {
@@ -79,7 +82,7 @@ export default class LeftSideBar extends Vue {
         overflow-y auto
         margin-right 5px
         padding-right 10px
-        max-width  300px
+        max-width 300px
         width 100%
         background-color white
 

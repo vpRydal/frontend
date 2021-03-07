@@ -6,7 +6,7 @@
                 :price="realty.price"
                 :area="realty.area"
                 class="sidebar-realty__realty"
-         :description="realty.description" :name="realty.name" :img-path="realty.img_path"/>
+         :description="realty.description" :name="realty.name" :img-path="baseApiPath + realty.img_path"/>
     </div>
 </template>
 
@@ -17,6 +17,9 @@ import RealtyCard2 from "@/js/components/RealtyCard2.vue";
 
 @Component({
     components: {RealtyCard2},
+    data: () => ({
+        baseApiPath: process.env.VUE_APP_URL
+    }),
     computed: {
         ...mapGetters('catalog', {
             $realty: 'realty'

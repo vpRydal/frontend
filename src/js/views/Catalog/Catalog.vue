@@ -43,7 +43,7 @@
                             :area="object.area"
                             :title="object.name"
                             :price="object.price_per_metr"
-                            :img-path="object.img_path"
+                            :img-path="baseApiPath + object.img_path"
                             :data-index="index"
                             :id="object.id"
                         />
@@ -67,7 +67,7 @@
 <script lang="ts">
 import {Component, Ref, Watch} from 'vue-property-decorator';
 import {getModule} from "vuex-module-decorators";
-import {mapGetters} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import $ from "jquery";
 import Realty from "@/js/components/RealtyCard.vue";
 import RealtyModel from "@/js/models/Realty";
@@ -92,7 +92,8 @@ import Paginator from "@/js/common/helpers/Paginator";
     components: {Map, LeftSideBar, Balloon, Filters, Range, Select, Pagination, Realty, Preloader},
     data: () => ({
         imgTown,
-        bus
+        bus,
+        baseApiPath: process.env.VUE_APP_URL
     }),
     metaInfo: {
         title: 'Аренда помещений Севастополь',
@@ -102,19 +103,26 @@ import Paginator from "@/js/common/helpers/Paginator";
             $windowWidth: 'windowWidth'
         }),
         ...mapGetters('queryParams', {
-            $queryParams: 'params'
+            $queryParams: 'params',
+            $filtersForDefault: 'filtersForDefault'
         }),
         ...mapGetters('catalog', {
             $realty: 'realty',
             $onlyMap: 'onlyMap',
-        }),
+        })
     },
+    methods: {
+        ...mapMutations('queryParams', {
+            $saveFiltersInUrl: 'saveInUrl',
+        }),
+    }
 })
 export default class Catalog extends ScrollTo {
     realtyLength = 0
     inRequestState = false
     isOpenedSidebar = false
     $queryParams!: objectWIthAnyProperties
+    $filtersForDefault!: objectWIthAnyProperties
     $realty!: Array<RealtyModel>
     $onlyMap!: boolean
     catalogModule: CatalogModule
@@ -128,10 +136,11 @@ export default class Catalog extends ScrollTo {
         this.catalogModule = getModule(CatalogModule, this.$store)
     }
 
+    $saveFiltersInUrl!: () => void
+
     onBeforeEnter(el: HTMLElement): void {
         $(el).css('opacity', 0)
     }
-
     onEnter(el: HTMLElement, done: () => void): void {
         if (el) {
             let delay = Number(el.dataset.index) * 150
@@ -190,24 +199,15 @@ export default class Catalog extends ScrollTo {
 
     getRealty(options: { page?: number } = {}): Promise<AxiosResponse<Paginator<RealtyModel>>> {
         this.inRequestState = true
-        const filters = JSON.stringify(this.$queryParams)
-        let add = this.$queryParams.equipments ? (this.$queryParams.equipments as Array<string>).reduce((acc: { [name: string]: boolean }, val: string) => {
-            acc[val] = true
 
-            return acc
-        }, {}) : {}
-
-        delete this.$queryParams.equipments
-
-        return RealtyModel.getList({ ...this.$queryParams, ...add, ...options, count: 12}).then((response) => {
+        return RealtyModel.getList({ ...this.$filtersForDefault, ...options, count: 12}).then((response) => {
             const paginator = response.data
             Paginator.initPaginator(paginator)
 
             this.realtyLength = paginator.data.length
             this.paginator = paginator
-            this.$router.push({ name: this.$route.name as string, query: { filters } }).catch(() => {
-                return
-            })
+
+            this.$saveFiltersInUrl()
 
             getModule(CatalogModule, this.$store).setRealty(paginator.data)
             this.inRequestState = false
@@ -217,12 +217,7 @@ export default class Catalog extends ScrollTo {
     }
 
     created(): void {
-        if (this.$route.query.filters) {
-            this.$store.commit('queryParams/setQueryParams', JSON.parse(this.$route.query.filters as string))
-        }
-
         bus.$on('filters::clear', this.onFilterClear)
-
 
         this.getRealty()
     }
@@ -235,6 +230,10 @@ export default class Catalog extends ScrollTo {
             delete this.$queryParams.bounds
             delete this.$queryParams.zoom
             delete this.$queryParams.center
+            delete this.$queryParams.latitudeMin
+            delete this.$queryParams.latitudeMax
+            delete this.$queryParams.longitudeMin
+            delete this.$queryParams.longitudeMax
 
             this.getRealty().finally(() => {
                 this.scrollTo(this.refRealty, -200)
