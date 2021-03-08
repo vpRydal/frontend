@@ -138,20 +138,7 @@ export default class Item extends Vue {
 <style scoped lang="stylus">
 @import "~@/stylus/colors.styl"
 @import "~@/stylus/mixins.styl"
-
-.m2, .p
-    font-size .6em
-    position absolute
-    top 0
-    right 0
-
-.m2
-  right -3px
-
-.p
-    left 0
-    font-size .7em
-    right auto
+@import "~@/stylus/common.styl";
 
 .object
     position relative

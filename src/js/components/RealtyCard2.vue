@@ -7,7 +7,7 @@
     <div class="balloon__footer">
       <span></span>
       <div class="balloon__price-wrapper">
-        <span class="balloon__price">р {{ price }} м2</span>
+        <span class="balloon__price"><span class="p">&#8381;</span> {{ price }} <span class="m2">М2</span></span>
       </div>
       <button @click="onClick" class="btn btn_primary btn_sm balloon__btn">
         Подробнее
@@ -50,4 +50,5 @@ export default class RealtyCard2 extends Vue {
 
 <style scoped lang="stylus">
 @import "~@/stylus/blocks/yandex-map-balloon.styl";
+@import "~@/stylus/common.styl";
 </style>
