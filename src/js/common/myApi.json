@@ -1,6 +1,11 @@
 {
   "realtyMinMax": {
-
+    "areaMax": 100,
+    "areaMin": 10,
+    "priceMax": 1000,
+    "priceMin": 50,
+    "pricePerMetrMax": 99,
+    "pricePerMetrMin": 3
   },
   "realty": [
     {
@@ -11,6 +16,7 @@
       "price": 550,
       "latitude": 44.58217870865952,
       "longitude": 33.55737926479875,
+      "price_per_metr": 4000,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -28,6 +34,7 @@
       "price": 230,
       "latitude": 44.59677612423578,
       "longitude": 33.552229423490154,
+      "price_per_metr": 6000,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -45,6 +52,7 @@
       "price": 450,
       "latitude": 44.587438877009525,
       "longitude": 33.47000362392961,
+      "price_per_metr": 5600,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -62,6 +70,7 @@
       "price": 112,
       "latitude": 44.60352158169553,
       "longitude": 33.58467342373429,
+      "price_per_metr": 5674,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -79,6 +88,7 @@
       "price": 760,
       "latitude": 44.56389606818065,
       "longitude": 33.48667314754207,
+      "price_per_metr": 3456,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -96,6 +106,7 @@
       "price": 364.34,
       "latitude": 44.568848774339926,
       "longitude": 33.59178098780951,
+      "price_per_metr": 8678,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -113,6 +124,7 @@
       "price": 412,
       "latitude": 44.52151435223796,
       "longitude": 33.565744207800485,
+      "price_per_metr": 2456,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",
@@ -130,6 +142,7 @@
       "price": 214,
       "latitude": 44.57302958713985,
       "longitude": 33.56103893295109,
+      "price_per_metr": 8765,
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum eos libero minima porro quod! Accusamus animi consectetur dicta doloremque doloribus dolorum, fugit id laboriosam, nemo pariatur quo reprehenderit unde veniam.",
       "images": [
         "/frontend/img/objects/town.png",

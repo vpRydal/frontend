@@ -3,7 +3,7 @@
         <ibg class="object__img" :src="imgPath"/>
         <div class="object__info">
             <div class="object__title text-right">
-                <h3 class="">{{ title }}</h3>
+                <h3 class="">{{ isHovered ? title : titleValue }}</h3>
             </div>
             <div class="object__flex-wrapper">
                 <div class="object__bg"></div>
@@ -56,6 +56,10 @@ export default class Item extends Vue {
     isHovered = false
     defaultHeight: undefined | number;
     defaultBgWidth: undefined | number;
+
+    get titleValue (): string {
+      return this.title.length > 20 ? this.title.slice(0, 20) + '...' : this.title
+    }
 
     mounted(): void {
         this.defaultHeight = $(this.$refs['object']).find('.object__info').height()
