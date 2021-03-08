@@ -145,6 +145,9 @@ export default class Item extends Vue {
     top 0
     right 0
 
+.m2
+  right -3px
+
 .p
     left 0
     font-size .7em
