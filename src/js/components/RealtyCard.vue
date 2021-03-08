@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue, Watch} from 'vue-property-decorator';
+import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 import $ from 'jquery'
 
 @Component({
@@ -56,6 +56,7 @@ export default class Item extends Vue {
     isHovered = false
     defaultHeight: undefined | number;
     defaultBgWidth: undefined | number;
+    @Prop({ required: true }) title!: string
 
     get titleValue (): string {
       return this.title.length > 20 ? this.title.slice(0, 20) + '...' : this.title

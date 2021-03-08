@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Emit, Prop, Ref, Vue, Watch} from "vue-property-decorator";
+import {Component, Emit, Ref, Vue, Watch} from "vue-property-decorator";
 import Range from "@/js/components/ui/Range.vue";
 import Select from "@/js/components/ui/Select.vue";
 import RealtyType from "@/js/models/RealtyType";
