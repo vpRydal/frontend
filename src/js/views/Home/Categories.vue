@@ -1,67 +1,44 @@
 <template>
-    <div class="categories" ref="categories">
-        <div class="container">
-            <Link text="Смотреть все предложения" class="categories__link-wrapper" v-animate-to-on-scroll:left/>
-            <div class="flex-wrapper flex-wrapper_column">
-                <div class="categories__row categories__row_1">
-                    <div class="categories__col" v-animate-to-on-scroll:left>
-                        <div class="category">
-                            <div class="category__name-wrapper">
-                                <h3 class="category__name">Склады</h3>
-                            </div>
-                            <ibg class="category__img category__img_1" :src="townImages[0]" alt=""/>
-                        </div>
-                    </div>
-                    <div class="categories__col categories__col_title">
-                        <BigHeader class="categories__title" :texts="['Аренда', 'площадей', 'и помещений']" tag="h1"
-                                   v-animate-to-on-scroll:top/>
-                    </div>
-                </div>
-                <div class="categories__row categories__row_2">
-                    <div class="categories__col">
-                    </div>
-                    <div class="categories__col" v-animate-to-on-scroll:right>
-                        <div class="category">
-                            <div class="category__name-wrapper category__name-wrapper_name-top">
-                                <h3 class="category__name">Ангары</h3>
-                            </div>
-                            <ibg class="category__img category__img_2" :src="townImages[3]" alt=""/>
-                        </div>
-                    </div>
-                </div>
-                <div class="categories__row categories__row_3">
-                    <div class="categories__col" v-animate-to-on-scroll:left>
-                        <div class="category">
-                            <div class="category__name-wrapper category__name-wrapper_name-right">
-                                <h3 class="category__name">Офисы</h3>
-                            </div>
-                            <ibg class="category__img category__img_align-left category__img_3" :src="townImages[2]"
-                                 alt=""/>
-                        </div>
-                    </div>
-                    <div class="categories__col">
-                    </div>
-                </div>
-                <Link text="Узнать больше" class="link-wrapper_right categories__link-wrapper_more"
-                      v-animate-to-on-scroll:right/>
-                <div class="categories__row categories__row_center">
-                    <div class="categories__col" v-animate-to-on-scroll:bot>
-                        <div class="category">
-                            <div
-                                class="category__name-wrapper category__name-wrapper_name-right category__name-wrapper_default-padding">
-                                <h3 class="category__name">Офисные блоки</h3>
-                            </div>
-                            <ibg class="category__img category__img_align-left category__img_4" :src="townImages[1]"
-                                 alt=""/>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="categories" ref="categories">
+    <div class="container">
+      <div class="categories__header" >
+        <Link text="Смотреть все предложения" class="categories__link" v-animate-to-on-scroll:left/>
+        <h1 class="categories__title" >
+          <span class="categories__title-part-1" v-animate-to-on-scroll:top>Аренда</span>
+          <span class="categories__title-part-2" v-animate-to-on-scroll:right="100">площадей и помещений</span>
+        </h1>
+      </div>
+      <div class="categories__slider-wrapper">
+        <Slick
+            class="categories__slider"
+            :options="slickOptions"
+            @beforeChange="handleBeforeChange"
+            ref="slick"
+        >
+          <Category v-for="(category, idx) in categories"
+                    :key="idx"
+                    :id="category.id"
+                    :img-path="category.img_path"
+                    :name="category.name"
+          />
+        </Slick>
+        <div class="categories__slider-nav-wrapper">
+          <SliderNav
+              class="categories__slider-nav"
+              :count-slides="categories.length"
+              :current-slide-index="currentSlideIdx"
+              :nav-item-height="7"
+              @next="handleNextSlide"
+              @prev="handlePrevSlide"
+          />
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script lang="ts">
+import Slick from "vue-slick";
 import {Component, Vue} from 'vue-property-decorator';
 import Link from "@/js/views/Home/Link.vue";
 import BigHeader from "@/js/components/BigHeader.vue";
@@ -69,258 +46,142 @@ import town1 from '@/assets/img/town1.png';
 import town2 from '@/assets/img/town2.png';
 import town3 from '@/assets/img/town3.png';
 import town4 from '@/assets/img/town4.png';
+import Category from "@/js/components/Category.vue";
+import SliderNav from "@/js/components/SliderNav.vue";
 
 
 @Component({
-    components: {BigHeader, Link},
+  components: {SliderNav, Category, BigHeader, Link, Slick},
 })
 export default class Categories extends Vue {
-    townImages = [
-        town1,
-        town2,
-        town3,
-        town4,
-    ];
+  slickOptions = {
+    slidesToShow: 3,
+    autoplay: true,
+    delay: 5000,
+    arrows: false,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 2
+        }
+      },
+      {
+        breakpoint: 700,
+        settings: {
+          slidesToShow: 1,
+          centerMode: false,
+        }
+      }
+    ]
+  }
+  categories = [
+    {
+      name: 'Склады',
+      id: 1,
+      img_path: town1
+    },
+    {
+      name: 'Офисы',
+      id: 2,
+      img_path: town2
+    },
+    {
+      name: 'Ангары',
+      id: 3,
+      img_path: town3
+    },
+    {
+      name: 'Земля',
+      id: 4,
+      img_path: town4
+    }
+  ];
+  currentSlideIdx = 0
+
+  /* eslint-disable */
+  handleBeforeChange(event: Event, slick: any, currentSlide: number, nextSlide: number) {
+    this.currentSlideIdx = nextSlide;
+  }
+
+  handleNextSlide():void {
+    /* eslint-disable */
+    //@ts-ignore
+    this.$refs['slick'].next()
+  }
+
+  handlePrevSlide() {
+    /* eslint-disable */
+    //@ts-ignore
+    this.$refs['slick'].prev()
+  }
 }
 </script>
 
 <style scoped lang="stylus">
-@import "../../../stylus/colors.styl"
-
 .categories
-    overflow hidden
+  overflow hidden
+
+  &__slider-wrapper
     margin-bottom 150px
+
+    @media (max-width 1400px)
+      margin-bottom 100px
+
     @media (max-width 600px)
-        margin-bottom 70px
+      margin-bottom 70px
 
-    &__link-wrapper_more
-        @media (max-width 1400px)
-            order 3
-            margin-left 40%
-        @media (max-width 500px)
-            margin-left 10%
-        @media (max-width 500px)
-            font-size 25px
+  &__slider
+    margin-bottom 50px
 
-    &__title
-        @media (max-width 1400px)
-            text-align center !important
-            margin-bottom 70px
-        @media (max-width 1200px)
-            font-size 110px
-        @media (max-width 770px)
-            font-size 80px
-        @media (max-width 500px)
-            font-size 60px
+  &__slider-nav-wrapper
+    display flex
+    justify-content center
 
-    &__row
-        display flex
-        @media (max-width 1400px)
-            flex-direction column
-
-        &_center
-            width 700px
-            margin-left 300px
-            @media (max-width 1400px)
-                margin-right auto
-                margin-left 0
-                margin-bottom 35px
-                @media (max-width 860px)
-                    width 69%
-                @media (max-width 770px)
-                    width 85%
-
-
-        &_1
-            @media (max-width 1400px)
-                width 100%
-                margin-bottom 35px
-
-            & ^[0]__col:first-child
-                @media (max-width 1400px)
-                    margin-left auto
-                    width 60%
-                @media (max-width 1000px)
-                    width 80%
-                    margin-bottom 35px
-                @media (max-width 610px)
-                    width 95%
-
-
-        &_2
-            transform translateY(30px)
-            @media (max-width 1400px)
-                transform none
-                order 1
-            @media (max-width 735px)
-                margin-bottom 40px
-
-            & ^[0]__col:last-child
-                @media (max-width 1400px)
-                    margin-left auto
-                    width 50%
-                    margin-bottom 35px
-                @media (max-width 860px)
-                    width 60%
-                @media (max-width 610px)
-                    width 95%
-
-
-        &_3
-            transform translateY(-105px)
-            @media (max-width 1400px)
-                order 2
-                transform none
-
-            & ^[0]__col:first-child
-                @media (max-width 1400px)
-                    margin-right auto
-                    width 65%
-                    margin-bottom 50px
-                @media (max-width 860px)
-                    width 60%
-                @media (max-width 610px)
-                    width 85%
-
-
-    &__col
-        flex 1 1 50%
-        order 1
-        @media (max-width 735px)
-            margin-bottom 35px
-
-        &_title
-            @media (max-width 1400px)
-                order 0
-
-    &__link-wrapper
-        margin-bottom 120px
-        @media (max-width 1000px)
-            margin-bottom 60px
-        @media (max-width 500px)
-            font-size 23px
-
-
-.category
+  &__header
     position relative
-
-    &__name-wrapper
-        position absolute
-        width 95%
-        display flex
-        align-items flex-end
-        background-color mainColorLight
-        height 50px
-        padding 30px
-        padding-right 0
-        bottom 50px
-        right 40px
-        @media (max-width 860px)
-            bottom 10%
-        @media (max-width 735px)
-            bottom -60px
-
-        &_name-right
-            justify-content flex-end
-            padding-right 139px
-            padding-left 0
-            right -230px
-            @media (max-width 1400px)
-                padding-right 100px
-                right -150px
-        @media (max-width 1200px)
-            padding-right 50px
-
-        &_default-padding
-            width 85%
-            padding 30px
-            padding-right 70px
-            @media (max-width 860px)
-                bottom 10px
-            @media (max-width 735px)
-                bottom -60px
-
-        &_name-top
-            align-items flex-start
-            right 10%
-            @media (max-width 1000px)
-                width 100%
-
-        @media (max-width 735px)
-            padding 15px 25px
-            left 0
-            align-items flex-end
-            right auto
-        &_name-right
-            @media (max-width 1400px)
-                left -20px
-
-
-    &__img
-        position relative
-        display block
-        margin-left auto
-        z-index 2
-
-        &_1
-            width 452px
-            height 363px
-            @media (max-width 860px)
-                width: 350px;
-                height: 282px;
-
-        &_2
-            width 400px
-            height 292px
-            @media (max-width 860px)
-                width: 330px;
-                height: 240px;
-
-        &_3
-            width 517px
-            height 382px
-            @media (max-width 860px)
-                width: 392px;
-                height: 283px;
-            @media (max-width 450px)
-                width: 328px;
-                height: 242px;
-
-        &_4
-            width 531px
-            height 300px
-            @media (max-width 860px)
-                width: 350px;
-                height: 197px;
-
-
-        &_align-left
-            margin-right auto
-            margin-left 0
-
-    &__name
-        font-size 30px
-        color white
-        text-transform uppercase
-
-.title
+    margin-bottom 100px
     display flex
     flex-direction column
+
+  &__link
+    position absolute
+
+    @media (max-width 1100px)
+      position relative
+      order 1
+      width 75%
+
+    @media (max-width 860px)
+      font-size 30px
+      overflow hidden
+
+    @media (max-width 650px)
+      font-size 20px
+      width 100%
+
+  &__title
+    display flex
+    flex-direction column
+    font-size 106px
     text-align right
 
-    &__first-word
-        line-height 107px
+    @media (max-width 1100px)
+      position relative
+      margin-bottom 25px
 
-    &__second-word
-        line-height 92px
+    @media (max-width 860px)
+      font-size 80px
 
-    &__third-word
-        line-height 43px
+    @media (max-width 650px)
+      font-size 70px
+      text-align center
 
-    &__first-word, &__second-word, &__third-word
-        font-weight 800
-        font-size 124px
+    &-part-1
+      font-size 1em
+      line-height .7em
 
-    &__second-word, &__third-word
-        font-size 74px
+    &-part-2
+      font-size .6em
+
 </style>

@@ -1,5 +1,6 @@
 import Vue from "vue";
 import $ from "jquery";
+import {DirectiveBinding} from "vue/types/options";
 
 
 Vue.directive('scroll-to', {
@@ -18,20 +19,22 @@ Vue.directive('scroll-to', {
     }
 });
 
-const elementsForAnimate = new Map<HTMLElement, string>()
+const elementsForAnimate = new Map<HTMLElement, { anim: string, binding: DirectiveBinding }>()
 let isListen = false
 const scrollHandler = () => {
-    elementsForAnimate.forEach((animEnd, el) => {
+    elementsForAnimate.forEach((payload, el) => {
         const $el = $(el)
 
         if (window.scrollY + window.innerHeight > ($el.offset()?.top as number)) {
-            $(el).addClass(animEnd)
-            elementsForAnimate.delete(el)
+            setTimeout(() => {
+                $(el).addClass(payload.anim)
+                elementsForAnimate.delete(el)
 
-            if (!elementsForAnimate.size) {
-                removeEventListener('scroll', scrollHandler);
-                isListen = false;
-            }
+                if (!elementsForAnimate.size) {
+                    removeEventListener('scroll', scrollHandler);
+                    isListen = false;
+                }
+            }, payload.binding.value || 0)
         }
     })
 }
@@ -50,12 +53,13 @@ Vue.directive('animate-to-on-scroll', {
             $el.addClass('anim-slide-from-bot')
         }
         $el.addClass('anim-slide')
-        elementsForAnimate.set(el, 'anim-slide-from_end')
+        elementsForAnimate.set(el, { anim: 'anim-slide-from_end', binding })
 
         if (!isListen) {
             isListen = true;
 
             addEventListener('scroll', scrollHandler);
+            scrollHandler()
         }
     }
 });

@@ -32,6 +32,7 @@
         flex-direction column
         text-align right
         font-size 106px
+
         &__first-word
             line-height 1em
             font-size 1em
