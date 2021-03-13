@@ -139,7 +139,7 @@ export default class Footer extends Mixins(ScrollTo) {
 @import "../../../stylus/colors.styl"
 .footer
     position relative
-    font-size 1.1rem
+    font-size .7rem
     background-color: mainColor
     z-index 1
 
@@ -154,7 +154,7 @@ export default class Footer extends Mixins(ScrollTo) {
             flex-direction column
 
     &__col
-        flex 1 1 34%
+        flex 1 1 25%
 
         &_first
             @media (max-width: 1200px)
@@ -174,7 +174,13 @@ export default class Footer extends Mixins(ScrollTo) {
         font-size 1em
         color white
         font-family Inter-Regular
-        margin-bottom 40px
+        margin-bottom 20px
+
+        @media (max-width: 1200px)
+          margin-bottom: 25px
+
+        @media (max-width: 500px)
+          margin-bottom: 15px
 
 .contacts-list, .departments
     color white
@@ -182,7 +188,7 @@ export default class Footer extends Mixins(ScrollTo) {
 
     &__item
         display flex
-        margin-bottom 15px
+        margin-bottom 10px
         flex-wrap wrap
 
         &:last-child
@@ -194,12 +200,11 @@ export default class Footer extends Mixins(ScrollTo) {
 
 .social-link
     position relative
-    width 80px
-    height 80px
+    width 60px
+    height 60px
     margin 0 auto
 
-    &:first-child
-        margin-left: 0
+
     @media (max-width: 1200px)
         margin 0 10px
 
@@ -218,7 +223,7 @@ export default class Footer extends Mixins(ScrollTo) {
         @media (max-width: 430px)
             flex-direction column
             margin-bottom 0
-            span
-                margin-bottom 15px
+            a
+                margin-bottom 5px
 
 </style>
