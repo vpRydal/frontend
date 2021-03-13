@@ -202,7 +202,6 @@ export default class Filters extends Vue {
     }
 
     resize(): void {
-        $(this.refContainer).height(`${window.innerHeight - 120}`)
         this.refRangePricePerMetr.onResize()
         this.refRangePrice.onResize()
         this.refRangeArea.onResize()
