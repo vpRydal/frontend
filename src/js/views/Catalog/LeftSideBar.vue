@@ -1,7 +1,7 @@
 <template>
     <transition name="sidebar" @after-enter="onAfterEnter">
-        <div class="sidebar" v-if="open || $windowWidth >= 800">
-            <div class="sidebar__wrapper"  @click.stop>
+        <div class="sidebar" v-if="open || $windowWidth >= 800" :style="{ 'overflow-y': $windowWidth < 800 ? 'auto': '' }">
+            <div class="sidebar__wrapper" :style="{ height: (height === false ? 'auto' : `${height}px`) }" @click.stop>
                 <div v-if="$onlyMap" class="sidebar__nav">
                     <button class="btn btn_sm btn_secondary btn_bordered" @click="showRealty = !showRealty">
                         {{ showRealty ? 'Фильтры' : 'Недвижимость' }}
@@ -9,7 +9,7 @@
                 </div>
                 <transition name="type" mode="out-in" @after-enter="onAfterEnter">
                     <SidebarRealty v-if="showRealty"/>
-                    <Filters v-else class="sidebar__filters" ref="filters" @filter="$emit('filter')"/>
+                    <Filters v-else class="filters" ref="filters" @filter="$emit('filter')"/>
                 </transition>
             </div>
         </div>
@@ -76,10 +76,6 @@ export default class LeftSideBar extends Vue {
 
 <style scoped lang="stylus">
 .sidebar
-    overflow-y auto
-
-    &__filters
-      margin-bottom 25px
 
     &__wrapper
         position sticky
