@@ -34,32 +34,35 @@
                         <router-link :to="{name: 'home'}" class="nav__link link">Главная</router-link>
                     </li>
                     <li class="nav_item"><span class="nav__divider">-</span></li>
-                    <li class="nav_item"><router-link :to="{name: 'catalog', query: $store.getters['queryParams/queryParams'] || {}}" class="nav__link link">Каталог</router-link></li>
+                    <li class="nav_item"><router-link :to="{name: 'catalog', query: { filters: $store.getters['queryParams/getString'] } || {}}" class="nav__link link">Каталог</router-link></li>
                     <li class="nav_item"><span class="nav__divider">-</span></li>
-                    <li class="nav_item"><a class="nav__link link link_disabled">Название</a></li>
+                    <li class="nav_item"><a class="nav__link link link_disabled">{{ viewRealty.name }}</a></li>
                 </ul>
             </nav>
             <div v-if="viewRealty" class="view-object__content">
                 <div class="view-object__col">
                     <Slider
-                        :images="viewRealty.images"
+                        :images="viewRealty.photo"
                     />
                 </div>
                 <div class="view-object__col view-object__object-info object-info">
                     <h1 class="object-info__name">{{ viewRealty.name }}</h1>
                     <ul class="object-info__parameters parameters fw-600">
                         <li class="parameters__item">
-                            <span class="parameters__name">Хозяйственное назначение</span>:<span class="parameters__value">Офисы</span>
+                            <span class="parameters__name">Хозяйственное назначение</span>:<span class="parameters__value">{{ viewRealty.realtyTypeName }}</span>
                         </li>
-                        <li class="parameters__item"><span class="parameters__name">Площадь</span>:<span
-                            class="parameters__value">{{ viewRealty.area }} кв. м.</span></li>
+                        <li class="parameters__item">
+                          <span class="parameters__name">Площадь</span>:
+                          <span class="parameters__value">{{ viewRealty.area }} кв. м.</span>
+                        </li>
+                        <li class="parameters__item">
+                          <span class="parameters__name">Цена за м. кв.</span>:
+                          <span class="parameters__value">{{ viewRealty.price_per_metr }} руб.</span>
+                        </li>
                         <li class="parameters__item">
                             <span class="parameters__name">Цена: </span><span class="parameters__value">{{
                                 viewRealty.price
-                            }}</span>
-                        </li>
-                        <li class="parameters__item">
-                            <span class="parameters__name"></span>До 30.12.2020<span class="parameters__value"></span>
+                            }} руб.</span>
                         </li>
                     </ul>
                     <p class="object-info__description fw-600">{{ viewRealty.description }}</p>
@@ -73,8 +76,8 @@
                 <div class="offers__body">
                     <Object
                         class="offers__object"
-                        v-if="realtys.length"
-                        v-for="(object, index) in realtys"
+                        v-if="realities.length"
+                        v-for="(object, index) in realities"
                         :key="index"
                         :area="object.area"
                         :title="object.name"
@@ -92,30 +95,74 @@
 import {Component, Vue} from "vue-property-decorator";
 import Slider from "./Slider.vue";
 import Object from "@/js/components/RealtyCard.vue";
-import imgTown from '@/assets/img/town.png'
 import Modal from "@/js/components/widgets/Modal.vue";
 import Realty from "@/js/models/Realty";
 
 
 @Component({
-    components: {Modal, Object, Slider},
-    data: () => ({
-        imgTown
-    })
+  data: () => ({
+    metaDesc: '',
+    metaRealtyTypeName: '',
+    metaKeyWords: '',
+  }),
+
+  components: {Modal, Object, Slider},
+
+  metaInfo() {
+    return {
+      // @ts-ignore
+      title: `Аренда ${this.metaRealtyTypeName}`,
+      meta: [
+        {
+          vmid: 'description',
+          name: 'description',
+          // @ts-ignore
+          content: `${this.metaDesc}`,
+        },
+        {
+          vmid: 'keywords',
+          name: 'keywords',
+          // @ts-ignore
+          content: `аренда, недвижимость, севастополь, аренда помещений, аренда недвижимости, помещения, коммерческая недвижимость${this.metaKeyWords}`,
+        }
+      ]
+    }
+  },
+
 })
 export default class ViewObject extends Vue {
-    realtys: Array<Realty> = []
+    realities: Array<Realty> = []
     viewRealty: Realty | false = false
     isShowRentModal = false
+  metaDesc!: string
+  metaRealtyTypeName!: string
 
-    created(): void {
+  metaKeyWords!: string
+
+  created(): void {
         Realty.getList().then(({ data }) => {
-            this.realtys = data.data.slice(0, 3)
+            this.realities = data.data.slice(0, 3)
         })
-        Realty.get().then(({ data }) => {
+        Realty.get({ id: this.$route.params.id as unknown as number }).then(({ data }) => {
             this.viewRealty = data
+          this.metaDesc = data.description as string
+          this.metaRealtyTypeName = (data.realtyTypeName as string || '').toLocaleLowerCase()
+          this.metaKeyWords = this.makeKeywords()
         })
     }
+
+  makeKeywords(): string {
+    const keywords = [
+        'аренда ' + this.metaRealtyTypeName,
+        (this.viewRealty as Realty).heating !== 0 ? 'отопление' : '',
+        (this.viewRealty as Realty).restroom !== 0 ? 'отдельный санузел' : '',
+        (this.viewRealty as Realty).energy !== 0 ? 'индивидуальный узел учёта электроэнергии' : '',
+        (this.viewRealty as Realty).access !== 0 ? 'круглосуточный доступ' : '',
+        (this.viewRealty as Realty).furniture !== 0 ? 'мебелью укомплектован' : '',
+    ].filter(value => value !== '')
+
+      return keywords.length !== 0 ? ', ' + keywords.join(', ') : ''
+  }
 
     openRentModal(): void {
         this.isShowRentModal = true

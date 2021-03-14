@@ -10,12 +10,20 @@ export default class Realty extends BaseModel{
     img_path?: string
     name?: string
     description?: string
+    realtyTypeName?: string
     price?: number
     area?: number
     latitude?: number
     longitude?: number
     price_per_metr?: number
-    images?: Array<string>
+    photo?: Array<string>
+
+    access?: number
+    energy?: number
+    furniture?: number
+    renovation?: number
+    restroom?: number
+    heating?: number
 
     static getMinMax() : Promise<AxiosResponse<realtyMinMaxInfo>> {
         if (process.env.VUE_APP_USE_LOCAL_API === 'false') {
@@ -46,10 +54,13 @@ export default class Realty extends BaseModel{
         }
     }
 
-    /* eslint-disable */
-    static get(options?: any): Promise<AxiosResponse<Realty>> {
-        return new Promise<AxiosResponse<Realty>>((resolve) => {
-            resolve({data: api.realty[0]} as AxiosResponse<Realty>)
-        })
+    static get(params: { id: number; [key: string]: string | number }): Promise<AxiosResponse<Realty>> {
+        if (process.env.VUE_APP_USE_LOCAL_API === 'false') {
+            return http.get<Realty>('realty/' + params.id, { params: params })
+        } else {
+            return new Promise<AxiosResponse<Realty>>((resolve) => {
+                resolve({ data: api.realty[0] } as AxiosResponse<Realty>)
+            })
+        }
     }
 }

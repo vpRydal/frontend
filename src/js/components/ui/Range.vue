@@ -130,7 +130,7 @@ export default class Range extends Vue {
         this.moveBtnRight(pos)
     }
     moveBtnRight(pos: number): void {
-        if (0 < pos && pos < this.width && this.currentPosLeft < (this.width - pos)) {
+        if (0 <= pos && pos < this.width && this.currentPosLeft < (this.width - pos)) {
             this.currentPosRight = pos
 
             this.$btnRight.css('right', pos - (this.btnRightWidth / 2))
@@ -152,7 +152,7 @@ export default class Range extends Vue {
         this.moveBtnLeft(-pos)
     }
     moveBtnLeft(pos: number): void {
-        if (0 < pos && pos < this.width && pos < (this.width - this.currentPosRight)) {
+        if (0 <= pos && pos < this.width && pos < (this.width - this.currentPosRight)) {
             this.currentPosLeft = pos
 
             this.$btnLeft.css('left', pos - (this.btnLeftWidth / 2))
@@ -193,6 +193,11 @@ export default class Range extends Vue {
             this.moveBtnRight(((this.max - value.max) / (this.max - this.min)) * this.width)
             this.moveBtnLeft(((value.min - this.min) / (this.max - this.min)) * this.width)
             this.disableChangeByValue = false
+
+          if (force) {
+            this.moveBtnRight((((this.max - this.max) / (this.max - this.min)) * this.width))
+            this.moveBtnLeft(((this.min - this.min) / (this.max - this.min)) * this.width)
+          }
         }
     }
 

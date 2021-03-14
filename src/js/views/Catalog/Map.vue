@@ -28,7 +28,7 @@
         <Balloon slot="balloon"
                  :area="realtyItem.area"
                  :description="realtyItem.description"
-                 :img-path="baseApiPath + realtyItem.img_path"
+                 :img-path="imageBasePath + realtyItem.img_path"
                  :name="realtyItem.name"
                  :price="realtyItem.price"
                  :id="realtyItem.id"
@@ -54,7 +54,7 @@
 <script lang="ts">
 // @ts-ignore
 import {yandexMap, ymapMarker} from "vue-yandex-maps";
-import {Component, Ref, Vue} from "vue-property-decorator";
+import {Component, Inject, Ref, Vue} from "vue-property-decorator";
 import {mapGetters, mapMutations} from "vuex";
 import Balloon from "@/js/components/widgets/Balloon.vue";
 import RealtyModel from "@/js/models/Realty";
@@ -69,8 +69,7 @@ import {minMax, objectWIthAnyProperties} from "@/js/common/types";
 @Component({
   components: {Balloon, yandexMap, ymapMarker},
   data: () => ({
-    bus,
-    baseApiPath: process.env.VUE_APP_URL
+    bus
   }),
   computed: {
     ...mapGetters('catalog', {
@@ -102,6 +101,7 @@ export default class Map extends Vue {
   $filtersForMap!: objectWIthAnyProperties
   $startedQueryParams!: objectWIthAnyProperties
   $addParam!: (payload: { name: string, value: string | Array<number | string> | minMax | number | objectWIthAnyProperties }) => void
+  @Inject('imageBasePath') imageBasePath!: string
   @Ref('map-container') refMapContainer!: HTMLElement
   center = [44.583460, 33.482296]
   zoom = 19
@@ -189,7 +189,9 @@ export default class Map extends Vue {
     if (!this.$onlyMap) return
 
     getModule(CatalogModule, this.$store)._setRealty([])
-    this.getRealty({ exceptedId: [] })
+    this.$nextTick(() => {
+      this.getRealty({ exceptedId: [] })
+    })
   }
 
   getRealty(options: { exceptedId: Array<number> }): Promise<AxiosResponse<Array<RealtyModel>>> {
@@ -202,12 +204,7 @@ export default class Map extends Vue {
   }
 
   onFiltersClear(): void {
-    this.maxBounds = {
-      latitudeMax: 0,
-      longitudeMax: 10000000,
-      latitudeMin: 10000000,
-      longitudeMin: 0,
-    }
+    console.log(123)
   }
 
   created(): void {

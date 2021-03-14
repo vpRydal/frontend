@@ -17,9 +17,6 @@ import News from "@/js/views/Home/News/News.vue";
     components: {News, Categories, PageHeader},
     metaInfo: {
         title: 'Аренда помещений Севастополь',
-    },
-    created(): void {
-        console.log(this.$route.query)
     }
 })
 export default class Home extends Vue {

@@ -16,6 +16,9 @@ export default class CatalogQueryParams extends VuexModule {
     get startedParams (): objectWIthAnyProperties {
         return this._startedParams
     }
+    get getString (): string {
+        return JSON.stringify(this._params)
+    }
     get filtersForMap (): objectWIthAnyProperties {
         return Object.keys(this.preparedFilters).reduce( (acc, key) => {
             if (!this.exceptedProperties.includes(key)) {
@@ -49,8 +52,13 @@ export default class CatalogQueryParams extends VuexModule {
     }
     @Mutation
     init(): void {
-        this._params = JSON.parse(router.currentRoute.query.filters as string)
-        this._startedParams = JSON.parse(router.currentRoute.query.filters as string)
+        try {
+            this._params = JSON.parse(router.currentRoute.query.filters as string)
+            this._startedParams = JSON.parse(router.currentRoute.query.filters as string)
+        } catch (ex) {
+            this._params = {}
+            this._startedParams = {}
+        }
     }
     @Mutation
     saveInUrl(): void {

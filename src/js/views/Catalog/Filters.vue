@@ -92,7 +92,6 @@ import Range from "@/js/components/ui/Range.vue";
 import Select from "@/js/components/ui/Select.vue";
 import RealtyType from "@/js/models/RealtyType";
 import Realty from "@/js/models/Realty";
-import $ from "jquery";
 import {mapGetters, mapMutations} from "vuex";
 import bus from "@/js/common/bus";
 import {minMax, objectWIthAnyProperties, realtyMinMaxInfo} from "@/js/common/types";
@@ -120,12 +119,12 @@ import {minMax, objectWIthAnyProperties, realtyMinMaxInfo} from "@/js/common/typ
 export default class Filters extends Vue {
     realtyTypes: Array<RealtyType> = []
     realtyMinMaxInfo?: realtyMinMaxInfo = {
-        pricePerMetrMax: 0,
-        priceMin: 0,
-        priceMax: 0,
-        areaMin: 0,
-        areaMax: 0,
-        pricePerMetrMin: 0
+        pricePerMetrMax: -1,
+        priceMin: -1,
+        priceMax: -1,
+        areaMin: -1,
+        areaMax: -1,
+        pricePerMetrMin: -1
     }
     equipment: Array<{ value: string; label: string }> = [
         {
@@ -172,7 +171,6 @@ export default class Filters extends Vue {
         bus.$emit('filters::filter')
         this.$emit('close')
     }
-
     @Emit('clear')
     onClear(): void {
         this.$setQueryParams({})
@@ -183,8 +181,8 @@ export default class Filters extends Vue {
                 max: this.realtyMinMaxInfo.pricePerMetrMax,
                 min: this.realtyMinMaxInfo.pricePerMetrMin
             }
-            this.areaModel = {max: this.realtyMinMaxInfo.areaMax, min: this.realtyMinMaxInfo.areaMin}
-            this.priceModel = {max: this.realtyMinMaxInfo.priceMax, min: this.realtyMinMaxInfo.priceMin}
+            this.areaModel = { max: this.realtyMinMaxInfo.areaMax, min: this.realtyMinMaxInfo.areaMin }
+            this.priceModel = { max: this.realtyMinMaxInfo.priceMax, min: this.realtyMinMaxInfo.priceMin }
 
             this.refRangePricePerMetr.setValue(this.perPriceModel, true);
             this.refRangePrice.setValue(this.priceModel, true);
@@ -196,9 +194,11 @@ export default class Filters extends Vue {
         bus.$emit('filters::clear')
         this.$emit('close')
     }
-
     onResize(): void {
         this.resize()
+    }
+    rangeModelIsValid(model: minMax): boolean {
+      return model.max !== -1 && model.min !== -1
     }
 
     resize(): void {
@@ -209,11 +209,9 @@ export default class Filters extends Vue {
 
     created(): void {
         RealtyType.getList().then(({data}) => {
-            const filtersFromUrl = JSON.parse(this.$route.query.filters as string)
-
             this.realtyTypes = data
-            this.realtyEquipmentModel = filtersFromUrl.equipments as Array <string> || []
-            this.realtyTypesModel = filtersFromUrl.types as Array <number> || []
+            this.realtyEquipmentModel = this.$startedQueryParams.equipments as Array <string> || []
+            this.realtyTypesModel = this.$startedQueryParams.types as Array <number> || []
         })
 
         Realty.getMinMax().then(res => {
@@ -275,20 +273,26 @@ export default class Filters extends Vue {
 
     @Watch('priceModel')
     watchPriceModel(payload: minMax): void {
-        this.$addParam({name: 'priceMax', value: payload.max})
-        this.$addParam({name: 'priceMin', value: payload.min})
+      if (this.rangeModelIsValid(payload)) {
+        this.$addParam({ name: 'priceMax', value: payload.max })
+        this.$addParam({ name: 'priceMin', value: payload.min })
+      }
     }
 
     @Watch('areaModel')
     watchAreaModel(payload: minMax): void {
-        this.$addParam({name: 'areaMax', value: payload.max})
-        this.$addParam({name: 'areaMin', value: payload.min})
+      if (this.rangeModelIsValid(payload)) {
+        this.$addParam({ name: 'areaMax', value: payload.max })
+        this.$addParam({ name: 'areaMin', value: payload.min })
+      }
     }
 
     @Watch('perPriceModel')
     watchPerPriceModel(payload: minMax): void {
-        this.$addParam({name: 'pricePerMetrMax', value: payload.max})
-        this.$addParam({name: 'pricePerMetrMin', value: payload.min})
+      if (this.rangeModelIsValid(payload)) {
+        this.$addParam({ name: 'pricePerMetrMax', value: payload.max })
+        this.$addParam({ name: 'pricePerMetrMin', value: payload.min })
+      }
     }
 }
 </script>

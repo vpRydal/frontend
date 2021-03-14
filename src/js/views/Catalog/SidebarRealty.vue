@@ -1,24 +1,25 @@
 <template>
     <div class="sidebar-realty">
         <RealtyCard2 v-for="(realty, idx) in $realty"
-                :key="idx"
-                :id="realty.id"
-                :price="realty.price"
-                :area="realty.area"
-                class="sidebar-realty__realty"
-         :description="realty.description" :name="realty.name" :img-path="baseApiPath + realty.img_path"/>
+                     :key="idx"
+                     :id="realty.id"
+                     :price="realty.price"
+                     :area="realty.area"
+                     :description="realty.description" :name="realty.name" :img-path="imageBasePath + realty.img_path"
+                     class="sidebar-realty__realty"
+        />
     </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
+import {Component, Inject, Vue} from "vue-property-decorator";
 import {mapGetters} from "vuex";
 import RealtyCard2 from "@/js/components/RealtyCard2.vue";
 
 @Component({
     components: {RealtyCard2},
     data: () => ({
-        baseApiPath: process.env.VUE_APP_URL
+
     }),
     computed: {
         ...mapGetters('catalog', {
@@ -27,6 +28,7 @@ import RealtyCard2 from "@/js/components/RealtyCard2.vue";
     }
 })
 export default class SidebarRealty extends Vue {
+  @Inject('imageBasePath') imageBasePath!: string
 
 }
 </script>
