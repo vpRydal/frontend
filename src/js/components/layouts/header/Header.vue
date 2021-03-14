@@ -15,7 +15,6 @@
                     </template>
                 </NavLinks>
             </nav>
-            <Search v-if="!isXSM" class="header__search"/>
         </div>
     </div>
 </template>

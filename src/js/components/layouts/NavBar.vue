@@ -8,7 +8,6 @@
                         <span class="header__cross cross cross_md" @click="handleClose"></span>
                     </div>
                 </div>
-                <Search v-if="$windowWidth <= 500" class="nav-bar__search" always-open full-size/>
                 <NavLinks class="nav-bar__links-list" @click="handleClose">
                     <template v-slot:link="{link}" >
                         <router-link v-if="link.isLink" :to="{name: link.routeName}" class="nav-bar__link">
