@@ -2,30 +2,44 @@
     <div class="view-object">
         <Modal
             :show="isShowRentModal"
-            @close="isShowRentModal = false"
+            @close="onClose"
         >
             <h3 slot="header">Ваша заявка</h3>
-            <form action="" slot="content" class="form">
+            <form action="" slot="content" class="form" ref="form" @submit.prevent="onSubmit">
                 <div class="row form__row form__row_no-margin-sm">
-                    <div class="form__group col-6 col-12-sm">
+                    <div class="form__group col-6 col-12-sm" :class="{ 'invalid': $v.formModels.fio.$invalid && $v.formModels.fio.$dirty }">
                         <label for="fio" class="form__label">ФИО</label>
-                        <input type="text" id="fio" class="form__control">
+                        <input type="text" id="fio" class="form__control" v-model="formModels.fio" @input.once="$v.formModels.fio.$touch()">
+                      <span class="form__invalid-message">
+                        Это поле обязательно для заполнения
+                      </span>
                     </div>
-                    <div class="form__group col-6 col-12-sm">
+                    <div class="form__group col-6 col-12-sm" :class="{ 'invalid': $v.formModels.phone.$invalid && $v.formModels.phone.$dirty }">
                         <label for="phone" class="form__label">Номер телефона</label>
-                        <input type="tel" id="phone" class="form__control">
+                        <input type="tel" id="phone" class="form__control" v-mask="'+7 (###) ###-##-##'" v-model="formModels.phone" @input.once="$v.formModels.phone.$touch()">
+                      <span class="form__invalid-message">
+                        Необходимо заполнить поле "Телефон" или "Email"
+                      </span>
                     </div>
                 </div>
-                <div class="form__group">
+                <div class="form__group" :class="{ 'invalid': $v.formModels.email.$invalid && $v.formModels.email.$dirty }">
                     <label for="email" class="form__label">Email</label>
-                    <input type="email" id="email" class="form__control">
+                    <input type="email" id="email" class="form__control" v-mask="'X@X.X'" v-model="formModels.email" @input.once="$v.formModels.email.$touch()">
+                  <span class="form__invalid-message">
+                    <template v-if="!$v.formModels.email.email && $v.formModels.email.$dirty">
+                      Не верный формат email
+                    </template>
+                    <template v-if="!$v.formModels.email.requiredIf && $v.formModels.email.$dirty">
+                      Необходимо заполнить поле "Телефон" или "Email"
+                    </template>
+                  </span>
                 </div>
                 <div class="form__group">
                     <label for="message" class="form__label">Сообщение</label>
-                    <textarea id="message" class="form__control" rows="4"></textarea>
+                    <textarea id="message" class="form__control" rows="4" v-model="formModels.message" @input.once="$v.formModels.message.$touch()"></textarea>
                 </div>
             </form>
-            <button class="btn btn_primary btn_sm" slot="btn-ok">Отправить</button>
+            <button class="btn btn_primary btn_sm" slot="btn-ok" :disabled="$v.$invalid">Отправить</button>
         </Modal>
         <div class="container">
             <nav class="view-object__nav nav">
@@ -92,21 +106,45 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
+import { Component, Mixins, Ref } from "vue-property-decorator";
 import Slider from "./Slider.vue";
 import Object from "@/js/components/RealtyCard.vue";
 import Modal from "@/js/components/widgets/Modal.vue";
 import Realty from "@/js/models/Realty";
+import { requiredIf, required, email } from 'vuelidate/lib/validators'
+import { validationMixin, Validation } from "vuelidate";
 
 
 @Component({
   data: () => ({
     metaDesc: '',
     metaRealtyTypeName: '',
-    metaKeyWords: '',
+    metaKeyWords: ''
   }),
-
   components: {Modal, Object, Slider},
+
+  /* eslint-disable */
+  validations(): any {
+    return {
+      formModels: {
+        fio: {
+          required
+        },
+        email: {
+          // @ts-ignore
+          requiredIf: requiredIf(() => !this.formModels.phone),
+          email
+        },
+        phone: {
+          // @ts-ignore
+          requiredIf: requiredIf(() => !this.formModels.email)
+        },
+        message: {
+
+        }
+      }
+    }
+  },
 
   metaInfo() {
     return {
@@ -128,28 +166,39 @@ import Realty from "@/js/models/Realty";
       ]
     }
   },
-
 })
-export default class ViewObject extends Vue {
+export default class ViewObject extends Mixins<Validation>(validationMixin) {
     realities: Array<Realty> = []
     viewRealty: Realty | false = false
     isShowRentModal = false
+  @Ref('form') refForm!: HTMLElement
   metaDesc!: string
   metaRealtyTypeName!: string
-
   metaKeyWords!: string
+  formModels = {
+    message: '',
+    email: '',
+    phone: '',
+    fio: '',
+  }
 
-  created(): void {
-        Realty.getList().then(({ data }) => {
-            this.realities = data.data.slice(0, 3)
-        })
-        Realty.get({ id: this.$route.params.id as unknown as number }).then(({ data }) => {
-            this.viewRealty = data
-          this.metaDesc = data.description as string
-          this.metaRealtyTypeName = (data.realtyTypeName as string || '').toLocaleLowerCase()
-          this.metaKeyWords = this.makeKeywords()
-        })
+  onSubmit (): void {
+      if (!this.$v.$invalid) {
+        console.log(this.formModels)
+      }
+  }
+  onClose (): void {
+      this.isShowRentModal = false
+
+    this.formModels = {
+      message: '',
+      email: '',
+      phone: '',
+      fio: '',
     }
+
+    this.$v.$reset()
+  }
 
   makeKeywords(): string {
     const keywords = [
@@ -167,6 +216,18 @@ export default class ViewObject extends Vue {
     openRentModal(): void {
         this.isShowRentModal = true
     }
+
+  created(): void {
+    Realty.getList().then(({ data }) => {
+      this.realities = data.data.slice(0, 3)
+    })
+    Realty.get({ id: this.$route.params.id as unknown as number }).then(({ data }) => {
+      this.viewRealty = data
+      this.metaDesc = data.description as string
+      this.metaRealtyTypeName = (data.realtyTypeName as string || '').toLocaleLowerCase()
+      this.metaKeyWords = this.makeKeywords()
+    })
+  }
 }
 </script>
 

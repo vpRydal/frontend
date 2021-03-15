@@ -11,14 +11,6 @@
         input[type=checkbox] + &
             margin-bottom 0
 
-    &__group
-        margin-bottom 10px
-        display flex
-        flex-direction column
-
-        &:last-child
-            margin-bottom 0
-
     &__row
         margin-bottom 10px
         & ^[0]__group
@@ -97,3 +89,28 @@
                 & + label
                     &:after
                         background-color mainColor
+
+    &__invalid-message
+        display none
+        font-size .6rem
+
+    &__group
+        margin-bottom 10px
+        display flex
+        flex-direction column
+
+        &:last-child
+            margin-bottom 0
+
+        &.invalid
+            & ^[0]__control
+                border 1px #ef3b3b solid
+
+            & ^[0]__invalid-message
+                color #ef3b3b
+                display block
+
+        &.valid
+            & ^[0]__control
+                border 1px #49dd49 solid
+

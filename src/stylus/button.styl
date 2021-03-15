@@ -6,6 +6,12 @@
         padding 10px 0
         text-align center
 
+    &[disabled]
+        &, &:hover, &:focus
+            background-color gray
+            cursor not-allowed
+
+
     &_primary
         transition background-color linear .2s
         background-color mainColor
