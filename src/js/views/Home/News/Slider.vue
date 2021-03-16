@@ -10,7 +10,7 @@
     </Slick>
     <SliderNav
         v-if="slides.length"
-        class="slider__nav"
+        class="slider__nav nav_center"
         :current-slide-index="currentSlideIndex"
         :countSlides="slides.length"
         :nav-item-height="7"
@@ -69,9 +69,4 @@ export default class Slider extends Vue {
 .slider
   &__slick-slider
     margin-bottom 90px
-
-  &__nav
-    margin-left 10%
-    @media (max-width 675px)
-      margin-left 0
 </style>

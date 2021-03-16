@@ -20,6 +20,7 @@
                     :id="category.id"
                     :img-path="category.img_path"
                     :name="category.name"
+                    @click="onClickCategory(category)"
           />
         </Slick>
         <div class="categories__slider-nav-wrapper">
@@ -77,24 +78,28 @@ export default class Categories extends Vue {
   }
   categories = [
     {
-      name: 'Склады',
+      name: 'Ангары',
       id: 1,
-      img_path: town1
+      img_path: town1,
+      routeName: 'catalog'
     },
     {
       name: 'Офисы',
       id: 2,
-      img_path: town2
+      img_path: town2,
+      routeName: 'catalog'
     },
     {
-      name: 'Ангары',
+      name: 'Склады',
       id: 3,
-      img_path: town3
+      img_path: town3,
+      routeName: 'catalog'
     },
     {
-      name: 'Земля',
+      name: 'Офисные блоки',
       id: 4,
-      img_path: town4
+      img_path: town4,
+      routeName: 'catalog'
     }
   ];
   currentSlideIdx = 0
@@ -114,6 +119,13 @@ export default class Categories extends Vue {
     /* eslint-disable */
     //@ts-ignore
     this.$refs['slick'].prev()
+  }
+
+  onClickCategory(category: { name: string, id: number | string, img_path: string, routeName: string }): void {
+    this.$router.replace({ name: category.routeName, query: { filters: JSON.stringify({ types: [ category.id ] }) } })
+        .then(() => {
+      this.$store.commit('queryParams/init')
+    })
   }
 }
 </script>

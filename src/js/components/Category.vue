@@ -1,5 +1,6 @@
 <template>
   <div class="category" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
+    <a class="category__link" @click="$emit('click')"></a>
     <div class="category__content-wrapper">
       <ibg :src="imgPath" class="category__img"/>
       <div class="category__name" ref="name">
@@ -27,11 +28,13 @@ export default class Category extends Vue {
   isHovered = false
   oldHeight = 0
 
+  mounted(): void {
+    this.oldHeight = $(this.refName).height() as number
+  }
+
   @Watch('isHovered')
   watchIsHovered (val: boolean): void {
     if (val) {
-      this.oldHeight = $(this.refName).height() as number
-
       $(this.refName).stop()
           .animate({
             height: '100%',
@@ -82,13 +85,21 @@ export default class Category extends Vue {
 
 .category
   font-size 1rem
+  position relative
+
+  &__link
+    position absolute
+    cursor pointer
+    width 100%
+    height 100%
+    z-index 1
 
   &__content-wrapper
     position relative
     margin  0 10px
 
   &__img
-    padding 0 0 72% 0
+    height 300px
     width 100%
 
   &__name
@@ -96,8 +107,8 @@ export default class Category extends Vue {
     position absolute
     bottom 0
     left 0
-    width 91.5%
-    padding 10px 15px
+    width 100%
+    padding 10px 0
     color white
     background-color mainColor
     text-align right
@@ -110,6 +121,9 @@ export default class Category extends Vue {
       display: flex;
       align-items  center
       justify-content flex-end
+
+      & span
+        margin-right 15px
 
       &_big
         font-size 40px

@@ -91,13 +91,11 @@ export default class PageHeader extends Mixins(ScrollTo) {
   }
 
   setInterval(): void {
-    this.idInterval = setInterval(() => {
       if (this.currentSlideIndex && this.currentSlideIndex + 1 === this.slides.length) {
         this.currentSlideIndex = 0
       } else {
         this.currentSlideIndex++
       }
-    }, 5000)
   }
 
   initSlider(): void {

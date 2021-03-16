@@ -89,7 +89,7 @@ import Paginator from "@/js/common/helpers/Paginator";
 
 
 @Component({
-  components: {Map, LeftSideBar, Balloon, Filters, Range, Select, Pagination, Realty, Preloader},
+  components: { Map, LeftSideBar, Balloon, Filters, Range, Select, Pagination, Realty, Preloader },
   data: () => ({
     imgTown,
     bus

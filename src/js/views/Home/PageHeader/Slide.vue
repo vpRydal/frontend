@@ -3,16 +3,19 @@
         <div class="slide__body">
             <h1 class="slide__title">{{ header }}</h1>
             <p class="slide__text">{{ content }}</p>
-            <div class="slide__learn-more learn-more">Узнать подробнее
+            <div class="slide__learn-more learn-more">
+              Узнать подробнее
                 <span class="learn-more__arrow"></span>
-                <span class="learn-more__circle"></span></div>
+                <span class="learn-more__circle" @click="$router.replace({ name: 'catalog' })"></span>
+              <router-link :to="{ name: 'catalog' }" class="learn-more__link"></router-link>
+            </div>
         </div>
         <ibg class="slide__town" :src="image"/>
     </div>
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+    import { Component, Vue } from 'vue-property-decorator';
 
     @Component({
         props: {
@@ -73,7 +76,7 @@
             height 812px
             margin-top -330px
             margin-left auto
-            z-index 5
+            z-index 2
 
             @media (max-width 1460px)
                 width 0
@@ -99,10 +102,20 @@
         align-items center
         margin-bottom 96px
         word-spacing 5px
-        font-size 14px
+        font-size 18px
+
+        &:hover
+           & .learn-more__circle
+              transform scale(1.2)
+
         @media (max-width: 560px)
             flex-direction column
             align-items unset
+
+        &__link
+            position absolute
+            height 100%
+            width 100%
 
         &__arrow
             position relative
@@ -132,6 +145,9 @@
             border-radius 50%
             right 40px
             top -40px
+            transition all ease .7s
+            cursor pointer
+
             @media (max-width 500px)
                 display none
 

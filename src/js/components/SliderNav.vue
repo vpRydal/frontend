@@ -87,6 +87,7 @@
 
     .nav
         position relative
+
         @media (max-width 675px)
             width 100%
         @media (max-width 675px)
@@ -95,6 +96,10 @@
 
         &__body
             width 600px
+
+            ^[0]_center &
+                margin 0 auto
+
             @media (max-width 675px)
                 display flex
             @media (max-width 675px)

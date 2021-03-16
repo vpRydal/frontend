@@ -203,13 +203,9 @@ export default class Map extends Vue {
     })
   }
 
-  onFiltersClear(): void {
-    console.log(123)
-  }
 
   created(): void {
     bus.$on('filters::filter', this.onFilter)
-    bus.$on('filters::clear', this.onFiltersClear)
 
 
     if (this.$startedQueryParams) {
@@ -233,7 +229,6 @@ export default class Map extends Vue {
 
   beforeDestroy(): void {
     bus.$off('filters::filter', this.onFilter)
-    bus.$off('filters::clear', this.onFiltersClear)
   }
 }
 </script>

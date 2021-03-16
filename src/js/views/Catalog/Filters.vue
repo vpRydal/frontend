@@ -10,9 +10,10 @@
                          :key="`realty-type-${index}`">
                         <input type="checkbox" class="form__control" :id="`realty-type-${index}`" :value="type.id"
                                v-model="realtyTypesModel"/>
-                        <label :for="`realty-type-${index}`" class="filters__form-label form__label flex-wrapper">{{
-                                type.name
-                            }}</label>
+                        <label :for="`realty-type-${index}`" class="filters__form-label form__label flex-wrapper">
+                          <span class="form__control-indicator"></span>
+                          {{ type.name }}
+                        </label>
                     </div>
                 </div>
                 <div class="filters__section">
@@ -23,7 +24,10 @@
                         <input type="checkbox" class="form__control" :id="`equipment-type-${index}`" :value="eq.value"
                                v-model="realtyEquipmentModel"/>
                         <label :for="`equipment-type-${index}`"
-                               class="filters__form-label form__label flex-wrapper">{{ eq.label }}</label>
+                               class="filters__form-label form__label flex-wrapper">
+                          <span class="form__control-indicator"></span>
+                          {{ eq.label }}
+                          </label>
                     </div>
                 </div>
             </form>
@@ -38,7 +42,7 @@
                         ref="rangeArea"
                         v-model="areaModel"
                     >
-                        <template v-slot:info="{currentMin, currentMax}">
+                        <template v-slot:info="{ currentMin, currentMax }">
                             {{ currentMin }}кв. м. | {{ currentMax }}кв. м.
                         </template>
                     </Range>
@@ -210,8 +214,6 @@ export default class Filters extends Vue {
     created(): void {
         RealtyType.getList().then(({data}) => {
             this.realtyTypes = data
-            this.realtyEquipmentModel = this.$startedQueryParams.equipments as Array <string> || []
-            this.realtyTypesModel = this.$startedQueryParams.types as Array <number> || []
         })
 
         Realty.getMinMax().then(res => {
@@ -259,6 +261,12 @@ export default class Filters extends Vue {
 
     beforeDestroy(): void {
         removeEventListener('resize', this.onResize)
+    }
+
+    @Watch('$startedQueryParams', { immediate: true })
+    watchStartedParams (): void {
+      this.realtyEquipmentModel = this.$startedQueryParams.equipments as Array <string> || []
+      this.realtyTypesModel = this.$startedQueryParams.types as Array <number> || []
     }
 
     @Watch('realtyTypesModel')

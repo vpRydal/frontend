@@ -24,7 +24,7 @@
                 </div>
                 <div class="form__group" :class="{ 'invalid': $v.formModels.email.$invalid && $v.formModels.email.$dirty }">
                     <label for="email" class="form__label">Email</label>
-                    <input type="email" id="email" class="form__control" v-mask="'X@X.X'" v-model="formModels.email" @input.once="$v.formModels.email.$touch()">
+                    <input type="email" id="email" class="form__control" v-model="formModels.email" @input.once="$v.formModels.email.$touch()">
                   <span class="form__invalid-message">
                     <template v-if="!$v.formModels.email.email && $v.formModels.email.$dirty">
                       Не верный формат email
