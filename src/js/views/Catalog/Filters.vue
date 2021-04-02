@@ -60,7 +60,7 @@
                         v-model="perPriceModel"
                     >
                         <template v-slot:info="{currentMin, currentMax}">
-                            {{ currentMin }}кв. м. | {{ currentMax }}кв. м.
+                            {{ currentMin }}руб. | {{ currentMax }}руб.
                         </template>
                     </Range>
                 </div>
