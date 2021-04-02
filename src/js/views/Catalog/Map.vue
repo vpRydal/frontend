@@ -237,7 +237,7 @@ export default class Map extends Vue {
 .map-placeholder
   &__bg
     filter blur(1px)
-    background-image url("/img/map-placeholder.png")
+    background-image url("/frontend/img/map-placeholder.png")
     background-position center
     background-size cover
     height 200px
