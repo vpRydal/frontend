@@ -43,7 +43,7 @@
                 :area="object.area"
                 :title="object.name"
                 :price="object.price_per_metr"
-                :img-path="imageBasePath + object.img_path"
+                :img-path="object.img_path"
                 :data-index="index"
                 :id="object.id"
             />
