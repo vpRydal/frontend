@@ -1,12 +1,15 @@
 <template>
     <div class="link-wrapper">
-        <a href="" class="link-wrapper__link">{{ text }}</a>
+      <router-link v-if="to" :to="to">
+        {{ text }}
+      </router-link>
+        <a v-else href="" class="link-wrapper__link"></a>
         <span class="link-wrapper__line"></span>
     </div>
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
 
     @Component({
         components: {},
@@ -18,6 +21,7 @@
         }
     })
     export default class Link extends Vue {
+      @Prop({ type: Object, required: false, default: null }) to!: null
     }
 </script>
 

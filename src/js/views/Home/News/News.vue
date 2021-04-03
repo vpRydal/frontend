@@ -2,7 +2,7 @@
   <div class="news" ref="news">
     <div class="news__container container">
       <div class="news__flex-wrapper flex-wrapper flex-wrapper_J-SB flex-wrapper_A-FE">
-        <Link text="Смотреть все новости" class="news__link" v-animate-to-on-scroll:left/>
+        <Link :to="{ name: 'news' }" text="Смотреть все новости" class="news__link" v-animate-to-on-scroll:left/>
         <h2 class="news__title"
         >
           <span class="news__title-part-1" v-animate-to-on-scroll:right>Новости</span>

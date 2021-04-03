@@ -42,7 +42,7 @@ export default class Slider extends Vue {
 
   mounted(): void {
     News.getList().then(({data}) => {
-      this.slides = data
+      this.slides = data.data
     })
   }
 
