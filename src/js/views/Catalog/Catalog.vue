@@ -43,7 +43,7 @@
                 :area="object.area"
                 :title="object.name"
                 :price="object.price_per_metr"
-                :img-path="object.img_path"
+                :img-path="imageBasePath + object.img_path"
                 :data-index="index"
                 :id="object.id"
             />
@@ -127,6 +127,7 @@ export default class Catalog extends ScrollTo {
   catalogModule: CatalogModule
   paginator = new Paginator
   @Ref('realty') refRealty!: HTMLElement
+
 
   get mapHeight(): number {
     return window.innerHeight - 120

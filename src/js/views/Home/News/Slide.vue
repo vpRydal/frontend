@@ -1,7 +1,7 @@
 <template>
     <div class="slide">
         <div class="slide__flex-wrapper flex-wrapper">
-            <ibg :src="photo" class="slide__img"/>
+            <ibg :src="imageBasePath + photo" class="slide__img"/>
             <div class="slide__body">
                 <h3 class="slide__title">{{ header }}</h3>
                 <p class="slide__text">{{ content }}</p>
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+import {Component, Inject, Vue} from 'vue-property-decorator';
 
     @Component({
         props: {
@@ -30,6 +30,7 @@
         }
     })
     export default class Slide extends Vue {
+      @Inject('imageBasePath') imageBasePath!: string
     }
 </script>
 

@@ -8,7 +8,7 @@
                     v-if="news.length"
                     :content="newsItem.content"
                     :name="newsItem.header"
-                    :img-path="newsItem.photo"
+                    :img-path="imageBasePath + newsItem.photo"
                     :key="idx + newsItem.id"
                     :data-index="idx"
                     @click="$router.push({ name: 'news.view', params: { id: newsItem.id } })"
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Ref, Watch} from "vue-property-decorator";
+import {Component, Inject, Ref, Watch} from "vue-property-decorator";
 import News from "@/js/models/News";
 import Paginator from "@/js/common/helpers/Paginator";
 import PaginatorComponent from "@/js/components/widgets/Paginator.vue";
@@ -49,6 +49,8 @@ export default class IndexNews extends ScrollTo {
   newsListLength = 0
   inRequestState = false
   @Ref('news') $refNews!: HTMLElement
+  @Inject('imageBasePath') imageBasePath!: string
+
 
   updateList (): Promise<AxiosResponse<Paginator<News>>> {
     this.inRequestState = true
