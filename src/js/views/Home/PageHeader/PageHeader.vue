@@ -63,15 +63,6 @@ export default class PageHeader extends Mixins(ScrollTo) {
 
   idInterval = 0;
 
-  mounted(): void {
-    SlideOnMainPage.getList().then(({data}) => {
-      this.slides = data
-    })
-    this.$nextTick(() => {
-      this.initSlider()
-    })
-  }
-
   prevHandler(): void {
     clearInterval(this.idInterval);
     this.setInterval();
@@ -111,6 +102,13 @@ export default class PageHeader extends Mixins(ScrollTo) {
     bus.$on('scroll-to-info', () => {
       this.scrollTo(0)
     })
+
+    SlideOnMainPage.getList().then(({data}) => {
+      this.slides = data
+    })
+    this.$nextTick(() => {
+      this.initSlider()
+    })
   }
 
   beforeDestroy(): void {
@@ -133,6 +131,7 @@ export default class PageHeader extends Mixins(ScrollTo) {
   margin-top 150px
   justify-content space-between
   margin-bottom 220px
+
   @media (max-width 1600px)
     padding 150px 25px 0 25px
     margin-bottom 130px

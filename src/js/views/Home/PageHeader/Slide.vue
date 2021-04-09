@@ -10,12 +10,12 @@
               <router-link :to="{ name: 'catalog' }" class="learn-more__link"></router-link>
             </div>
         </div>
-        <ibg class="slide__town" :src="image"/>
+        <ibg class="slide__town" :src="imageBasePath + image"/>
     </div>
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
+import {Component, Inject, Vue} from 'vue-property-decorator';
 
     @Component({
         props: {
@@ -34,6 +34,7 @@
         }
     })
     export default class Slide extends Vue {
+      @Inject('imageBasePath') imageBasePath!: string
     }
 </script>
 

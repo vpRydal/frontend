@@ -8,29 +8,28 @@
           <span class="categories__title-part-2" v-animate-to-on-scroll:right="100">площадей и помещений</span>
         </h1>
       </div>
-      <div class="categories__slider-wrapper">
-        <Slick
-            class="categories__slider"
-            :options="slickOptions"
-            @beforeChange="handleBeforeChange"
-            ref="slick"
+      <div v-if="categories.length"
+          class="categories__slider-wrapper">
+        <Slick class="categories__slider"
+               :options="slickOptions"
+               @beforeChange="handleBeforeChange"
+               ref="slick"
         >
           <Category v-for="(category, idx) in categories"
                     :key="idx"
                     :id="category.id"
-                    :img-path="category.img_path"
+                    :img-path="imageBasePath + category.img_path"
                     :name="category.name"
                     @click="onClickCategory(category)"
           />
         </Slick>
         <div class="categories__slider-nav-wrapper">
-          <SliderNav
-              class="categories__slider-nav"
-              :count-slides="categories.length"
-              :current-slide-index="currentSlideIdx"
-              :nav-item-height="7"
-              @next="handleNextSlide"
-              @prev="handlePrevSlide"
+          <SliderNav class="categories__slider-nav"
+                     :count-slides="categories.length"
+                     :current-slide-index="currentSlideIdx"
+                     :nav-item-height="7"
+                     @next="handleNextSlide"
+                     @prev="handlePrevSlide"
           />
         </div>
       </div>
@@ -40,15 +39,12 @@
 
 <script lang="ts">
 import Slick from "vue-slick";
-import {Component, Vue} from 'vue-property-decorator';
+import {Component, Inject, Vue} from 'vue-property-decorator';
 import Link from "@/js/views/Home/Link.vue";
 import BigHeader from "@/js/components/BigHeader.vue";
-import town1 from '@/assets/img/town1.png';
-import town2 from '@/assets/img/town2.png';
-import town3 from '@/assets/img/town3.png';
-import town4 from '@/assets/img/town4.png';
 import Category from "@/js/components/Category.vue";
 import SliderNav from "@/js/components/SliderNav.vue";
+import RealtyType from "@/js/models/RealtyType";
 
 
 @Component({
@@ -76,33 +72,9 @@ export default class Categories extends Vue {
       }
     ]
   }
-  categories = [
-    {
-      name: 'Ангары',
-      id: 1,
-      img_path: town1,
-      routeName: 'catalog'
-    },
-    {
-      name: 'Офисы',
-      id: 2,
-      img_path: town2,
-      routeName: 'catalog'
-    },
-    {
-      name: 'Склады',
-      id: 3,
-      img_path: town3,
-      routeName: 'catalog'
-    },
-    {
-      name: 'Офисные блоки',
-      id: 4,
-      img_path: town4,
-      routeName: 'catalog'
-    }
-  ];
+  categories = [] as Array<RealtyType>;
   currentSlideIdx = 0
+  @Inject('imageBasePath') imageBasePath!: string
 
   /* eslint-disable */
   handleBeforeChange(event: Event, slick: any, currentSlide: number, nextSlide: number) {
@@ -121,11 +93,17 @@ export default class Categories extends Vue {
     this.$refs['slick'].prev()
   }
 
-  onClickCategory(category: { name: string, id: number | string, img_path: string, routeName: string }): void {
-    this.$router.replace({ name: category.routeName, query: { filters: JSON.stringify({ types: [ category.id ] }) } })
+  onClickCategory(category: RealtyType): void {
+    this.$router.replace({ name: 'catalog', query: { filters: JSON.stringify({ types: [ category.id ] }) } })
         .then(() => {
       this.$store.commit('queryParams/init')
     })
+  }
+
+  created (): void {
+    RealtyType.getList().then(response => {
+      this.categories = response.data
+      })
   }
 }
 </script>

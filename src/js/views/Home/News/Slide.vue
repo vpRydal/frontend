@@ -7,6 +7,7 @@
                 <p class="slide__text">{{ content }}</p>
             </div>
         </div>
+      <router-link class="slide__link" :to="{ name: 'news.view', params: { id } }"/>
     </div>
 </template>
 
@@ -15,6 +16,10 @@ import {Component, Inject, Vue} from 'vue-property-decorator';
 
     @Component({
         props: {
+            id: {
+                type: Number,
+                required: true
+            },
             content: {
                 type: String,
                 required: true
@@ -37,11 +42,20 @@ import {Component, Inject, Vue} from 'vue-property-decorator';
 <style scoped lang="stylus">
     @import "../../../../stylus/colors.styl"
     .slide
+        position relative
         font-size 1rem
         @media (max-width 500px)
             font-size .9rem
         @media (max-width 320px)
             font-size .8rem
+
+        &__link
+          position: absolute;
+          top 0
+          left 0
+          height 100%
+          width 100%
+
         &__flex-wrapper
             margin 0 45px
             @media (max-width 1100px)

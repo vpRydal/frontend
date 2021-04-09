@@ -9,8 +9,8 @@
                         <li class="contacts-list__item" v-for="(contact, index) of contacts" :key="index">
                             <span class="contacts-list__name">{{ contact.header }}</span><span class="contacts-list__dote">:</span>
                             <a class="contacts-list__value link link_white"
-                               :href="contact.content.includes('@') ? `mail-to:${contact.content}`: `tel:${contact.content}`"
-                            >{{ contact.content }}</a>
+                               :href="contact.type === 'email' ? `mail-to:${contact.value}`: `tel:${contact.value}`"
+                            >{{ contact.value }}</a>
                         </li>
                         <li
                             v-if="emails.length"
@@ -49,7 +49,7 @@
                                 <a
                                     v-for="(contact, index) in contacts"
                                     :key="index"
-                                    class="link link_white" :href="`tel:${contact.content}`">{{ contact.content }}</a>
+                                    class="link link_white" :href="`tel:${contact.value}`">{{ contact.value }}</a>
                             </li>
                         </ul>
                     </div>
@@ -80,42 +80,22 @@ export default class Footer extends Mixins(ScrollTo) {
     refEmails!: Array<HTMLElement>
     responseData: Array<Contact> = []
 
-    created():void {
-        bus.$on('scroll-to-contacts', () => {
-            this.scrollTo(this.$refs['footer'] as HTMLElement)
-        })
-
-        Contact.getList().then((response) => {
-            this.responseData = response.data
-        })
-    }
-
-    @Watch('emails')
-    watchEmails(): void {
-        this.$nextTick(() => {
-            $(this.refEmails.slice(0, this.refEmails.length - 1))
-                .after($('<span>', {text: ','}).css('margin-right', 5))
-        })
-    }
-
     get emails(): Array<string> {
         return this.responseData
             .filter(contact => contact.type === Contact.EMAIL)
-            .map(contact => contact.content as string)
+            .map(contact => contact.value as string)
     }
-
     get contacts(): Array<Contact> {
         return this.responseData
-            .filter(contact => contact.type !== Contact.EMAIL && !contact.is_rent_depart)
+            .filter(contact => contact.type !== Contact.EMAIL && !contact.is_rent_department)
     }
-
     get rentDepartContacts(): Array<Array<Contact>> {
         const res: Array<Array<Contact>> = []
         let counter = 0
         let tempList: Array<Contact> = []
 
         this.responseData.forEach(contact => {
-            if (contact.is_rent_depart) {
+            if (contact.is_rent_department) {
                 tempList.push(contact)
 
                 if (++counter == 2) {
@@ -129,9 +109,27 @@ export default class Footer extends Mixins(ScrollTo) {
         return res
     }
 
+  created():void {
+    bus.$on('scroll-to-contacts', () => {
+      this.scrollTo(this.$refs['footer'] as HTMLElement)
+    })
+
+    Contact.getList().then((response) => {
+      this.responseData = response.data
+    })
+  }
+
     beforeDestroy(): void {
         bus.$off('scroll-to-contacts')
     }
+
+  @Watch('emails')
+  watchEmails(): void {
+    this.$nextTick(() => {
+      $(this.refEmails.slice(0, this.refEmails.length - 1))
+          .after($('<span>', {text: ','}).css('margin-right', 5))
+    })
+  }
 }
 </script>
 

@@ -267,74 +267,78 @@
     {
       "id": 1,
       "header": "Менеджер проекта",
-      "content": "+7(978) 801-43-83",
+      "value": "+7(978) 801-43-83",
       "type": "phone",
-      "is_rent_depart": false
+      "is_rent_department": false
     },
     {
       "id": 2,
       "header": "email",
-      "content": "elena@sferos.com",
+      "value": "elena@sferos.com",
       "type": "email",
-      "is_rent_depart": false
+      "is_rent_department": false
     },
     {
       "id": 3,
       "header": "email",
-      "content": "irina@sferos.com",
+      "value": "irina@sferos.com",
       "type": "email",
-      "is_rent_depart": false
+      "is_rent_department": false
     },
     {
       "id": 4,
       "header": "",
-      "content": "+7 (978) 734-58-55",
+      "value": "+7 (978) 734-58-55",
       "type": "phone",
-      "is_rent_depart": true
+      "is_rent_department": true
     },
     {
       "id": 5,
       "header": "",
-      "content": "+7 (978) 268-72-55",
+      "value": "+7 (978) 268-72-55",
       "type": "phone",
-      "is_rent_depart": true
+      "is_rent_department": true
     },
     {
       "id": 6,
       "header": "",
-      "content": "+7 (978) 734-58-99",
+      "value": "+7 (978) 734-58-99",
       "type": "phone",
-      "is_rent_depart": true
+      "is_rent_department": true
     },
     {
       "id": 7,
       "header": "",
-      "content": "+7 (918) 473-08-39",
+      "value": "+7 (918) 473-08-39",
       "type": "phone",
-      "is_rent_depart": true
+      "is_rent_department": true
     }
   ],
   "realtyType": [
     {
       "id": 1,
-      "name": "Ангары"
+      "name": "Ангары",
+      "img_path": "/frontend/img/objects/town.png"
     },
     {
       "id": 2,
-      "name": "Офисы"
+      "name": "Офисы",
+      "img_path": "/frontend/img/objects/town1.png"
     },
-
     {
       "id": 4,
-      "name": "Офисные блоки"
-    },
-    {
-      "id": 3,
-      "name": "Склады"
+      "name": "Офисные блоки",
+      "img_path": "/frontend/img/objects/town2.png"
     },
     {
       "id": 5,
-      "name": "Офисные блоки"
+      "name": "Земля",
+      "img_path": "/frontend/img/objects/town2.png"
+    },
+    {
+      "id": 3,
+      "name": "Склады",
+      "img_path": "/frontend/img/objects/town3.png"
     }
   ]
 }

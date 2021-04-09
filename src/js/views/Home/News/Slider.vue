@@ -6,6 +6,7 @@
              :header="news.header"
              :content="news.content"
              :photo="news.photo"
+             :id="news.id"
       />
     </Slick>
     <SliderNav

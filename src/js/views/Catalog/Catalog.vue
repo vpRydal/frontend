@@ -28,7 +28,7 @@
       </div>
       <div class="catalog__main-content" :class="{ 'catalog__main-content_with-realty':  !$onlyMap}">
           <LeftSideBar class="catalog__sidebar" :height="mapHeight" :open="isOpenedSidebar"
-                       @close="isOpenedSidebar = false" @filter="onFilter"/>
+                       @close="isOpenedSidebar = false"/>
           <Map class="catalog__map"/>
         <div v-if="!$onlyMap"
              class="catalog__realty-wrapper" ref="realty">
@@ -211,7 +211,7 @@ export default class Catalog extends ScrollTo {
   getRealty(options: { page?: number } = {}): Promise<AxiosResponse<Paginator<RealtyModel>>> {
     this.inRequestState = true
 
-    return RealtyModel.getList({...this.$filtersForDefault, ...options, count: 12}).then((response) => {
+    return RealtyModel.getList({...this.$filtersForDefault, ...options, perPage: 12}).then((response) => {
       const paginator = response.data
       Paginator.initPaginator(paginator)
 
@@ -229,6 +229,7 @@ export default class Catalog extends ScrollTo {
 
   created(): void {
     bus.$on('filters::clear', this.onFilterClear)
+    bus.$on('filters::filter', this.onFilter)
 
     this.getRealty()
   }
