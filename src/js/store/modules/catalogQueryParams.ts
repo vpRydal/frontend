@@ -8,7 +8,7 @@ import router from "@/js/router";
 export default class CatalogQueryParams extends VuexModule {
     _params: objectWIthAnyProperties = {}
     _startedParams: objectWIthAnyProperties = {}
-    exceptedProperties= ['zoom', 'bounds', 'center', 'equipments']
+    exceptedProperties= ['zoom', 'bounds', 'center']
 
     get params (): objectWIthAnyProperties {
         return this._params
@@ -37,13 +37,7 @@ export default class CatalogQueryParams extends VuexModule {
     }
 
     get preparedFilters(): objectWIthAnyProperties {
-        const temp = this._params.equipments ? (this._params.equipments as Array<string>).reduce((acc: { [name: string]: boolean }, val: string) => {
-            acc[val] = true
-
-            return acc
-        }, {}) : {}
-
-        return {...temp, ...this._params} as objectWIthAnyProperties
+        return this._params as objectWIthAnyProperties
     }
 
     @Mutation

@@ -21,12 +21,12 @@
                     <div v-for="(eq, index ) in equipment"
                          class="form__group"
                          :key="`equipment-type-${index}`">
-                        <input type="checkbox" class="form__control" :id="`equipment-type-${index}`" :value="eq.value"
+                        <input type="checkbox" class="form__control" :id="`equipment-type-${index}`" :value="eq.id"
                                v-model="realtyEquipmentModel"/>
                         <label :for="`equipment-type-${index}`"
                                class="filters__form-label form__label flex-wrapper">
                           <span class="form__control-indicator"></span>
-                          {{ eq.label }}
+                          {{ eq.display_name }}
                           </label>
                     </div>
                 </div>
@@ -99,6 +99,7 @@ import Realty from "@/js/models/Realty";
 import {mapGetters, mapMutations} from "vuex";
 import bus from "@/js/common/bus";
 import {minMax, objectWIthAnyProperties, realtyMinMaxInfo} from "@/js/common/types";
+import Equipment from "@/js/models/Equipment";
 
 
 @Component({
@@ -130,30 +131,9 @@ export default class Filters extends Vue {
         areaMax: -1,
         pricePerMetrMin: -1
     }
-    equipment: Array<{ value: string; label: string }> = [
-        {
-            value: 'heating',
-            label: 'Отопление'
-        },
-        {
-            value: 'restroom',
-            label: 'Отдельный санузел'
-        },
-        {
-            value: 'energy',
-            label: 'Индивидуальный узел учёта электроэнергии'
-        },
-        {
-            value: 'access',
-            label: 'Круглосуточный доступ'
-        },
-        {
-            value: 'furniture',
-            label: 'Мебелью укомплектован'
-        }
-    ]
+    equipment: Array<Equipment> = []
     realtyTypesModel: Array<number> = []
-    realtyEquipmentModel: Array<string> = []
+    realtyEquipmentModel: Array<number> = []
     sticky = false
     $windowWidth!: number
     $queryParams!: objectWIthAnyProperties
@@ -256,6 +236,10 @@ export default class Filters extends Vue {
             })
         })
 
+      Equipment.getList().then(response => {
+        this.equipment = response.data
+      })
+
         addEventListener('resize', this.onResize)
     }
 
@@ -275,7 +259,7 @@ export default class Filters extends Vue {
     }
 
     @Watch('realtyEquipmentModel')
-    watchRealtyEquipmentModel(model: Array<string>): void {
+    watchRealtyEquipmentModel(model: Array<number>): void {
         this.$addParam({name: 'equipments', value: model})
     }
 

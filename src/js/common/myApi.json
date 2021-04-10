@@ -340,5 +340,32 @@
       "name": "Склады",
       "img_path": "/frontend/img/objects/town3.png"
     }
+  ],
+  "equipments": [
+    {
+      "id":1,
+      "value": "heating",
+      "display_name": "Отопление"
+    },
+    {
+      "id": 2,
+      "value": "restroom",
+      "display_name": "Отдельный санузел"
+    },
+    {
+      "id": 3,
+      "value": "energy",
+      "display_name": "Индивидуальный узел учёта электроэнергии"
+    },
+    {
+      "id": 4,
+      "value": "access",
+      "display_name": "Круглосуточный доступ"
+    },
+    {
+      "id": 5,
+      "value": "furniture",
+      "display_name": "Мебелью укомплектован"
+    }
   ]
 }
