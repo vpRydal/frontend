@@ -5,28 +5,31 @@
                 <ibg class="header__logo" :src="logoPng"/>
             </router-link>
             <Burger class="header__burger" @click="handleShowMenu"/>
-            <nav v-if="!isXSM" class="header__nav nav">
+            <nav v-if="!isXSM" class="header__nav nav" ref="linksContainer">
                 <NavLinks class="nav__links">
                     <template v-slot:link="{link}">
-                        <router-link v-if="link.isLink" :to="{name: link.routeName}" class="nav__link">
-                            {{ link.displayName }}
+                        <router-link :to="{ name: link.routeName, hash: link.hash ? `#${link.hash}` : '' }" class="nav__link">
+                          {{ link.displayName }}
                         </router-link>
-                        <span v-else class="cursor-pointer nav__link">{{ link.displayName }}</span>
                     </template>
                 </NavLinks>
+              <span v-if="!isXSM" class="nav__underline" ref="underline"></span>
             </nav>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
+import {Component, Ref, Vue, Watch} from 'vue-property-decorator';
 import Burger from "@/js/components/layouts/header/Burger.vue";
 import logoPng from '@/assets/img/logo.png'
 import bus from "@/js/common/bus";
 import NavLinks from "@/js/components/layouts/header/NavLinks.vue";
 import Search from "@/js/components/layouts/header/Search.vue";
 import {mapGetters} from "vuex";
+import $ from "jquery";
+import JQuery from "jquery";
+import {Route} from "vue-router";
 
 @Component({
     components: {Search, NavLinks, Burger},
@@ -41,13 +44,41 @@ import {mapGetters} from "vuex";
 })
 export default class Header extends Vue {
     $windowWidth!: number
+    @Ref('underline') refUnderLine!: HTMLElement
+    @Ref('linksContainer') refLinksContainer!: HTMLElement
+    $refLinksContainer!: JQuery
+    $refUnderLine!: JQuery
+    get isXSM(): boolean { return this.$windowWidth <= 500; }
+
+    updateUnderLineState (): void {
+      if (!this.$refLinksContainer) return
+
+      this.$nextTick(() => {
+        const $activeLink = this.$refLinksContainer.find('.router-link-active')
+
+        this.$refUnderLine.animate({
+          left: $activeLink.offset()?.left,
+          width: $activeLink.width()
+        })
+      })
+
+
+      }
 
     handleShowMenu(): void {
         bus.$emit('nav-bar-show')
     }
 
-    get isXSM(): boolean {
-        return this.$windowWidth <= 500;
+    mounted (): void {
+      this.$refUnderLine = $(this.refUnderLine)
+      this.$refLinksContainer = $(this.refLinksContainer)
+    }
+
+    @Watch('$route', { immediate: true })
+    watchRoute (route: Route): void {
+      if (route) {
+        this.updateUnderLineState()
+      }
     }
 }
 </script>
@@ -107,4 +138,12 @@ export default class Header extends Vue {
 
     &__link
         margin 0 50px
+
+    &__underline
+        display block
+        position absolute
+        height 3px
+        background-color mainColor
+        transition width ease-out .3s
+        margin-top 5px
 </style>

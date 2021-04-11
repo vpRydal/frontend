@@ -10,10 +10,9 @@
                 </div>
                 <NavLinks class="nav-bar__links-list" @click="handleClose">
                     <template v-slot:link="{link}" >
-                        <router-link v-if="link.isLink" :to="{name: link.routeName}" class="nav-bar__link">
+                        <router-link :to="{ name: link.routeName, hash: link.hash ? `#${link.hash}` : '' }" class="nav-bar__link">
                             {{ link.displayName }}
                         </router-link>
-                        <span v-else class="cursor-pointer nav-bar__link" @click="handleClose">{{ link.displayName }}</span>
                     </template>
                 </NavLinks>
             </div>
@@ -93,6 +92,8 @@ export default class NavBar extends Vue {
 </script>
 
 <style scoped lang="stylus">
+@import "~@/stylus/colors.styl"
+
 .nav-bar
     background-color rgba(0, 0, 0, .6)
     position fixed
@@ -117,7 +118,11 @@ export default class NavBar extends Vue {
 
     &__link
         display block
-        margin 20px 0
+        margin 17px 0
+        padding-bottom 3px
+        &.router-link-active
+
+          border-bottom 3px solid mainColor
 
     &__body
         background-color: white;

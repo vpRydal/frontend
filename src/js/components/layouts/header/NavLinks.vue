@@ -3,7 +3,6 @@
         <li
             v-for="(link, index) in links"
             :key="index"
-            @click="onClickNavLink(link.id)"
         >
             <slot name="link" :link="link">
                 <router-link v-if="link.isLink" :to="{name: link.routeName}">
@@ -16,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
+import {Component, Vue, Watch} from "vue-property-decorator";
 import {mixinNavLinks} from "@/js/mixins/navLinks";
 import bus from "@/js/common/bus";
 import {Route} from "vue-router";
@@ -25,40 +24,45 @@ import {Route} from "vue-router";
     mixins: [mixinNavLinks],
 })
 export default class NavLinks extends Vue {
-    onClickNavLink(linkId: number):void {
-        const routeIsHome = this.$route.name === 'home'
-        if (linkId === 3) {
-            if (!routeIsHome) {
-                this.goToHome().then(() => {
-                    this.$nextTick(() => {
-                        bus.$emit('scroll-to-news')
-                    })
-                })
-            } else {
-                bus.$emit('scroll-to-news')
-            }
-        } else if (linkId === 1) {
-            if (!routeIsHome) {
-                this.goToHome()
-            } else {
-                bus.$emit('scroll-to-info')
-            }
-        } else if (linkId === 4) {
-            if (!routeIsHome) {
-                this.goToHome().then(() => {
-                    this.$nextTick(() => {
-                        bus.$emit('scroll-to-contacts')
-                    })
-                })
-            } else {
-                bus.$emit('scroll-to-contacts')
-            }
-        }
-    }
-
     goToHome(): Promise <Route> {
         return this.$router.push({name: 'home'})
     }
+
+  @Watch('$route', { immediate: true, deep: true })
+  watchRoute (route: Route): void {
+    if (route) {
+     this.$nextTick(() => {
+       const routeIsHome = this.$route.name === 'home'
+       if (route.hash === '#news') {
+         if (!routeIsHome) {
+           this.goToHome().then(() => {
+             this.$nextTick(() => {
+               bus.$emit('scroll-to-news')
+             })
+           })
+         } else {
+           bus.$emit('scroll-to-news')
+         }
+       } else if (route.hash === '#about') {
+         if (!routeIsHome) {
+           this.goToHome()
+         } else {
+           bus.$emit('scroll-to-info')
+         }
+       } else if (route.hash === '#contacts') {
+         if (!routeIsHome) {
+           this.goToHome().then(() => {
+             this.$nextTick(() => {
+               bus.$emit('scroll-to-contacts')
+             })
+           })
+         } else {
+           bus.$emit('scroll-to-contacts')
+         }
+       }
+     })
+    }
+  }
 }
 </script>
 
