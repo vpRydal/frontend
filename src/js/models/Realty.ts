@@ -4,6 +4,7 @@ import http from "@/js/common/http";
 import Paginator from "@/js/common/helpers/Paginator";
 import BaseModel from "@/js/models/BaseModel";
 import {realtyMinMaxInfo} from "@/js/common/types";
+import Equipment from "@/js/models/Equipment";
 
 export default class Realty extends BaseModel{
     id?: number
@@ -24,6 +25,8 @@ export default class Realty extends BaseModel{
     renovation?: number
     restroom?: number
     heating?: number
+
+    equipments?: Array<Equipment>
 
     static getMinMax() : Promise<AxiosResponse<realtyMinMaxInfo>> {
         if (process.env.VUE_APP_USE_LOCAL_API === 'false') {

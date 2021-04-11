@@ -133,7 +133,7 @@ export default class Filters extends Vue {
     }
     equipment: Array<Equipment> = []
     realtyTypesModel: Array<number> = []
-    realtyEquipmentModel: Array<number> = []
+    realtyEquipmentModel: Array<Equipment> = []
     sticky = false
     $windowWidth!: number
     $queryParams!: objectWIthAnyProperties
@@ -249,7 +249,7 @@ export default class Filters extends Vue {
 
     @Watch('$startedQueryParams', { immediate: true })
     watchStartedParams (): void {
-      this.realtyEquipmentModel = this.$startedQueryParams.equipments as Array <string> || []
+      this.realtyEquipmentModel = this.$startedQueryParams.equipments as Array <Equipment> || []
       this.realtyTypesModel = this.$startedQueryParams.types as Array <number> || []
     }
 

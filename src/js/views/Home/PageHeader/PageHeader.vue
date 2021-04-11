@@ -20,6 +20,7 @@
               class="slider__nav"
               @prev="prevHandler"
               @next="nextHandler"
+              :nav-item-height="7"
               :count-slides="slides.length"
               :current-slide-index="currentSlideIndex"
           />

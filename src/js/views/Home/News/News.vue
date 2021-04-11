@@ -42,7 +42,7 @@ export default class News extends Mixins(ScrollTo) {
 .news
   overflow hidden
   &__title
-    font-size 106px
+    font-size 75px
     display flex
     flex-direction column
 

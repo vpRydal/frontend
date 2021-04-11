@@ -69,5 +69,5 @@ export default class Slider extends Vue {
 <style scoped lang="stylus">
 .slider
   &__slick-slider
-    margin-bottom 90px
+    margin-bottom 70px
 </style>

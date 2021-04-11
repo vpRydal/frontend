@@ -63,7 +63,7 @@
                     <h1 class="object-info__name">{{ viewRealty.name }}</h1>
                     <ul class="object-info__parameters parameters fw-600">
                         <li class="parameters__item">
-                            <span class="parameters__name">Хозяйственное назначение</span>:<span class="parameters__value">{{ viewRealty.realtyTypeName }}</span>
+                            <span class="parameters__name">Тип</span>:<span class="parameters__value">{{ viewRealty.realtyTypeName }}</span>
                         </li>
                         <li class="parameters__item">
                           <span class="parameters__name">Площадь</span>:
@@ -79,6 +79,14 @@
                             }} руб.</span>
                         </li>
                     </ul>
+                  <h2 class="title">Оснащение</h2>
+                  <ul v-if="viewRealty.equipments" class="object-info__parameters parameters fw-600">
+                    <li class="parameters__item parameters__item_doted" v-for="(equipment, idx) in viewRealty.equipments"
+                        :key="idx"
+                    >
+                      {{ equipment.display_name }}
+                    </li>
+                  </ul>
                     <p class="object-info__description fw-600">{{ viewRealty.description }}</p>
                 </div>
             </div>
@@ -95,7 +103,7 @@
                         :key="index"
                         :area="object.area"
                         :title="object.name"
-                        :price="object.price"
+                        :price="object.price_per_metr"
                         :img-path="object.img_path"
                         :id="object.id"
                     />
@@ -201,16 +209,9 @@ export default class ViewObject extends Mixins<Validation>(validationMixin) {
   }
 
   makeKeywords(): string {
-    const keywords = [
-        'аренда ' + this.metaRealtyTypeName,
-        (this.viewRealty as Realty).heating !== 0 ? 'отопление' : '',
-        (this.viewRealty as Realty).restroom !== 0 ? 'отдельный санузел' : '',
-        (this.viewRealty as Realty).energy !== 0 ? 'индивидуальный узел учёта электроэнергии' : '',
-        (this.viewRealty as Realty).access !== 0 ? 'круглосуточный доступ' : '',
-        (this.viewRealty as Realty).furniture !== 0 ? 'мебелью укомплектован' : '',
-    ].filter(value => value !== '')
+    let keywords = this.viewRealty && this.viewRealty.equipments ? this.viewRealty.equipments.map(equipment => equipment.display_name) : []
 
-      return keywords.length !== 0 ? ', ' + keywords.join(', ') : ''
+    return keywords.length !== 0 ? ', ' + keywords.join(', ').toLowerCase() : ''
   }
 
     openRentModal(): void {
@@ -282,6 +283,22 @@ export default class ViewObject extends Mixins<Validation>(validationMixin) {
     &__item
         margin-bottom 20px
 
+        &_doted
+          padding-left 15px
+          display flex
+          align-items center
+          position relative
+
+          &:before
+            position absolute
+            content ''
+            display block
+            background-color mainColor
+            width 8px
+            height 8px
+            border-radius 60%
+            left 0
+
         &:last-child
             margin-bottom 0
 
@@ -305,4 +322,8 @@ export default class ViewObject extends Mixins<Validation>(validationMixin) {
 
     &__object
         width 100%
+
+.title
+  margin-bottom 10px
+
 </style>

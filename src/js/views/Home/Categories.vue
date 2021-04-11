@@ -153,7 +153,7 @@ export default class Categories extends Vue {
   &__title
     display flex
     flex-direction column
-    font-size 106px
+    font-size 75px
     text-align right
 
     @media (max-width 1100px)

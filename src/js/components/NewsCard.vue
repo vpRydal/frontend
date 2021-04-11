@@ -41,7 +41,7 @@ export default class NewsCard extends Vue {
             height: '100%',
           }, {
             start() {
-              $(this).css('background-color', 'rgba(50,161,208,0.6)')
+              $(this).css('background-color', 'rgba(50,161,208,0.8)')
                   .find('.news__name-value')
                   .animate({
                     opacity: 0
@@ -87,7 +87,7 @@ export default class NewsCard extends Vue {
 @import "~@/stylus/colors.styl"
 
 .news
-  font-size 1rem
+  font-size .8rem
   position relative
 
   &__link
@@ -116,7 +116,7 @@ export default class NewsCard extends Vue {
     background-color mainColor
     text-align right
     font-family Inter-Bold
-    font-size 1.4em
+    font-size 1.1em
     transition all linear .2s
 
     &-value

@@ -72,7 +72,7 @@ export default class Item extends Vue {
         const $target = $(this.$refs['object'])
         const $targetTitle = $(this.$refs['object']).find('.object__title')
         const $targetImage = $target.find('.ibg')
-        const $targetBG= $target.find('.object__bg')
+/*        const $targetBG= $target.find('.object__bg')*/
 
         if (val) {
             $targetTitle.stop()
@@ -85,9 +85,9 @@ export default class Item extends Vue {
                         start() {
                             $targetTitle.removeClass('text-right').addClass('text-center')
                             $target.css('color', 'white')
-                            $targetBG.animate({
+      /*                      $targetBG.animate({
                                 width: '100%'
-                            })
+                            })*/
                         },
                         complete: () => {
                             $targetTitle.animate({
@@ -130,9 +130,9 @@ export default class Item extends Vue {
                 start: () => {
                     $target.removeClass('object_opacity')
                     $targetImage.css('transform', 'none')
-                    $targetBG.animate({
+/*                    $targetBG.animate({
                         width: this.defaultBgWidth
-                    })
+                    })*/
                 }
             })
         }
@@ -160,13 +160,13 @@ export default class Item extends Vue {
     &__title
         color white
         margin-right 5px
-        margin-top 10px
         flex 1 1 100%
         display flex
         align-items center
         font-size 1em
         & h3
             width 100%
+            margin 5px 0
 
     &__info
         width 100%
@@ -213,7 +213,7 @@ export default class Item extends Vue {
         flex-direction column
 
         &:last-child
-            margin-right 5px
+            margin-right 10px
     &__area
         margin-left auto
         display block
