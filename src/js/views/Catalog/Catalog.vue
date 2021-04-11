@@ -16,7 +16,7 @@
           <a href="tel:+7(978)734-58-55" class="link">+7(978)734-58-55</a>
         </p>
       </div>
-      <div class="catalog__types types text-center">
+<!--      <div class="catalog__types types text-center">
         <span class="types__item">Офисы от собственника</span>
         <span class="types__item">От 10 до 500 кв. м.</span>
         <span class="types__item">От 650 руб. за кв. м.</span>
@@ -25,7 +25,7 @@
         <span class="types__item">Круглосуточный доступ</span>
         <span class="types__item">Развитая инфраструктура</span>
         <span class="types__item">Охраняемая территория, видеонаблюдение</span>
-      </div>
+      </div>-->
       <div class="catalog__main-content" :class="{ 'catalog__main-content_with-realty':  !$onlyMap}">
           <LeftSideBar class="catalog__sidebar" :height="mapHeight" :open="isOpenedSidebar"
                        @close="isOpenedSidebar = false"/>
