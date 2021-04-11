@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <div class="header__container container container_big">
-            <router-link :to="{name: 'home'}">
+            <router-link :to="{ name: 'home', hash: `#about`}">
                 <ibg class="header__logo" :src="logoPng"/>
             </router-link>
             <Burger class="header__burger" @click="handleShowMenu"/>
