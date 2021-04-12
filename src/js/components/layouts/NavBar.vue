@@ -114,6 +114,7 @@ export default class NavBar extends Vue {
         flex-direction column
         text-transform uppercase
         margin-bottom 30px
+        padding-right 40%
 
 
     &__link

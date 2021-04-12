@@ -38,12 +38,13 @@
     </yandex-map>
     <div v-else
          class="map-placeholder"
+         @click="onChangeCatalogState"
     >
       <div class="map-placeholder__bg">
 
       </div>
     </div>
-    <button class="btn btn_primary map-placeholder__btn" @click="onChangeCatalogState">{{
+    <button class="btn btn_primary map-placeholder__btn" @click.prevent="onChangeCatalogState">{{
         $onlyMap ? 'Обычный просмотр ' : 'Показать объявления на карте'
       }}
     </button>
@@ -235,6 +236,7 @@ export default class Map extends Vue {
 
 <style scoped lang="stylus">
 .map-placeholder
+  cursor pointer
   &__bg
     filter blur(1px)
     background-image url("/frontend/img/map-placeholder.png")

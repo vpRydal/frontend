@@ -43,7 +43,7 @@
                         v-model="areaModel"
                     >
                         <template v-slot:info="{ currentMin, currentMax }">
-                            {{ currentMin }}кв. м. | {{ currentMax }}кв. м.
+                            {{ Math.floor(currentMin) }} | {{ Math .ceil(currentMax) }}
                         </template>
                     </Range>
                 </div>
@@ -60,7 +60,7 @@
                         v-model="perPriceModel"
                     >
                         <template v-slot:info="{currentMin, currentMax}">
-                            {{ currentMin }}руб. | {{ currentMax }}руб.
+                            {{ Math.floor(currentMin) }}| {{ Math .ceil(currentMax) }}
                         </template>
                     </Range>
                 </div>
@@ -77,7 +77,7 @@
                         v-model="priceModel"
                     >
                         <template v-slot:info="{currentMin, currentMax}">
-                            {{ currentMin }}Р | {{ currentMax }}Р
+                            {{ Math.floor(currentMin) }} | {{ Math .ceil(currentMax)}}
                         </template>
                     </Range>
                 </div>

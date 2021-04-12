@@ -1,7 +1,7 @@
 <template>
-<div class="view-realty">
-  <div class="view-realty__container container" v-if="news">
-    <nav class="view-object__nav nav">
+<div class="view-news">
+  <div class="view-news__container container" v-if="news">
+    <nav class="view-news__nav nav">
       <ul class="nav__list">
         <li class="nav_item">
           <router-link :to="{name: 'home'}" class="nav__link link">Главная</router-link>
@@ -12,13 +12,15 @@
         <li class="nav_item" v-if="news"><a class="nav__link link link_disabled">{{ news.header }}</a></li>
       </ul>
     </nav>
+    <ibg :src="imageBasePath + news.photo" class="view-news__photo" alt=""/>
+
     <div v-if="news" v-html="news.content"/>
   </div>
 </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
+import {Component, Inject, Vue} from "vue-property-decorator";
 import News from "@/js/models/News";
 
 @Component({
@@ -26,6 +28,7 @@ import News from "@/js/models/News";
 })
 export default class ViewNews extends Vue{
   news: News| null = null
+  @Inject('imageBasePath') imageBasePath!: string
 
   created (): void {
     News.get({ id: Number(this.$route.params.id) })
@@ -46,4 +49,9 @@ export default class ViewNews extends Vue{
 
   &__divider
     margin 0 5px
+.view-news
+  &__photo
+    width 100%
+    padding 0 0 30% 0
+    margin-bottom 50px
 </style>

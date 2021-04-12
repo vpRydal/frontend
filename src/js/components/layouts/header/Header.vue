@@ -8,7 +8,7 @@
             <nav v-if="!isXSM" class="header__nav nav" ref="linksContainer">
                 <NavLinks class="nav__links">
                     <template v-slot:link="{link}">
-                        <router-link :to="{ name: link.routeName, hash: link.hash ? `#${link.hash}` : '' }" class="nav__link">
+                        <router-link :ref="'link' + link.refName" :to="{ name: link.routeName, hash: link.hash ? `#${link.hash}` : '' }" class="nav__link">
                           {{ link.displayName }}
                         </router-link>
                     </template>
@@ -56,14 +56,15 @@ export default class Header extends Vue {
       this.$nextTick(() => {
         const $activeLink = this.$refLinksContainer.find('.router-link-active')
 
-        this.$refUnderLine.animate({
-          left: $activeLink.offset()?.left,
-          width: $activeLink.width()
-        })
+        this.setUnderLineToLink($activeLink)
       })
-
-
-      }
+    }
+    setUnderLineToLink ($link: JQuery): void {
+      this.$refUnderLine.animate({
+        left: $link.offset()?.left,
+        width: $link.width()
+      })
+    }
 
     handleShowMenu(): void {
         bus.$emit('nav-bar-show')
@@ -77,7 +78,19 @@ export default class Header extends Vue {
     @Watch('$route', { immediate: true })
     watchRoute (route: Route): void {
       if (route) {
-        this.updateUnderLineState()
+        if (route.name && route.name.includes('news')) {
+          this.$nextTick(() => {
+            // @ts-ignore
+            this.setUnderLineToLink($(this.$refs['linknews'].$el as HTMLElement))
+          })
+        } if (route.name && route.name.includes('Realty')) {
+          this.$nextTick(() => {
+            // @ts-ignore
+            this.setUnderLineToLink($(this.$refs['linkcatalog'].$el as HTMLElement))
+          })
+        } else {
+          this.updateUnderLineState()
+        }
       }
     }
 }
