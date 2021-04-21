@@ -84,10 +84,10 @@
                     <li class="parameters__item parameters__item_doted" v-for="(equipment, idx) in viewRealty.equipments"
                         :key="idx"
                     >
-                      {{ equipment.display_name }}
+                      {{ equipment.name }}
                     </li>
                   </ul>
-                    <p class="object-info__description fw-600">{{ viewRealty.description }}</p>
+                    <p class="object-info__description fw-600" v-html="viewRealty.description"/>
                 </div>
             </div>
             <div class="view-object__btn-wrapper">
@@ -325,5 +325,6 @@ export default class ViewObject extends Mixins<Validation>(validationMixin) {
 
 .title
   margin-bottom 10px
+  font-size 25px
 
 </style>

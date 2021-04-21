@@ -26,7 +26,7 @@
                         <label :for="`equipment-type-${index}`"
                                class="filters__form-label form__label flex-wrapper">
                           <span class="form__control-indicator"></span>
-                          {{ eq.display_name }}
+                          {{ eq.name }}
                           </label>
                     </div>
                 </div>
