@@ -56,7 +56,7 @@ export default class NewsCard extends Vue {
             },
             done() {
               $(this)
-                  .find('.news__name-value').height('100%')
+                  .find('.news__name-value')
                   .addClass('news__name-value_big').animate({ opacity: 1 }, 400)
                   .find('span').text(_this.descriptionValue.slice(0, 65) + (_this.descriptionValue.length > 65 ? '...' : ''))
             }
@@ -116,7 +116,6 @@ export default class NewsCard extends Vue {
     bottom 0
     left 0
     width 100%
-    padding 10px 0
     color white
     background-color mainColor
     text-align right
@@ -129,24 +128,19 @@ export default class NewsCard extends Vue {
       display: flex;
       align-items  center
       justify-content flex-end
+      padding 10px 0
+      word-break break-all
 
       & span
         margin-right 15px
 
       &_big
+        margin 10px 10px
         font-size 40px
+        display block
         text-align center
-        justify-content center
 
-    @media (max-width 1200px)
-      width 94%
+        & span
+          margin-right 0
 
-    @media (max-width 800px)
-      width 91%
-
-    @media (max-width 700px)
-      width 95.5%
-
-    @media (max-width 600px)
-      width 92%
 </style>
