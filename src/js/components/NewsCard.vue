@@ -15,6 +15,7 @@
 <script lang="ts">
 import {Component, Prop, Ref, Vue, Watch} from "vue-property-decorator";
 import $ from 'jquery'
+import {removeHtmlTags} from "@/js/common";
 
 @Component({
 })
@@ -26,6 +27,10 @@ export default class NewsCard extends Vue {
   @Ref('name-value') refNameValue!: HTMLElement
   isHovered = false
   oldHeight = 0
+
+  get descriptionValue (): string {
+    return removeHtmlTags(this.content)
+  }
 
   mounted(): void {
     this.oldHeight = $(this.refName).height() as number
@@ -53,7 +58,7 @@ export default class NewsCard extends Vue {
               $(this)
                   .find('.news__name-value').height('100%')
                   .addClass('news__name-value_big').animate({ opacity: 1 }, 400)
-                  .find('span').text(_this.content.slice(0, 65) + (_this.content.length > 65 ? '...' : ''))
+                  .find('span').text(_this.descriptionValue.slice(0, 65) + (_this.descriptionValue.length > 65 ? '...' : ''))
             }
           })
     } else {

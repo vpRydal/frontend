@@ -18,6 +18,7 @@
 
 <script lang="ts">
 import {Component, Prop, Ref, Vue} from "vue-property-decorator";
+import {removeHtmlTags} from "@/js/common";
 
 @Component({})
 export default class RealtyCard2 extends Vue {
@@ -37,7 +38,7 @@ export default class RealtyCard2 extends Vue {
   id!: number
 
   get descriptionValue (): string {
-    return this.description.slice(0, 165) + '...'
+    return removeHtmlTags(this.description).slice(0, 165) + '...'
   }
 
   onClick (): void {

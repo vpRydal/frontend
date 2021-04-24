@@ -9,7 +9,7 @@ class News {
     content?: string;
     id?: number;
 
-    static getList(options: { page: number, count?: number } = { page: 1 }): Promise<AxiosResponse<Paginator<News>>> {
+    static getList(options: { page: number, perPage?: number } = { page: 1 }): Promise<AxiosResponse<Paginator<News>>> {
         if (process.env.VUE_APP_USE_LOCAL_API === 'false') {
             return http.get<Paginator<News>>('news', { params: options })
         } else {

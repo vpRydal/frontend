@@ -9,7 +9,7 @@
                     :content="newsItem.content"
                     :name="newsItem.header"
                     :img-path="imageBasePath + newsItem.photo"
-                    :key="idx + newsItem.id"
+                    :key="idx"
                     :data-index="idx"
                     @click="$router.push({ name: 'news.view', params: { id: newsItem.id } })"
           >
@@ -55,7 +55,7 @@ export default class IndexNews extends ScrollTo {
   updateList (): Promise<AxiosResponse<Paginator<News>>> {
     this.inRequestState = true
 
-    return News.getList({ page: this.paginator.currentPage, count: 9 })
+    return News.getList({ page: this.paginator.currentPage, perPage: 6 })
         .then(response => {
           Paginator.initPaginator(response.data)
 
@@ -120,6 +120,9 @@ export default class IndexNews extends ScrollTo {
 </script>
 
 <style scoped lang="stylus">
+::v-deep .news
+  .news__name
+    width 100%
 .news
   margin-bottom 50px
 
@@ -129,6 +132,13 @@ export default class IndexNews extends ScrollTo {
     margin-bottom 25px
     column-gap 20px
     row-gap 20px
+
+    @media (max-width 1000px)
+      grid-template-columns repeat(2, 1fr)
+
+    @media (max-width 650px)
+      grid-template-columns repeat(1, 1fr)
+
 
 .news
   &-enter-active, &-leave-active

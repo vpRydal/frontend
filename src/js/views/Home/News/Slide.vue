@@ -4,7 +4,7 @@
             <ibg :src="imageBasePath + photo" class="slide__img"/>
             <div class="slide__body">
                 <h3 class="slide__title">{{ header }}</h3>
-                <p class="slide__text">{{ content }}</p>
+                <p class="slide__text" v-html="content"></p>
             </div>
         </div>
       <router-link class="slide__link" :to="{ name: 'news.view', params: { id } }"/>

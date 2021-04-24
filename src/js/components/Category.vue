@@ -129,16 +129,4 @@ export default class Category extends Vue {
         font-size 40px
         text-align center
         justify-content center
-
-    @media (max-width 1200px)
-      width 94%
-
-    @media (max-width 800px)
-      width 91%
-
-    @media (max-width 700px)
-      width 95.5%
-
-    @media (max-width 600px)
-      width 92%
 </style>
