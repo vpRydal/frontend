@@ -1,7 +1,7 @@
 html, body
   width 100%
   height 100%
-  font-family Raleway-Regular
+  font-family Inter-Regular
   color mainColorDark
   font-size 20px
 
@@ -10,7 +10,7 @@ for i in 2..6
   titles[i] = 'h' + i
 
 {join(', ', titles)}
-  font-family Raleway-Bold
+  font-family Inter-Bold
 
 push(titles, 'body', 'ul', 'p')
 
@@ -28,5 +28,15 @@ h1
 a, a:hover, a:active
   text-decoration none
   color mainColorDark
+
+button, button:focus
+  background-color unset
+  outline none
+  box-shadow none
+  border none
+  cursor pointer
+  font-family Inter-Regular
+  padding 0
+
 
 

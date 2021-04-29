@@ -1,0 +1,45 @@
+.btn
+    font-size 1rem
+    &, &:focus
+        background white
+        color mainColorDark
+        padding 10px 0
+        text-align center
+
+    &[disabled]
+        &, &:hover, &:focus
+            background-color gray
+            cursor not-allowed
+
+
+    &_primary
+        transition background-color linear .2s
+        background-color mainColor
+
+        &:hover
+            background-color getColorWithOpacity(mainColorDark, .8)
+
+        &:focus, &:active
+            background-color mainColorDark
+
+        &, &:focus
+            color white
+
+    &_secondary
+        transition background-color linear .2s, color linear .2s
+        color mainColorDark
+
+        &:hover
+            background-color mainColor
+            color white !important
+
+        &^[0]_bordered
+            border 1px solid mainColor
+
+        &:focus, &:active
+            background-color mainColorDark
+            color white
+            border 1px solid mainColorDark
+
+    &_sm
+        width 200px

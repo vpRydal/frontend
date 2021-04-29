@@ -1,0 +1,29 @@
+defaultDirection = 1
+
+.anim
+  &-slide
+    transition transform ease (defaultDirection)s, opacity ease (defaultDirection)s
+    opacity 0
+
+    &-from
+      &-left
+        transform translateX(-100%)
+      &-right
+        transform translateX(100%)
+      &-top
+        transform translateY(-100%)
+      &-bot
+        transform translateY(100%)
+
+      &_end
+        opacity 1
+        transform none
+
+    &_delay
+      transition-delay 1s
+
+      &-big
+        transition-delay 1.5s
+
+      &-little
+        transition-delay 0.5s

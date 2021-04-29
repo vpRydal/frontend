@@ -31,14 +31,15 @@
         display flex
         flex-direction column
         text-align right
-        font-size 127px
+        font-size 106px
+
         &__first-word
             line-height 1em
             font-size 1em
         &__second-word
             line-height .9em
         &__third-word
-            line-height .6em
+            line-height .8em
         &__first-word, &__second-word, &__third-word
             font-weight 800
         &__second-word, &__third-word

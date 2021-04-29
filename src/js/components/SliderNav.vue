@@ -7,7 +7,6 @@
                     :class="{'nav__item_active': currentSlideIndex === Number(index)}" :index="index"></li>
             </ul>
             <span class="nav__next" @click="$emit('next')"></span>
-
         </div>
         <span class="nav-cursor" ref="nav-cursor"></span>
     </div>
@@ -19,7 +18,6 @@
 
     @Component({})
     export default class SliderNav extends Vue {
-        @Prop() readonly msg!: string;
         @Prop({
             type: Number,
             required: true
@@ -89,6 +87,7 @@
 
     .nav
         position relative
+
         @media (max-width 675px)
             width 100%
         @media (max-width 675px)
@@ -97,6 +96,10 @@
 
         &__body
             width 600px
+
+            ^[0]_center &
+                margin 0 auto
+
             @media (max-width 675px)
                 display flex
             @media (max-width 675px)
